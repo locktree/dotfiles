@@ -1,0 +1,115 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Author      : mitchell
+" Purpose     : Configuration file for Vim (Vi IMproved)
+" Last Update : Wed 01 May 2019 06:58:33 AM CEST
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"        _
+" __   _(_)_ __ ___  _ __ ___
+" \ \ / / | '_ ` _ \| '__/ __|
+"  \ V /| | | | | | | | | (__
+"   \_/ |_|_| |_| |_|_|  \___|
+"
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Automatically setup Vundle on first run
+if !isdirectory(expand("~/.vim/bundle"))
+    call system("git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim")
+endif
+
+if v:version < 700
+    echohl WarningMsg | echo 'Needs Vim version >= 7'| echohl None
+    finish
+endif
+
+execute pathogen#infect()
+
+source ${HOME}/dotfiles/vim/functions.vim
+source ${HOME}/dotfiles/vim/settings.vim
+source ${HOME}/dotfiles/vim/abbrev.vim
+source ${HOME}/dotfiles/vim/explore.vim
+source ${HOME}/dotfiles/vim/last_update.vim
+source ${HOME}/dotfiles/vim/sessions.vim
+source ${HOME}/dotfiles/vim/colorscheme.vim
+source ${HOME}/dotfiles/vim/wordlist.vim
+source ${HOME}/dotfiles/vim/maps.vim
+source ${HOME}/dotfiles/vim/function_mappings.vim
+source ${HOME}/dotfiles/vim/autogroups.vim
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                           VARIABLES
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:AUTHORNAME = 'Mitchell'
+let OS=substitute(system('uname -s'),"\n","","")
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                           LOCALS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Local Overrides
+if filereadable($HOME.'/.vimrc_local')
+    source $HOME/.vimrc_local
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                           INFO - GENERAL
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" https://devhints.io/vimscript
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                           INFO - VARIABLES
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" buffer-variable    b:     Local to the current buffer.
+" window-variable    w:     Local to the current window.
+" tabpage-variable   t:     Local to the current tab page.
+" global-variable    g:     Global.
+" local-variable     l:     Local to a function.
+" script-variable    s:     Local to a :source'ed Vim script.
+" function-argument  a:     Function argument (only inside a function).
+" vim-variable       v:     Global, predefined by Vim.
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                           INFO - EVENTS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" There are three kinds of things which are defined in this file:
+" Mapping ("map"), settings ("set"), and abbreviations ("ab")
+"  -Settings affect the behaviour of cmds.
+"  -Mappings maps a key sequence to a cmd. Immediately, not after a space
+"  -Abbreviations define words which are replaced.
+"   Only AFTER you enter space right *after* they are typed in
+
+" BufNewFile     - Starting to edit a file that doesn't exist
+" FileReadPre    - Before reading a file with a ":read" command
+" BufWritePre    - Starting to write the whole buffer to a file
+" FileWritePre   - Starting to write part of a buffer to a file
+" BufDelete      - Before deleting a buffer from the buffer list
+" BufWipeout     - Before completely deleting a buffer
+" BufNew         - Just after creating a new buffer
+" BufEnter       - After entering a buffer
+" BufLeave       - Before leaving to another buffer
+" SwapExists     - Detected an existing swap file
+
+" <silent>   - Map will not be echoed on the command line
+" <buffer>   - Map is local to the current buffer
+" <expr>     - Right-hand side is result of an expression evaluated each
+"              time the map is invoked
+" <unique>   - Command fails if the left-hand side is not unique
+" <script>   - Remapping alled, but only for <SID> maps local to a script
+" <special>  - Allows use of symbolic key names, even when cpoptions
+"              doesn't contain <
+
+" Macro - Recording a job and repeating it
+" Mark  - Bookmarking a particular position in a file and coming back to it
+" Map   - Mapping a job to a key, and then executing that job by that key
+
+" :syntax keyword xStatement if then else endif
+" :highlight link xStatement Statement
+" :syntax match xComment /#.*$/          -----> defining matches
+" :syntax region xString start=/"/ end=/" ---> defining regions
+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+"      ___    ____                                            __   _         _    ________  ___  "
+"     /   |  / / /  __  ______  __  __   ____  ___  ___  ____/ /  (_)____   | |  / /  _/  |/  /  "
+"    / /| | / / /  / / / / __ \/ / / /  / __ \/ _ \/ _ \/ __  /  / / ___/   | | / // // /|_/ /   "
+"   / ___ |/ / /  / /_/ / /_/ / /_/ /  / / / /  __/  __/ /_/ /  / (__  )    | |/ // // /  / /    "
+"  /_/  |_/_/_/   \__, /\____/\__,_/  /_/ /_/\___/\___/\__,_/  /_/____/     |___/___/_/  /_/     "
+"                   /_/                                                                          "
+"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
