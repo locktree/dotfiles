@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+###########################################################################
+##  FILENAME    : md-prev
+##  LAST UPDATE : Wed 01 May 2019 07:23:16 AM CEST
+##  AUTHOR      : mitchell
+##  DESCRIPTION : Preview a markdown file
+##  USAGE       : md-prev your-markdown-file
+###########################################################################
+log=/dev/null
+exec > ${log} 2>&1
+
+tmpPath="/tmp/md-preview"
+previewHtml="${tmpPath}/preview.html"
+
+## Replace markdown.css with the url if you prefer not to save it on local
+cssFileName="markdown.css"
+
+if [ -d ${tmpPath} ]; then
+    rm ${tmpPath}/*
+else
+    mkdir -p ${tmpPath}
+fi
+
+## Skip this line if you prefer not to save the markdown.css to local
+cp "~/dotfiles/scripts/${cssFileName}" ${tmpPath}
+
+echo "<!DOCTYPE html>" > ${previewHtml}
+echo "<html>" >> ${previewHtml}
+echo "<head>" >> ${previewHtml}
+echo "<meta http-equiv='content-type' content='text/html; charset=UTF-8' />" >> ${previewHtml}
+echo "<link href='$css' rel='stylesheet'></link>" >> ${previewHtml}
+echo "</head>" >> ${previewHtml}
+echo "<body>" >> ${previewHtml}
+python -m markdown "$1" -x tables >> ${previewHtml}
+echo "</body></html>" >> ${previewHtml}
+
+type -P xdg-open &> /dev/null && xdg-open ${previewHtml} || open ${previewHtml}
+###########################################################################
+##                          EOF
+###########################################################################
