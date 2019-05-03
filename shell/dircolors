@@ -1,0 +1,253 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : Configuration file for dircolors
+# Last Update : Sun 28 Apr 2019 12:55:40 PM CEST
+# =========================================================================
+# Configuration file for dircolors, a utility to help you set the
+# LS_COLORS environment variable used by GNU ls with the --color option.
+# Copyright (C) 1996, 1999-2008
+# Free Software Foundation, Inc.
+# Copying and distribution of this file, with or without modification,
+# are permitted provided the copyright notice and this notice are
+# preserved. The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
+# slackware version of dircolors) are recognized but ignored.
+# Below, there should be one TERM entry for each termtype that is
+# colorizable
+#
+# Modern terminals support 256 colors.
+# Text 256 color coding:
+# 38;5;COLOR_NUMBER
+# Background 256 color coding:
+# 48;5;COLOR_NUMBER
+
+# =========================================================================
+# TYPES
+# =========================================================================
+NORMAL      00       ## Global default
+FILE        00       ## Regular file
+DIR         01;34    ## Directory
+LINK        01;36    ## Symbolic Link
+EXEC        01;32    ## This is for files with execute permission
+#FIFO       00       ## Pipe
+#SOCK       00       ## Socket
+#DOOR       00       ## Door
+#BLK        00       ## Block device driver
+#CHR        00       ## Character device driver
+#ORPHAN     00       ## Symlink to nonexistent file, or non-stat'able file
+#SETUID     00       ## File that is setuid (u+s)
+#SETGID     00       ## File that is setgid (g+s)
+#STICKY     00       ## Dir with sticky bit set (+t) and not other-writable
+#CAPABILITY 00       ## File with capability
+#HARDLINK   00       ## Regular file with more than one link
+
+# ========================================
+# MY WORKING FILES/SOURCE FILES ( GREEN )
+# ========================================
+.awk   01;32
+.bash  01;32
+.c     01;32
+.cpp   01;32
+.csh   01;32
+.h     01;32
+.hpp   01;32
+.hs    01;32
+.ksh   01;32
+.md    01;32
+.py    01;32
+.sed   01;32
+.sh    01;32
+.txt   01;32
+.vim   01;32
+
+# ========================================
+# ARCHIVES OR COMPRESSED ( RED )
+# ========================================
+.7z    01;31
+.deb   01;31
+.bz2   01;31
+.bz    01;31
+.dz    01;31
+.gz    01;31
+.jar   01;31
+.rar   01;31
+.rpm   01;31
+.rz    01;31
+.tar   01;31
+.tbz2  01;31
+.tgz   01;31
+.tz    01;31
+.z     01;31
+.Z     01;31
+.zip   01;31
+
+# ========================================
+# IMAGE FORMATS ( CYAN )
+# ========================================
+.bmp   01;36
+.jpg   01;36
+.JPG   01;36
+.jpeg  01;36
+.gif   01;36
+.pbm   01;36
+.pgm   01;36
+.png   01;36
+.ppm   01;36
+.tif   01;36
+.tiff  01;36
+.tga   01;36
+.xbm   01;36
+.xpm   01;36
+
+# ========================================
+# VIDEO FORMAT ( CYAN )
+# ========================================
+.asf   01;36
+.avi   01;36
+.divx  01;36
+.flc   01;36
+.flv   01;36
+.m2v   01;36
+.m4v   01;36
+.mkv   01;36
+.mov   01;36
+.mp4   01;36
+.mp4v  01;36
+.mpg   01;36
+.mpeg  01;36
+.vob   01;36
+.wmv   01;36
+
+# ========================================
+# AUDIO FORMAT ( CYAN )
+# ========================================
+.aac   01;36
+.flac  01;36
+.mp3   01;36
+.ogg   01;36
+.wav   01;36
+
+# ========================================
+# LOG FORMAT ( YELLOW )
+# ========================================
+.log       01;33
+*history   01;33
+*AUTHORS   01;33
+*COPYING   01;33
+*INSTALL   01;33
+*LICENSE   01;33
+*README    01;33
+
+# ========================================
+# MY IMPORTANT DOTFILES ( MAGENTA )
+# ========================================
+*bash_color       01;35
+*bash_config      01;35
+*bash_functions   01;35
+*bash_git         01;35
+*bash_info        01;35
+*bash_profile     01;35
+*bash_logout      01;35
+*bash_prompt      01;35
+*bashrc           01;35
+*dircolors        01;35
+*inputrc          01;35
+*gitconfig        01;35
+*gitmessage       01;35
+*gitignore        01;35
+*gitattributes    01;35
+*pylintrc         01;35
+*profile          01;35
+*tkdiffrc         01;35
+*vim              01;35
+*vimrc            01;35
+*Xresources       01;35
+
+# ========================================
+# TERM
+# ========================================
+TERM Eterm
+TERM ansi
+TERM color-xterm
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM eterm-color
+TERM gnome
+TERM gnome-256color
+TERM jfbterm
+TERM konsole
+TERM kterm
+TERM linux
+TERM linux-c
+TERM mach-color
+TERM mlterm
+TERM putty
+TERM rxvt
+TERM rxvt-cygwin
+TERM rxvt-cygwin-native
+TERM rxvt-unicode
+TERM screen
+TERM screen-256color
+TERM screen-bce
+TERM screen-w
+TERM screen.linux
+TERM vt100
+TERM xterm
+TERM xterm-16color
+TERM xterm-256color
+TERM xterm-88color
+TERM xterm-color
+TERM xterm-debian
+
+# =========================================================================
+# DEFINITIONS
+# =========================================================================
+
+# =============================
+# ATTRIBUTE CODES
+# =============================
+# 00 = none
+# 01 = bold
+# 04 = underscore
+# 05 = blink
+# 07 = reverse
+# 08 = concealed
+
+# =============================
+# TEXT COLOR CODES
+# =============================
+# 30 = black
+# 31 = red
+# 32 = green
+# 33 = yellow
+# 34 = blue
+# 35 = magenta
+# 36 = cyan
+# 37 = white
+
+# =============================
+# BACKGROUND COLOR CODES
+# =============================
+# 40 = black
+# 41 = red
+# 42 = green
+# 43 = yellow
+# 44 = blue
+# 45 = magenta
+# 46 = cyan
+# 47 = white
+
+# =========================================================================
+#                                EOF
+# =========================================================================
