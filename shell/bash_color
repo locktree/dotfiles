@@ -1,0 +1,38 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : bash_color
+# Last Update : Sun 28 Apr 2019 12:55:32 PM CEST
+# =========================================================================
+
+      BLACK='\e[0;30m'
+        RED='\e[0;31m'
+      GREEN='\e[0;32m'
+      BROWN='\e[0;33m'
+       BLUE='\e[0;34m'
+     PURPLE='\e[0;35m'
+       CYAN='\e[0;36m'
+  LIGHTGRAY='\e[0;37m'
+
+   DARKGRAY='\e[1;30m'
+   LIGHTRED='\e[1;31m'
+ LIGHTGREEN='\e[1;32m'
+     YELLOW='\e[1;33m'
+  LIGHTBLUE='\e[1;34m'
+LIGHTPURPLE='\e[1;35m'
+  LIGHTCYAN='\e[1;36m'
+      WHITE='\e[1;37m'
+         NC='\e[0m'              ## No Color
+
+## Bold
+ BOLDBLACK='\e[1;30m'
+   BOLDRED='\e[1;31m'
+ BOLDGREEN='\e[1;32m'
+BOLDYELLOW='\e[1;33m'
+  BOLDBLUE='\e[1;34m'
+BOLDPURPLE='\e[1;35m'
+  BOLDCYAN='\e[1;36m'
+ BOLDWHITE='\e[1;37m'
+
+###########################################################################
+###                                EOF
+###########################################################################
