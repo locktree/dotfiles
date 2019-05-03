@@ -1,0 +1,107 @@
+! =========================================================================
+! Author      : mitchell
+! Purpose     : My Xresources
+! Last Update : Sun 28 Apr 2019 12:55:54 PM CEST
+! =========================================================================
+!
+! AFTER EDITING: xrdb ~/.Xresources  (to load the config file)
+!
+! =========================================================================
+XTerm*background:           black
+XTerm*foreground:           gray90
+XTerm*title:                terminal of locktree
+XTerm*geometry:             80x44+0+0
+XTerm.vt100.geometry:       80x44+0+0
+XTerm*VT100*colorMode:      on
+
+XTerm*cursorBlink:          false
+XTerm*cursorOffTime:        600
+XTerm*cursorOnTime:         600
+XTerm*cursorColor:          blue
+
+XTerm*saveLines:            8192
+
+!#The definition of a "word" depends on the character class resource.
+XTerm*charClass:            33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48
+XTerm*charClass:            33:48,37-38:48,45-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
+
+XTerm*termName:             xterm-256color
+
+XTerm*borderColor:          white
+XTerm*internalBorder:       3
+
+XTerm*scrollBar:            true
+XTerm*rightScrollBar:       true
+XTerm*scrollKey:            true
+XTerm*scrollTtyOutput:      true
+XTerm*jumpScroll:           true
+XTerm*multiScroll:          true
+XTerm*fastScroll:           true
+XTerm*scrollbar*background: black
+XTerm*scrollbar*foreground: green
+
+XTerm*metaSendsEscape:      true
+
+! let’s be 8bit-clean
+XTerm*utf8:                 1
+XTerm*eightBitInput:        false
+XTerm*eightBitControl:      false
+XTerm*eightBitOutput:       true
+
+XTerm*toolBar:              false
+
+XTerm*VT100*underLine:      off
+XTerm*cursorUnderLine:      off
+
+XTerm*visualBell:           true
+
+XTerm*faceName:             DejaVu Sans Mono
+XTerm*faceSize:             7
+
+XTerm*colorBDMode:          false
+XTerm*colorULMode:          false
+XTerm*boldMode:             false
+
+! Every shell is a login shell by default (for inclusion of all necessary
+! environment variables)
+XTerm*loginshell:           true
+
+XTerm*locale:               true
+
+XTerm*color0:               #000000   // black
+XTerm*color1:               #B40000   // red
+XTerm*color2:               #00AA00   // green
+XTerm*color3:               #AAAA00   // yellow
+XTerm*color4:               #5555AA   // blue
+XTerm*color5:               #AA00AA   // magenta
+XTerm*color6:               #00AAAA   // cyan
+XTerm*color7:               #AAAAAA   // white
+XTerm*color8:               #555555   // black (now and below: bright)
+XTerm*color9:               #FF0000   // red
+XTerm*color10:              #00FF00   // green
+XTerm*color11:              #FFFF00   // yellow
+XTerm*color12:              #6464FF   // blue
+XTerm*color13:              #FF00FF   // magenta
+XTerm*color14:              #00FFFF   // cyan
+XTerm*color15:              #FFFFFF   // white
+
+!XTerm*cursorColorBackground: yellow
+!XTerm*highlight:red
+
+XTerm*pointerShape:            arrow
+!XTerm*pointerColor:           red
+!XTerm*pointerColorBackground: white
+
+!highlight selected area
+XTerm*highlightSelection:      true
+! Trim trailing spaces
+XTerm*trimSelection:           true
+
+!XTerm -fa 'Luxi Mono' -fs 10
+!https://linux.die.net/man/1/xterm
+
+! EOF
+
+xterm*VT100.Translations: #override \
+             Ctrl ~Shift <Key>Tab: string(0x1b) string("[27;5;9~") \n\
+             Ctrl Shift <Key>Tab: string(0x1b) string("[27;6;9~")
