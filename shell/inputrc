@@ -1,0 +1,175 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : My inputrc
+# Last Update : Sun 28 Apr 2019 12:56:30 PM CEST
+# =========================================================================
+##
+## type C-v and press any <key> or a combination of <key>s to see its code
+##
+##   \C - Control
+##   \M - Meta
+##   \e - Escape => ^[
+##
+###########################################################################
+###                        SETTINGS
+###########################################################################
+## Be 8 bit clean
+set input-meta on
+set output-meta on
+set meta-flag on
+
+## Do not bell on TAB completion
+set bell-style none
+
+## Adds punctuation as word delimiters
+set bind-tty-special-chars off
+
+## Ignore case on TAB-completion
+set completion-ignore-case on
+
+## Display completions using different colors for their file types
+set colored-stats on
+
+## If there are more than 200 possible completions for a word, ask to
+## show them all
+set completion-query-items 200
+
+## Do not strip 8th bit
+set convert-meta off
+
+## If set to on, readline will inhibit word completion. Completion
+## characters will be inserted into the line as if they had been mapped to
+## self-insert.
+set disable-completion off
+
+## vi mode when editing
+set editing-mode vi
+
+## Disable application keypad (it is enabled in PUTTY and with this set
+## as 'off' it sort of 'just works')
+set enable-keypad off
+
+## Don't expand '~' into the absolute path to our home directory when doing
+## word completion
+set expand-tilde off
+
+## When set to On, makes readline use a single line for display, scrolling
+## the input horizontally on a single screen line when it becomes longer
+## than the screen width rather than wrapping to a new line.
+set horizontal-scroll-mode off
+
+#vi, vi-move, vi-command, and vi-insert. vi is equivalent to vi-command
+set keymap vi-insert
+
+## Completed directory names have a slash appended
+set mark-directories on
+
+## If set to On, history lines that have been modified are displayed with a
+## preceding asterisk (*).
+set mark-modified-lines off
+
+## Immediately add a trailing slash when autocompleting symlinks to dirs
+set mark-symlinked-directories on
+
+## Do not autocomplete hidden files unless the pattern explicitly begins
+## with a dot
+set match-hidden-files on
+
+## Show all autocomplete results at once. If set to On, readline uses an
+## internal more-like pager to display a screenful of possible completions
+## at a time.
+set page-completions off
+
+## Don't print horizontally
+set print-completion-horizontally off
+
+## Words which have more than one possible completion cause the matches to
+## be listed immediately instead of ringing the bell.
+## Show all completions as soon as I press tab,even if there's more than one
+set show-all-if-ambiguous on
+
+## List immediately, don't bell if ambigous.
+set show-all-if-unmodified on
+
+## Be more intelligent when autocompleting by also looking at the text after
+## the cursor. For example, when the current line is "cd ~/src/mozil", and
+## the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+## ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+## Readline used by Bash 4.)
+set skip-completed-text on
+
+## Show extra file information when completing, like `ls -F` does
+## If set to On, a character denoting a file's type as reported by stat(2)
+## is appended to the filename when listing possible completions.
+set visible-stats on
+
+###########################################################################
+###                       MAPPINGS
+###########################################################################
+
+$if mode=vi
+  ## CTRL-KEY MAPPINGS
+  "\C-A": beginning-of-line
+  "\C-B": backward-char
+  "\C-D": delete-char
+  "\C-E": end-of-line
+  "\C-F": forward-char
+  "\C-G": abort
+  "\C-K": kill-line                 ## from point to end of line
+  "\C-L": clear-screen
+  "\C-P": previous-history
+  "\C-N": next-history
+  "\C-R": reverse-search-history
+  "\C-S": forward-search-history
+  "\C-T": transpose-chars
+  "\C-U": unix-line-discard
+  "\C-W": unix-word-rubout
+  "\C-Y": yank ## yank to the top of the kill ring into the buffer at point
+  "\C-X": backward-kill-line
+
+  ## ALT-KEY MAPPINGS
+  "\eb": backward-word
+  "\ed": kill-word
+  "\ef": forward-word
+  "\et": transpose-words
+  "\eu": upcase-word         ## from cursor position till end of line
+  "\el": downcase-word       ## from cursor position till end of line
+$endif
+
+###########################################################################
+###      SPECIAL KEY MAPPINGS
+###########################################################################
+"\eOP":     "F1"                      ## F1
+"\eOQ":     "F2"                      ## F2
+"\eOR":     "F3"                      ## F3
+"\eOS":     "F4"                      ## F4
+"\e[15~":   "F5"                      ## F5
+"\e[17~":   "F6"                      ## F6
+"\e[18~":   "F7"                      ## F7
+"\e[19~":   "F8"                      ## F8
+"\e[20~":   "F9"                      ## F9
+"\e[21~":   "F10"                     ## F10
+"\e[23~":   "F11"                     ## F11
+"\e[24~":   "F12"                     ## F12
+
+"\e[H":     beginning-of-line         ## Home
+"\e[F":     end-of-line               ## End
+
+"\e[3~":    delete-char               ## Delete
+"\e[2~":    quoted-insert             ## Insert
+
+"\e[5~":    history-search-backward   ## PageUp
+"\e[6~":    history-search-forward    ## PageDown
+
+"\e[A":     history-search-backward   ## Up-arrow
+"\e[B":     history-search-forward    ## Down-arrow
+
+"\e[1;5C":  forward-word              ## CTRL+Left
+"\e[1;5D":  backward-word             ## CTRL+Right
+
+"\e[1;3C":  forward-word              ## ALT+Left
+"\e[1;3D":  backward-word             ## ALT+Right
+
+###########################################################################
+###                               EOF
+###########################################################################
