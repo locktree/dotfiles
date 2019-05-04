@@ -1,0 +1,144 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : bash_prompt
+# Last Update : Mon 29 Apr 2019 01:34:12 PM CEST
+# =========================================================================
+git_status(){
+    s='';
+    ## Check if the current directory is in a Git repository.
+    if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}")" == '0' ]; then
+        ## check if the current directory is in .git before running git checks
+        if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+
+            if [[ -O "$(git rev-parse --show-toplevel)/.git/index" ]]; then
+                git update-index --really-refresh -q &> /dev/null;
+            fi;
+
+            ## Check for uncommitted changes in the index
+            if ! git diff --quiet --ignore-submodules --cached; then
+                s+='+';
+            fi;
+
+            ## Check for unstaged changes
+            if ! git diff-files --quiet --ignore-submodules --; then
+                s+='!';
+            fi;
+
+            ## Check for untracked files
+            if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+                s+='?';
+            fi;
+
+            ## Check for stashed files
+            if git rev-parse --verify refs/stash &>/dev/null; then
+                s+='$';
+            fi;
+        fi;
+    fi;
+
+    echo -e "[$s]"
+}
+
+git_branch_bashism(){
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || return;
+    echo "("${ref#refs/heads/}") "
+}
+
+## Show current git branch in command line
+parse_git_branch(){
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+git_since_last_commit(){
+    now=$(date +%s)
+    last_commit=$(git log --pretty=format:%at -1 2> /dev/null) || return
+    seconds_since_last_commit=$((now-last_commit))
+    minutes_since_last_commit=$((seconds_since_last_commit/60))
+    hours_since_last_commit=$((minutes_since_last_commit/60))
+    minutes_since_last_commit=$((minutes_since_last_commit%60))
+
+    echo "${hours_since_last_commit}h${minutes_since_last_commit}m"
+}
+
+define_branch_color(){
+    git_status="$(git status 2> /dev/null)"
+    if [[ "${git_status}" = *'nothing to commit, working tree clean'* ]]; then
+        echo -e ${LIGHTGREEN}
+    elif [[ "${git_status}" = *'Changes to be committed'* ]]; then
+        echo -e ${CYAN}
+    elif [[ "${git_status}" = *'Your branch is ahead of'* ]]; then
+        echo -e ${YELLOW}
+    elif [[ "${git_status}" = *'nothing added to commit but untracked files present'* ]]; then
+        echo -e ${BOLDRED}
+    elif [[ "${git_status}" = *'Changes not staged for commit'* ]]; then
+        echo -e ${BOLDRED}
+    else
+        ## if not in a git repo
+        echo -e ${LIGHTGREEN}
+    fi
+}
+
+ahead_behind() {
+    ## Check if the current directory is in a Git repository.
+    if [ "$(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}")" == '0' ]; then
+        curr_branch=$(git rev-parse --abbrev-ref HEAD );
+        curr_remote=$(git config branch.$curr_branch.remote);
+        curr_merge_branch=$(git config branch.$curr_branch.merge | cut -d / -f 3);
+        
+        ## Check against the remote branch
+        against_remote=$(git rev-list --left-right --count $curr_branch...$curr_remote/$curr_merge_branch 2> /dev/null| tr -s '\t' '|';)
+        ## Check against the master branch
+        against_master=$(git rev-list --left-right --count master...$(git rev-parse --abbrev-ref HEAD)   2> /dev/null| tr -s '\t' '|';)
+        
+        if [ "${against_remote}" == "" ]; then
+            echo -e "${against_master} == no remote"
+        else
+            echo -e "${against_master} == ${against_remote}"
+        fi
+    else
+       echo -e "none"
+    fi
+}
+
+PS1=""
+#PS1+="\[${GREEN}\]\u"                   ## Username
+#PS1+="\[${WHITE}\]@"                    ## @ sign
+#PS1+="\[${GREEN}\]\h"                   ## Host
+PS1+="\[${GREEN}\]\t "                   ## Time
+PS1+="\[${LIGHTGREEN}\][\w]"             ## pwd
+PS1+="\[${WHITE}\]"                      ## Set to color white
+PS1+=" @ "                               ## Add @
+PS1+="\[${LIGHTGREEN}\]"                 ## Set to color green
+PS1+="\$(git_status)"                    ## git status
+PS1+="\[${WHITE}\]"                      ## Set to color white
+PS1+=" @ "                               ## Add @
+PS1+="\[${LIGHTGREEN}\]"                 ## Set to color green
+PS1+="\$(ahead_behind)"                  ## Ahead and Behind
+PS1+="\[${WHITE}\]"                      ## Set to color white
+PS1+=" @ "                               ## Add @
+PS1+="\[\$(define_branch_color)\]"       ## Define branch color
+PS1+="("                                 ## Add bracket
+PS1+="\$(parse_git_branch)"              ## Git branch
+PS1+="|"                                 ## Add a pipe
+PS1+="\$(git_since_last_commit)"         ## Time since last commit
+PS1+=")"                                 ## Add bracket
+PS1+="\[${NC}\]"                         ## Reset the color
+PS1+=" > "                               ## After this sign, start typing
+export PS1
+
+## Continuation interactive prompt
+PS2=">"
+## Prompt used by "select" inside shell scripts
+PS3=""
+
+## PS4: Used by "set -x" to prefix tracing output
+PS4='+ \011\e[1;30m\t\011\
+\e[1;34m${BASH_SOURCE}\
+\e[0m:\e[1;36m${LINENO}\
+\e[0m \011 ${FUNCNAME[0]:+\
+\e[0;35m${FUNCNAME[0]}\
+\e[1;30m()\e[0m:\011\011 }'
+
+###########################################################################
+###                             EOF
+###########################################################################
