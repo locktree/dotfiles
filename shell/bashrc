@@ -1,0 +1,32 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : My bashrc
+# Last Update : Wed 01 May 2019 07:21:30 AM CEST
+# =========================================================================
+## Do not continue if we are not in a bash shell
+[ -z "${BASH_VERSION}" ] && return
+
+## Shell is non-interactive. Be done now!
+[[ $- != *i* ]] && return
+
+DOTFILES=~/dotfiles/shell
+
+[ -f ${DOTFILES}/bash_config ]    && source ${DOTFILES}/bash_config
+[ -f ${DOTFILES}/bash_color ]     && source ${DOTFILES}/bash_color
+[ -f ${DOTFILES}/bash_functions ] && source ${DOTFILES}/bash_functions
+[ -f ${DOTFILES}/bash_git ]       && source ${DOTFILES}/bash_git
+[ -f ${DOTFILES}/bash_info ]      && source ${DOTFILES}/bash_info
+[ -f ${DOTFILES}/bash_prompt ]    && source ${DOTFILES}/bash_prompt
+
+if [ -f ${DOTFILES}/bash_prompt ]; then
+    PYTHONSTARTUP=~/.pythonrc.py
+    export PYTHONSTARTUP
+fi
+
+## local overrides
+if [ -f ~/.bash_local ]; then
+    source ~/.bash_local
+fi
+###########################################################################
+###                            EOF
+###########################################################################

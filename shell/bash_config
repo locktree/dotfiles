@@ -1,0 +1,201 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : bash_config
+# Last Update : Wed 01 May 2019 07:20:49 AM CEST
+# =========================================================================
+## Enable color support of ls and also add handy aliases
+if [ "${TERM}" != "dumb" ]; then
+    [ -e "${HOME}/.dircolors" ] && DIR_COLORS="${HOME}/.dircolors"
+    [ -e "${DIR_COLORS}" ] || DIR_COLORS=""
+    eval "$(dircolors -b ${DIR_COLORS})"
+    alias ls='ls --color=auto'
+fi
+
+# =========================================================================
+#                       USER VARIABLES
+# =========================================================================
+: ${DOTFILES=~/dotfiles}
+: ${GIT_USER_NAME=$(git config --get user.name)}
+: ${GIT_USER_EMAIL=$(git config --get user.email)}
+
+# =========================================================================
+#                       ENVIRONMENT VARIABLES
+# =========================================================================
+umask 022               ## Default umask: rw-r--r--
+VISUAL="$(which vim)"   ## What Else? :)
+EDITOR="${VISUAL}"      ## What Else? :)
+BLOCKSIZE=1K            ## Set default blocksize for ls, df, du
+PAGER=less              ## Default Pager
+CC='/usr/bin/gcc'       ## Default C compiler
+CXX='/usr/bin/g++'      ## Default C++ compiler
+#SHELL='/bin/bash'      ## Default Shell
+COLUMNS=80              ## Number of columns
+LINES=44                ## Number of lines
+IGNOREEOF=1             ## Pressed twice CTRL-D to exit Bash
+
+## Define PATH
+export PATH=""
+export PATH="${PATH}:${HOME}/bin"
+export PATH="${PATH}:/usr/local/bin"
+export PATH="${PATH}:/usr/local/sbin"
+export PATH="${PATH}:/usr/bin"
+export PATH="${PATH}:/usr/sbin"
+export PATH="${PATH}:/bin"
+export PATH="${PATH}:/sbin"
+export PATH="${PATH}:~/dotfiles/scripts"
+
+export INPUTRC="~/.inputrc"
+export LOGNAME="$(id -un)"
+export CLICOLOR=1                   ## To have colors for ls and all greps
+export BROWSER='firefox -new-tab'
+export MANPAGER='less'
+export LC_ALL='en_US.UTF-8'
+export LANG='en_US.UTF-8'
+export LANGUAGE='en_US.UTF-8'
+
+## Append commands to the history every time a prompt is shown, instead of
+## after closing the session. Bash shell executes the content of the
+## PROMPT_COMMAND just before displaying the PS1 variable. Save and reload
+## the history after each command finishes
+## history -a  -> Append
+## history -c  -> Clear history list
+## history -r  -> Reload
+export PROMPT_COMMAND='history -a; history -c; history -r;'
+export LESSHISTFILE=/dev/null
+export LESSHISTSIZE=0               ## No LESSHISTFILE
+
+##################
+# BASH HISTORY
+##################
+## History file
+export HISTFILE=~/.bash_history
+
+## ONLY for the 'history' command
+export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S_%a  >  "
+
+## Bash history will save N commands
+export HISTSIZE=100000
+
+## Bash will remember N commands
+export HISTFILESIZE=${HISTSIZE}
+
+## Ignore duplicates and spaces
+export HISTCONTROL=ignorespace:ignoredups
+
+## Ignore some commands and also commands starting with a space
+export HISTIGNORE='&:[bf]g:ll:h:ls:la:exit:clear:history:f:fd:pwd:'
+
+# =========================================================================
+#                              SHELL OPTIONS
+# =========================================================================
+## Automatically prepend cd when entering just a path in the shell
+shopt -s autocd
+
+## Auto-correct directory spelling errors
+shopt -s cdspell
+
+## Check the window size after each command and, if necessary, update the
+## values of LINES and COLUMNS
+shopt -s checkwinsize
+
+## Combine multiline commands into one in history
+shopt -s cmdhist
+
+## Include .files when globbing
+shopt -s dotglob
+
+## Use extra globing features. Extended pattern matching features enabled.
+## extended pattern matching features enabled
+shopt -s extglob
+
+## Append commands to the bash command history file (~/.bash_history)
+## instead of overwriting it.
+shopt -s histappend histreedit histverify
+
+## Perform hostname completion when a word containing a @ is being completed
+shopt -s hostcomplete
+
+## Will send SIGHUP to all jobs when an interactive login shell exists
+shopt -s huponexit
+
+## Allow a word beginning with # to cause that word and all remaining
+## characters on that line to be ignored
+shopt -s interactive_comments
+
+## Case insensitive matching when performing pathname expansion
+shopt -s nocaseglob
+
+## When a glob expands to nothing, make it an empty string instead of the
+## literal characters
+shopt -s nullglob
+
+## Programmable completion is FUN
+shopt -s progcomp
+
+## The echo builtin expands backslash-escape sequences by default
+shopt -s sourcepath
+
+## These options only exist since Bash 4.0-alpha
+if ((${BASH_VERSINFO[0]} >= 4)); then
+    ## Warn me about stopped jobs when exiting
+    shopt -s checkjobs
+    ## Autocorrect fudged paths during completion
+    shopt -s dirspell
+    ## Enable double-starring paths
+    shopt -s globstar
+fi
+
+## Tell me about background jobs right away
+set -o notify
+
+## Don't want any coredumps
+ulimit -S -c 0
+
+## Don't want my shell to warn me of incoming mail
+unset MAILCHECK
+
+# =========================================================================
+#                              LESS
+# =========================================================================
+## COLORED MANUAL PAGES
+export LESS_TERMCAP_mb=$'\E[01;34m'         ## start blink
+export LESS_TERMCAP_md=$'\E[01;34m'         ## starts displaying bold text
+export LESS_TERMCAP_me=$'\E[0m'             ## turn off bold,blink,underline
+export LESS_TERMCAP_se=$'\E[0m'             ## stop standout
+export LESS_TERMCAP_so=$'\E[01;44;33m'      ## start standout
+export LESS_TERMCAP_ue=$'\E[0m'             ## stop underline
+export LESS_TERMCAP_us=$'\E[01;32m'         ## start underline
+
+export LESSCHARSET='utf-8'
+#unset LESSCHARSET                ## Fix manpages looking funky
+
+export LESS='-iMXGRFwex4 -z-4'
+   ## i   = --ignore-case         causes searches to ignore case
+   ## M   = --long-prompt         prompt more verbose
+   ## F   = --quite-if-one-screen
+   ## X   = --no-init             disable sending the termcap init and
+   ##                             deinit strings
+   ## R   = --raw-control-chars
+   ## N   = --line-numbers
+   ## w   = --hilite-unread       temp highlight the first newline after a
+   ##                             forward movement of a full page
+   ## z-4 = --window              default scrolling window size
+   ## e   = --quite-at-eof        automatically exit the second time if
+   ##                             reaches eof. E(for first time)
+   ## x4 =                        Use tab size of 4 characters.
+
+# =========================================================================
+#                              GREP
+# =========================================================================
+# purple (E.g. echo one two three" | grep two)
+#export GREP_OPTIONS='-IHn --color=auto'
+    ## -i case-insensitive
+    ## -I ignore binary files
+    ## -H causes filename to be printed
+    ## -r recursive search
+    ## -n causes line number to be printed
+export GREP_COLOR='1;36;40'
+
+###########################################################################
+###                             EOF
+###########################################################################
