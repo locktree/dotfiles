@@ -1,0 +1,855 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : bash_functions
+# Last Update : Wed 01 May 2019 07:21:06 AM CEST
+# =========================================================================
+
+# =========================================================================
+#                                LIST
+# =========================================================================
+alias   l='ls -Altr'                         ## Common used
+alias  la='ls -Al'                           ## List all files
+alias  l3='ls -Alh *.{mp3, wav, m4a}'        ## All music files
+alias  l4='ls -Alh *.{mp4, mov, mkv}'        ## All movie files
+alias  l.='ls -Ad .*'                        ## List only Dotfiles
+alias  ld='ls -l | grep "^d"'                ## list only Dirs
+alias ld.='ls -la | grep "^d"'               ## list only Dirs(also hidden)
+alias  lt='ls -Altr --color | tail -n 10'    ## List last 10 files
+
+# =========================================================================
+#                           SIMPLE COMMANDS
+# =========================================================================
+alias  c='clear'
+alias  g='grep'
+alias  h='history | less'
+alias  p='pwd'
+alias  v='vim'
+alias tk='tkdiff'
+
+## Change directory
+alias      cd='cdls'               ## default the cdls
+alias    cd..='cd ..'              ## default the cd
+alias {up,..}='cd ..'              ## back one directory
+alias     ...='cd ../..'           ## back two directories
+alias    ....='cd ../../..'        ## back three directories
+alias   .....='cd ../../../..'     ## back four directories
+alias  ......='cd ../../../../..'  ## back five directories
+alias      .4='cd ../../..'        ## back four directorїes
+alias      .5='cd ../../../..'     ## back five directories
+alias     cdb='cd -'
+
+## Misc
+#alias del='mv --target-directory=${HOME}/.Trash/'
+alias please='sudo $(history -p !-1)'
+
+alias week='date +%V'              ## Get week number
+# =========================================================================
+#                          COMMON USED COMMANDS
+# =========================================================================
+alias ol='"${EDITOR}" "$(ls -tr | tail -n1)"'
+alias todo='${EDITOR} ~/todo.txt'
+alias x='xterm -geometry 120x24+0+0 -bg Black -fg Green &'
+
+# =========================================================================
+#                              APPLICATIONS
+# =========================================================================
+alias py='python3'
+alias python='python3'
+alias py3='python3'
+alias py2='python2'
+
+alias soffice='command soffice "$@" &'
+
+alias cpwd='pwd | xclip -selection clipboard'
+alias y4='youtube-dl --extract-audio --audio-format mp4'
+
+google()   { firefox http://www.google.com/search?hl=en#q="`encode $@`" ;}
+firefox()  { command firefox "$@" & }
+nu()       { lynx -term=vt100 http://www.nu.nl ; }
+file2pdf() { enscript "${1}" -o - | ps2pdf - > "${1}".pdf; }
+
+alias mac2unix="tr '\r' '\n'"
+alias dos2unix="tr -d '\r'"
+
+## weather: pass your city or zip code, and it returns the weather!
+## USAGE - weather cleveland
+## OR
+## weather 44106
+##
+## WARNING - city and zip code args may yield inaccurate/different results.
+weather(){
+    curl wttr.in/"$1"
+}
+# =========================================================================
+#                       MODIFIED (DEFAULT) COMMANDS
+# =========================================================================
+alias cp='cp -i'
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias rm='rm --preserve-root'
+alias mkdir='mkdir -p -v'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+alias tail='tail -f -n 30'
+
+# =========================================================================
+#                              COMMAND + GREP
+# =========================================================================
+alias psg='ps -ef   | grep -v grep | egrep -i '
+alias psa='ps -aux  | grep -v grep | egrep -i '
+alias  hg='history  | egrep -i '
+alias  lg='ls -ltrA | egrep -i '
+
+# =========================================================================
+#    SPELLING TYPES - HIGHLY PERSONAL AND KEYBOARD-DEPENDENT
+# =========================================================================
+alias xs='cd'
+alias vf='cd'
+alias moer='more'
+alias moew='more'
+alias kk='ll'
+alias grpe='grep'
+
+# =========================================================================
+#                              FIND COMMANDS
+# =========================================================================
+#=== FUNCTION ==================================
+#        NAME: ff
+# DESCRIPTION: Find file under the current directory
+#   PARAMETER:
+#===============================================
+ff (){
+   if [ -z "${1}" ];then
+      printf "Please pass an argument that you want to search for\n" >&2
+      return 1
+   else
+      /usr/bin/find . -type f -iname "$@"
+   fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: ffs
+# DESCRIPTION: Find file whose name starts with a given string
+#   PARAMETER:
+#===============================================
+ffs (){
+   if [ -z "${1}" ];then
+      printf "Please pass an argument that you want to search for\n" >&2
+      printf "SYNTAX: ffs <search-pattern>\n" >&2
+      return 1
+   else
+      /usr/bin/find . -type f -iname "$@"'*'
+   fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: ffe
+# DESCRIPTION: Find file whose name ends with a given string
+#   PARAMETER:
+#===============================================
+ffe (){
+   if [ -z "${1}" ];then
+      printf "Please pass an argument that you want to search for\n" >&2
+      printf "SYNTAX: ffe <search-pattern>\n" >&2
+      return 1
+   else
+      /usr/bin/find . -type f -iname '*'"$@"
+   fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: ffa
+# DESCRIPTION: Find file whose name contains a given string
+#   PARAMETER:
+#===============================================
+ffa (){
+   if [ -z "${1}" ];then
+      printf "Please pass an argument that you want to search for\n" >&2
+      printf "SYNTAX: ffa <search-pattern>\n" >&2
+      return 1
+   else
+      /usr/bin/find . -type f -iname "*$@*"
+   fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: fd
+# DESCRIPTION: Find directory whose name is a given string
+#   PARAMETER:
+#===============================================
+fd (){
+   if [ -z "${1}" ];then
+      printf "Please pass an argument that you want to search for\n" >&2
+      printf "SYNTAX: fd <search-pattern>\n" >&2
+      return 1
+   else
+      /usr/bin/find . -type d -iname "$@"
+   fi
+}
+
+# =========================================================================
+#                              FILE MANAGEMENT
+# =========================================================================
+#=== FUNCTION ==================================
+#        NAME: conf
+# DESCRIPTION: For editing and reloading conf files
+#   PARAMETER: conf <file>
+#===============================================
+conf() {
+    if (( $# != 1 ));then
+        printf "Wrong number of arguments\n" >&2
+        printf "  Syntax : conf bashrc       -> edit .bashrc      \n"  >&2
+        printf "  Syntax : conf vimrc        -> edit .vimrc       \n"  >&2
+        printf "  Syntax : conf bash_profile -> edit .bash_profile\n"  >&2
+        printf "  Syntax : conf bash_logout  -> edit .bash_logout \n"  >&2
+        printf "  Syntax : conf dircolors    -> edit .dircolors   \n"  >&2
+        printf "  Syntax : conf xresouces    -> edit .Xresources  \n"  >&2
+        printf "  Syntax : conf profile      -> edit .profile     \n"  >&2
+        printf "  Syntax : conf inputrc      -> edit .inputrc     \n"  >&2
+        return 1;
+    fi
+
+    case "$1" in
+        bashrc)        "${EDITOR}" ~/.bashrc       ; . ~/.bashrc        ;;
+        vimrc)         "${EDITOR}" ~/.vimrc        ; . ~/.vimrc         ;;
+        bash_profile)  "${EDITOR}" ~/.bash_profile ; . ~/.bash_profile  ;;
+        bash_logout)   "${EDITOR}" ~/.bash_logout  ; . ~/.bash_logout   ;;
+        profile)       "${EDITOR}" ~/.profile      ; . ~/.profile       ;;
+        inputrc)       "${EDITOR}" ~/.inputrc      ; . ~/.inputrc       ;;
+        dircolrs)      "${EDITOR}" ~/.dircolors    ; . ~/.dircolors     ;;
+        xresources)    "${EDITOR}" ~/.Xresources && xrdb ~/.Xresources  ;;
+        *)              printf "Unknown config file: $1\n" >&2; return 1;;
+    esac
+}
+
+# =========================================================================
+#                       BACKUP + ARCHIVE
+# =========================================================================
+#=== FUNCTION ==================================
+#        NAME: extract
+# DESCRIPTION: extract files
+#   PARAMETER: extract <file>
+#===============================================
+extract() {
+    if [ -f "$1" ]; then
+        case $1 in
+            *.tar.bz2)   tar xvjf   "$1"  ;;
+            *.tar.gz)    tar xvzf   "$1"  ;;
+            *.bz2)       bunzip2    "$1"  ;;
+            *.rar)       unrar x    "$1"  ;;
+            *.gz)        gunzip     "$1"  ;;
+            *.tar)       tar xvf    "$1"  ;;
+            *.tbz2)      tar xvjf   "$1"  ;;
+            *.tgz)       tar xvzf   "$1"  ;;
+            *.zip)       unzip      "$1"  ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x       "$1"  ;;
+            *)           printf "ERROR: '$1' cannot be extracted\n" >&2
+                         return 1
+                         ;;
+        esac
+    else
+        printf "ERROR : '$1' is not a valid file!\n" >&2
+        printf "SYNTAX: extract <filename>\n" >&2
+        return 1
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: mk<type>
+# DESCRIPTION: Creates an archive from given directory
+#   PARAMETER: ---
+#===============================================
+mktar() {
+    if [ -d "$1" ] ; then
+        tar cvf  "${1%%/}.tar"     "${1%%/}/"
+    else
+        printf "ERROR : Give a directory\n"  >&2
+        printf "SYNTAX: mktar <directory>\n" >&2
+        return 1
+    fi
+}
+
+mktgz() {
+    if [ -d "$1" ] ; then
+        tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"
+    else
+        printf "ERROR : Give a directory\n"  >&2
+        printf "SYNTAX: mktgz <directory>\n" >&2
+        return 1
+    fi
+}
+
+mktbz() {
+    if [ -d "$1" ] ; then
+        tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"
+    else
+        printf "ERROR : Give a directory\n"  >&2
+        printf "SYNTAX: mktbz <directory>\n" >&2
+        return 1
+    fi
+}
+
+mkzip() {
+    if [ -d "$1" ] ; then
+        zip -r   "${1%%/}.zip"     "${1%%/}/"
+    else
+        printf "ERROR : Give a directory\n"  >&2
+        printf "SYNTAX: mkzip <directory>\n" >&2
+        return 1
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: backup
+# DESCRIPTION: Back Up a file
+#   PARAMETER: bu <filename>
+#===============================================
+bu() {
+    if [ $# -ne 1 ]; then
+        printf "ERROR : Give a filename" >&2
+        printf "SYNTAX: backup <file>\n" >&2
+        return 1
+    else
+        cp -v "$1" "$1".$(date +%Y%m%d-%H%M%S).backup
+    fi
+}
+
+# =========================================================================
+#                       DIRECTORY STUFF
+# =========================================================================
+## cd to current git project root
+alias down='cd $(git rev-parse --show-toplevel)'
+
+#=== FUNCTION ==================================
+#        NAME: mkdate
+# DESCRIPTION: Make directory with current timestamp
+#   PARAMETER: ---
+#===============================================
+mkdate() {
+    mkdir -vp "$(date +"%Y_%m_%d_%H_%M_%S")"
+}
+
+#=== FUNCTION ==================================
+#        NAME: mcd
+# DESCRIPTION: Make a directory and cd into it
+#   PARAMETER: mcd <dirname>
+#===============================================
+mcd() {
+    if [ "$#" -eq 1 ]; then
+        mkdir -p "$1" && cd "$1";
+    else
+        printf "ERROR: give a directory\n" >&2
+        printf "SYNTAX: mcd <dirname>\n"   >&2
+        return 1
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: cdls
+# DESCRIPTION: cd into directory and do an ls
+#   PARAMETER: cdls <dirname>
+#===============================================
+cdls() {
+    if [ "$1" = "-" ]; then
+       builtin cd -
+       if [[ $(ls | wc -l) -gt 10 ]]; then
+           printf "\E[1;38;5;125m(too many files - so list the last 10 edited files)\E[0m\n" >&2
+           ls -ltr --color | tail -n10
+       else
+           ls -ltr --color
+      fi
+    elif [ -d "$1" ] || [ "$#" -eq 0 ]; then
+        builtin cd -- "$@"
+        if [[ $(ls | wc -l) -gt 10 ]]; then
+            printf "\E[1;38;5;125m(too many files - so list the last 10 edited files)\E[0m\n" >&2
+            ls -ltr --color | tail -n10
+        else
+            ls -ltr --color
+        fi
+    else
+        printf "ERROR cdls: '$1': Directory not found\n" >&2
+        printf "SYNTAX: cdls <dirname>\n" >&2
+        return 1
+    fi
+}
+
+# =========================================================================
+#                                TRASH
+# =========================================================================
+trash() {
+    if [ -z "$*" ] ; then
+        printf "SYNTAX: trash <filename>\n" >&2
+    else
+        DATE=$( date +%F )
+        [ -d "${HOME}/.Trash/${DATE}" ] || mkdir -p ${HOME}/.Trash/${DATE}
+        for FILE in $@ ; do
+            mv "${FILE}" "${HOME}/.Trash/${DATE}"
+            printf "${FILE} trashed!\n"
+        done
+    fi
+}
+
+# =========================================================================
+#                                MISC
+# =========================================================================
+bin2dec() {
+    if [[ $1 ]]; then
+        echo $((2#$1))
+    fi
+}
+
+bin2hex() {
+    if [[ $1 ]]; then
+        echo "obase=16 ; ibase=2 ; $1" | bc
+    fi
+}
+
+dec2bin() {
+    if [[ $1 ]]; then
+        echo "obase=2 ; $1" | bc
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: top10
+# DESCRIPTION: Top 10 commands
+#      SYNTAX: ---
+#===============================================
+top10() { cut -f1 -d" " ~/.bash_history \
+        | sort \
+        | uniq -c \
+        | sort -nr \
+        | head -n 10; }
+
+top10_(){ history\
+        |awk '{a[$4]++}END{for(i in a){printf"%5d\t%s\n",a[i],i}}'\
+        |sort -nr\
+        |head; }
+
+#=== FUNCTION ==================================
+#        NAME: busy
+# DESCRIPTION: Looks like i'm very busy :):)
+#      SYNTAX: ---
+#===============================================
+busy() {
+    cat /dev/urandom | hexdump -C | grep "ca fe"
+}
+
+# Some fun with cmatrix
+if [ -x "/usr/bin/cmatrix" ]; then
+   alias matrix='cmatrix -ab -u2 -C green'
+fi
+
+#=== FUNCTION ==================================
+#        NAME: colortable
+# DESCRIPTION: Display the colortable
+#   PARAMETER: ---
+#===============================================
+colortable() {
+    for n in $(seq 0 15); do
+        for m in $(seq 0 15); do
+            C=$((n * 16 + m))
+            printf "\033[48;5;${C}m %3d \033[0m" "$C"
+        done
+        printf "\n"
+    done
+}
+
+#=== FUNCTION ==================================
+#        NAME: hex_to_rgb
+# DESCRIPTION:
+#      SYNTAX:
+#===============================================
+hex_to_rgb(){
+    ## Usage: hex_to_rgb "#FFFFFF"
+    ##        hex_to_rgb "000000"
+    : "${1/\#}"
+    ((r=16#${_:0:2},g=16#${_:2:2},b=16#${_:4:2}))
+    printf '%s\n' "$r $g $b"
+}
+
+#=== FUNCTION ==================================
+#        NAME: hex_to_rgb
+# DESCRIPTION:
+#      SYNTAX:
+#===============================================
+rgb_to_hex(){
+    ## Usage: rgb_to_hex "r" "g" "b"
+    printf '#%02x%02x%02x\n' "$1" "$2" "$3"
+}
+
+#=== FUNCTION ==================================
+#        NAME: rot13
+# DESCRIPTION:
+#      SYNTAX:
+#===============================================
+rot13 () {
+    tr "[a-m][n-z][A-M][N-Z]" "[n-z][a-m][N-Z][A-M]"
+}
+
+#=== FUNCTION ==================================
+#        NAME: cleanup
+# DESCRIPTION: remove all stupid temp files that I hate
+#      SYNTAX: --
+#===============================================
+cleanup() {
+    printf "Starting Cleanup...\n"
+    rm *.url *.nzb *.sfv *.srr *.nfo *.swp
+    printf "Finished Cleanup\n"
+}
+
+#=== FUNCTION ==================================
+#        NAME: remindme
+# DESCRIPTION: Set a reminder
+#      SYNTAX: remindme <time> <text>
+#     EXAMPLE: remindme 10m "omg, the pizza"
+#===============================================
+remindme() {
+    if [ $# -ne 2 ]; then
+        printf "ERROR: needs two arguments\n" >&2
+        printf "SYNTAX: remindme <time> <message>\n" >&2
+        printf "   time: 5  -> 5 seconds\n" >&2
+        printf "   time: 5m -> 5 minutes\n" >&2
+        return 1
+    else
+        printf "Reminder: $2 set for $1 sec/mins from now.\n"
+        sleep $1 && zenity --info --text "$2" &
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: alert
+# DESCRIPTION: # Add an "alert" alias for long running commands.  Use like so:
+#      SYNTAX: sleep 10; alert
+#     EXAMPLE: sleep 10; alert
+#===============================================
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+#=== FUNCTION ==================================
+#        NAME: fixtabs
+# DESCRIPTION: Remove tabs from a file
+#      SYNTAX: fixtabs <file>
+#===============================================
+fixtabs() {
+    if [ $# -ne 1 ]; then
+        printf "ERROR fixtabs: 1 argument needed\n" >&2
+        printf "SYNTAX: fixtabs <file>\n" >&2
+        return 1
+    else
+        expand -t 4 "$1" > "$1.expanded"
+        mv -f "$1.expanded" "$1"
+        printf "Successful removed tabs from "$1"\n"
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: mans
+# DESCRIPTION: man page search
+#      SYNTAX: mans <cmd> <search-pattern>
+#===============================================
+mans () {
+    if [ $# -ne 2 ]; then
+        printf "ERROR : needs two arguments\n" >&2
+        printf "SYNTAX: mans <cmd> <search-pattern>\n" >&2
+        return 1
+    else
+        man $1 | grep -iC2 --color=always $2 | less
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: viw
+# DESCRIPTION: vim & wich <file>
+#      SYNTAX: viw <file>
+#===============================================
+viw() {
+    if [ $# -ne 1 ];then
+        printf "ERROR : Give a file\n" >&2
+        printf "SYNTAX: viw <file>\n" >&2
+        return 1
+    else
+        FILE=$(type "$1" | awk '{ print $3 }')
+        #FILE=$( which "$1" )
+        if [ -f "${FILE}" ]; then
+            printf "Editing ${FILE}\n"
+            "${EDITOR}" "${FILE}"
+        else
+            printf "ERROR : File not found in path!\n" >&2
+        fi
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: col
+# DESCRIPTION: Extract a column from a tabular output
+#      SYNTAX: col <column number>
+#===============================================
+col() {
+    if [ $# -ne 1 ];then
+        printf "ERROR: Give an integer as argument\n" >&2
+        printf "SYNTAX: col <column number>\n" >&2
+        return 1
+    else
+        awk -v col=$1 '{ print $col }'
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: gho
+# DESCRIPTION: Open the current path or file in GitHub
+#      SYNTAX:
+#===============================================
+gho() {
+    local file=$1
+    local remote=${2:-origin}
+
+    ## get the git root dir, branch, and remote URL
+    local gr=$(git rev-parse --show-toplevel)
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local url=$(git config --get "remote.$remote.url")
+
+    [[ -n ${gr} && -n ${branch} && -n ${remote} ]] || return 1
+
+    ## construct the path
+    local path=${PWD/#$gr/}
+    [[ -n $file ]] && path+=/$file
+
+    ## extract the username and repo name
+    local a
+    IFS=:/ read -a a <<< "$url"
+    local len=${#a[@]}
+    local user=${a[len-2]}
+    local repo=${a[len-1]%.git}
+
+    local url="https://github.com/${user}/${repo}/tree/${branch}${path}"
+    echo "${url}"
+    type -P xdg-open &> /dev/null && xdg-open ${url} || open ${url}
+}
+
+#=== FUNCTION ==================================
+#        NAME: git
+# DESCRIPTION: Wrap git. On errors, print an additional line in red.
+#      SYNTAX:
+#===============================================
+git1(){
+    command git "$@"
+    local exitCode=$?
+    if [ $exitCode -ne 0 ]; then
+        printf "\033[0;31mERROR: git exited with code $exitCode\033[0m\n"
+        return $exitCode
+    fi
+}
+#=== FUNCTION ==================================
+#        NAME: cdr
+# DESCRIPTION: # back to git project root directory
+#      SYNTAX:
+#===============================================
+cdr() {
+  [[ $(git rev-parse --is-inside-work-tree) == true ]] && cd $(git rev-parse --show-toplevel)
+}
+
+# =========================================================================
+#                       BOOKMARK FUNCTIONS
+# =========================================================================
+#=== FUNCTION ==================================
+#        NAME: rd
+# DESCRIPTION: Save current dir
+#      SYNTAX: rd <optional>
+#===============================================
+rd() {
+    printf "Save ${PWD}\n"
+    pwd > "${HOME}/.lastdir_$1" || printf "Cannot create file\n"
+}
+
+#=== FUNCTION ==================================
+#        NAME: rdd
+# DESCRIPTION: Goto the last saved dir
+#      SYNTAX: rdd <optional>
+#===============================================
+rdd() {
+    lastdir="$(cat "${HOME}/.lastdir_$1")" >/dev/null 2>&1
+    if [ -d "${lastdir}" ]; then
+        cd "${lastdir}" && pwd
+    else
+        printf "ERROR: No existing directory stored in buffer $1\n" >&2
+        return 1
+    fi
+}
+
+#=== FUNCTION ==================================
+#        NAME: stopwatch
+# DESCRIPTION: stopwatch
+#      SYNTAX: stopwatch
+#===============================================
+stopwatch(){
+    start_epoch=$(date +%s)
+    while true; do
+        days=$(( $(($(date +%s) - start_epoch)) / 86400 ))
+        echo -ne "$days day(s) and $(date -u --date @$((`date +%s` - $start_epoch)) +%H:%M:%S)\r";
+        sleep 0.1
+    done
+}
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+colors(){
+    fg=""
+    bg=""
+    for i in {0..255}; do
+        a=$(printf "\\x1b[38;5;%sm%3d\\e[0m " "$i" "$i")
+        b=$(printf "\\x1b[48;5;%sm%3d\\e[0m " "$i" "$i")
+        fg+="$a"
+        bg+="$b"
+        if (( "$i" % 5 ==0 )); then
+            echo -e "$fg\\t\\t$bg"
+            fg=""
+            bg=""
+        else
+            fg+="  "
+            bg+="  "
+        fi
+    done
+}
+
+## Draw an ascii bar figure from the percentage value read from stdin.
+## e.g.
+##    echo 17.73 | ascii-bar --width 20
+##    [||||                ] 17.73 %
+##    echo 17.73 | ascii-bar --width 30
+##    [||||||                        ] 17.73 %
+##
+ascii-bar(){
+    if [ "$1" == "--width" ]; then
+        shift
+    fi
+    width=${1:-20}
+    if [[ ! ${width} =~ [0-9]+ ]]; then
+        echo "Invalid width: ${width};"; exit 1;
+    fi
+    awk "{PERCENT=\$1; printf \"[\"; \
+        for(i=0;i<$width;++i) if(i/$width < PERCENT/100.0) printf \"|\"; else printf \" \"; \
+        printf \"] %5.2f %\", PERCENT; print \"\" }"
+}
+
+bashrchelp() {
+    less << EOF
+ ------------------- ALIASES ------------------------------------
+  c  = clear
+  f  = find . -name
+  g  = grep
+  h  = history
+  j  = jobs
+  md = mkdir
+  p  = pwd
+  v  = vim
+  tk = tkdiff
+  x  = xterm
+
+  cd = cdls
+  .. = cd ..
+  ...= cd ../..
+
+  l  = Common used
+  l. = List only dotfiles
+  ld = list only dirs
+  lt = List last 10 files
+
+  lf = Open last file
+  ll = Less last file
+  tf = tail -f
+  todo = ~/todo.txt
+
+  psa = ps -aux  | grep -v grep | egrep -i
+  psg = ps -ef   | grep -v grep | egrep -i
+  hg  = history  | egrep -i
+  lg  = ls -ltrA | egrep -i
+
+  path = Display PATH env var
+ ------------------- FUNCTIONS ------------------------------------
+  ff           Find file under the current directory
+  ffs          Find file whose name starts with a given string
+  ffe          Find file whose name ends with a given string
+  ffa          Find file whose name contains a given string
+  fd           Find directory whose name is a given string
+  conf         For editing and reloading conf files
+  extract      Extract files
+  mk<type>     Creates an archive from given directory
+  bu           Back Up a file
+  mkdate       Make directory with current timestamp
+  mcd          Make a directory and cd into it
+  cdls         cd into directory and do an ls
+  cdtmp        Create and goto temp dir
+  remove       Remove current dir if empty
+  trash        Move file to trash
+  bin2dec      bin2dec
+  dec2bin      dec2bin
+  top10        Top10 commands
+  busy         Looks like i'm busy
+  matrix       Looks like i'm busy
+  colortable   Show colortable
+  swap         Swap 2 files
+  gpp          Compiling and running C++ programs
+  rot13        rot13
+  cleanup      Remove all stupid temp files that I hate
+  remindme     Set a reminder
+  alert        Set a alert
+  fixtabs      Remove tabs from a file
+  mans         man page search
+  viw          vim & which <file>
+  col          Extract a column from a tabular output
+  rd           Save current dir
+  rdd          Goto the last saved dir
+  stopwatch    stopwatch
+  file2pdf     File2pdf
+
+  DESK         ~/Desktop
+
+  bashrchelp   Helpfile
+  my           My info
+
+EOF
+}
+
+## Pretty print the path
+alias path='echo ${PATH} | tr -s ":" "\n"'
+alias path='echo -e ${PATH//:/\\n}'
+
+# =========================================================================
+#                             OS SPECIFIC
+# =========================================================================
+
+OS="$(uname -s)"
+case $OS in
+    HP-UX)
+        ## To use your arrow keys in ksh
+        alias  _A=^P
+        alias  _B=^N
+        alias  _C=^B
+        alias  _D=^F
+        alias __A=^P
+        alias __B=^N
+        alias __C=^B
+        alias __D=^F
+        ;;
+    Linux)
+        alias      desk='cd ~/Desktop'
+        alias        nu='cd ~/TESTING/testing/'
+        alias      dots='cd ~/dotfiles'
+
+        # Common project directories
+        alias proj='cd ~/Projects/C_projects'
+
+        alias diff='colordiff'
+
+        ;;
+    *)
+        printf "Your OS Type is : ${OS}\n"
+        ;;
+esac
+###########################################################################
+###                           EOF
+###########################################################################
