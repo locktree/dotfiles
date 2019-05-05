@@ -1,0 +1,104 @@
+############################################################################
+# Author      : mitchell
+# Description : My gitattributes
+# Last Update : Sun 28 Apr 2019 01:08:49 PM CEST
+############################################################################
+## Details per file setting:
+##   text    These files should be normalized (i.e. convert CRLF to LF).
+##   binary  These files are binary and should be left untouched.
+##
+## Note that binary is a macro for -text -diff.
+##
+## SOURCE FILES
+## ============
+
+## BINARY FILES
+## ============
+*.db        binary
+*.p         binary
+*.pkl       binary
+*.pyc       binary
+*.pyd       binary
+*.pyo       binary
+
+## DOCUMENTATION
+## ============
+*.markdown   text
+*.md         text
+*.mdwn       text
+*.mdown      text
+*.mkd        text
+*.mkdn       text
+*.mdtxt      text
+*.mdtext     text
+*.txt        text
+AUTHORS      text
+CHANGELOG    text
+CHANGES      text
+CONTRIBUTING text
+COPYING      text
+copyright    text
+*COPYRIGHT*  text
+INSTALL      text
+license      text
+LICENSE      text
+NEWS         text
+readme       text
+*README*     text
+TODO         text
+
+.editorconfig  text
+.gitattributes text
+.gitconfig     text
+
+# DOCUMENTS
+## ============
+*.doc  diff=astextplain
+*.DOC  diff=astextplain
+*.docx diff=astextplain
+*.DOCX diff=astextplain
+*.dot  diff=astextplain
+*.DOT  diff=astextplain
+*.pdf  diff=astextplain
+*.PDF  diff=astextplain
+*.rtf  diff=astextplain
+*.RTF diff=astextplain
+
+## PROGRAMMING
+## ===========
+*.cs text=auto diff=csharp
+*.vb text=auto
+*.c text=auto
+*.cpp text=auto
+*.cxx text=auto
+*.h text=auto
+*.hxx text=auto
+*.py text=auto
+*.rb text=auto
+*.java text=auto
+*.html text=auto
+*.htm text=auto
+*.css text=auto
+*.scss text=auto
+*.sass text=auto
+*.less text=auto
+*.js text=auto
+*.lisp text=auto
+*.clj text=auto
+*.sql text=auto
+*.php text=auto
+*.lua text=auto
+*.m text=auto
+*.asm text=auto
+*.erl text=auto
+*.fs text=auto
+*.fsx text=auto
+*.hs text=auto
+*.pxd      text=auto
+*.py        text=auto
+*.py3       text=auto
+*.pyw       text=auto
+*.pyx       text=auto
+###########################################################################
+###                           EOF
+###########################################################################
