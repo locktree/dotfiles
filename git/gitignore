@@ -1,0 +1,94 @@
+# =========================================================================
+# Author      : mitchell
+# Description : My gitignore
+# Last Update : Sun 28 Apr 2019 01:08:38 PM CEST
+# =========================================================================
+## The rules for the patterns are as follows:
+##    -Blank lines or lines starting with # are ignored
+##    -Standard glob patterns work
+##    -Start patterns with a forward slash (/) to avoid recursivity
+##    -End patterns with a forward slash (/) to specify a directory
+##    -Negate a pattern by starting it with an exclamation point(!)
+##    -A question mark matches exactly one character
+## ========================================================================
+
+## Git
+## ===========================
+git-credentials
+
+## Compiled sources
+## ===========================
+*.com
+*.class
+*.dll
+*.elf
+*.exe
+*.lo
+*.o
+*.obj
+*.pyc
+*.slo
+*.so
+
+## Compiled Dynamic libraries
+## ===========================
+*.dylib
+*.dll
+
+## Compiled Static libraries
+## ===========================
+*.a
+*.la
+*.lai
+*.lib
+
+## Executables
+## ===========================
+*.app
+*.exe
+*.hex
+*.out
+
+## Temporary files
+## ===========================
+*.swo
+*.swp
+*.tmp
+*~
+
+## Packages
+## ===========================
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+## Logs and databases
+## ===========================
+*.log
+*.sql
+*.sqlite
+
+## OS generated files
+## ===========================
+.DS_Store
+.DS_Store?
+.Trashes
+._*
+ehthumbs.db
+Thumbs.db
+
+## Patch/diff artifacts
+## ===========================
+*.patch
+*.diff
+*.orig
+*.rej
+interdiff*.txt
+###########################################################################
+##                                EOF
+###########################################################################
