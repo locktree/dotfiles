@@ -1,0 +1,22 @@
+## 1. SUBJECTLINE: (50 CHARS OR LESS) SUMMARY OF CHANGES. COMMIT TITLE
+##    -<TYPE>
+##    -If applied, this commit will...
+##    -Start with capital, and do not end with a period!
+##    -Use imperative mood: Fix/Add/Change, instead of Fixed/Added/Changed
+##    -Separate subject from body with a blank line
+
+## 2. BODY: MORE DETAILED EXPLANATORY IF NECESSARY (MAX 72 CHARS WIDTH)
+##    -Use the body to explain what and why vs. how
+
+## 3. BULLETS(HYPHEN/ASTERISK/POINTS)
+##    -Provide links to any relevant tickets, articles or other resources
+
+############################### TYPES #####################################
+## feat     - new feature
+## fix      - bug fix
+## docs     - changes to documentation
+## style    - formatting, missing semi colons, etc; no code change
+## refactor - refactoring production code
+## test     - adding missing/refactoring tests; no production code change
+## chore    - updating grunt tasks etc; no production code change
+###########################################################################
