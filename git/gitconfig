@@ -1,0 +1,525 @@
+###########################################################################
+## Author      : mitchell
+## Description : My gitconfig
+## Last Update : Wed 01 May 2019 07:27:31 AM CEST
+###########################################################################
+
+###########################################################################
+###                               COLOR
+###########################################################################
+[color]
+    ui          = auto
+    diff        = auto
+    status      = auto
+    branch      = auto
+    interactive = auto
+    push        = auto
+
+[color "branch"]
+    current  = yellow bold
+    local    = green bold
+    remote   = cyan bold
+    upstream = red bold
+
+[color "status"]
+    header    = white
+    added     = green bold
+    changed   = yellow bold
+    untracked = red bold
+    branch    = yellow bold
+
+## Applies colors to diff/log/show output
+[color "diff"]
+    context    = white
+    meta       = yellow bold
+    frag       = magenta bold
+    old        = red bold
+    new        = green bold
+    commit     = yellow bold
+    whitespace = red reverse
+
+[color "grep"]
+    filename   = magenta bold
+    linenumber = magenta bold
+    match      = black yellow dim
+
+#[color "decorate"]
+#    HEAD = cyan
+#    branch = yellow
+#    tag = magenta
+###########################################################################
+##                                CONFIG
+###########################################################################
+[core]
+    editor = vim
+    excludesfile = ~/.gitignore
+    attributesfile = ~/.gitattributes
+    hooksPath = ~/dotfiles/git/hooks/
+    pager = less -FRX
+
+    ## Always use Unix line-endings in checked out files
+    autocrlf = false
+    safecrlf = false
+
+    ## Treat specific whitespaces as error:
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+[credential]
+    helper = cache
+
+[gc]
+    ## Automatic garbage collector
+    auto=1
+
+[help]
+    ## Show correct command version but do not exectude it when mistyped
+    autocorrect = 0
+
+[format]
+    ## The default pretty format for log/show/whatchanged
+    pretty = format:%C(yellow)%h %Cblue%>(21)%ad %Cgreen%>(16)%aN%Cred%d %Creset%s
+
+[advice]
+    ## Disable "how to stage/unstage/add" hints given by git status
+    statusHints = false
+
+[filter "trimWhitespace"]
+    clean = git-stripspace
+
+[status]
+    ## Show all files,  not only the directory
+    showUntrackedFiles = all
+    ## Show absolute project paths of files
+    relativePaths = false
+
+[commit]
+    ## Gives diffs in commit message
+    verbose = true
+    template= ~/.gitmessage
+    #gpgSign = true
+
+[branch]
+    ## By default, "git pull" will REBASE (instead merge) the local branch
+    ## created with "git checkout" / "git branch" when the local branche
+    ## tracking these branches
+    autoSetupRebase = always
+    ## By default, track branches created with checkout/branch when
+    ## starting from these branches
+    autoSetupMerge = always
+
+[branch "master"]
+    ## Always rebase when pulling on project level
+    rebase = true
+    mergeoptions = --ff-only
+
+[diff]
+    tool = vimdiff
+
+    ## Use mnemonic prefixes (index/work tree/commit/object) instead of a/b
+    mnemonicprefix = true
+
+    ## Show renames/moves as such
+    renames = true
+
+    ## When using --word-diff, assume --word-diff-regex=.
+    wordRegex = .
+
+[diff "bin"]
+    ## Use "hexdump" to diff binary files
+    textconv = hexdump -v -C
+
+[difftool]
+    ## Don't ask to open difftool!!
+    prompt = false
+
+[rebase]
+    ## Automatically set up commits for squashing in the todo list of
+    ## interactive rebases
+    autoSquash = true
+    autoStash = true
+
+[merge]
+    tool = vimdiff
+
+    ## Include summaries of merged commits in newly created merge commit
+    ## messages
+    log = true
+
+    summary = true
+
+    ## Always show a diffstat at the end of a merge
+    stat = true
+
+    conflictstyle = diff3
+
+    ## ensures that you get an error unless every merge is fast-forward.
+    ## No merge commits, no joining together of two histories, just a
+    ## smooth progression from commit to commit.
+    ## Basically forces you to either rebase before merging, or turn off
+    ## this configuration, or to force your way through using
+    ff = only
+
+[mergetool]
+    prompt = false
+
+[fetch]
+    ## Automatically prune stale remote branches on fetch
+    prune = true
+
+[pull]
+    ## Perform a rebase when pulling
+    rebase = true
+    ## do 'git rebase -p'
+    rebase = preserve
+
+[push]
+    default = current
+
+    ## When pushing, also push tags whose commit-ishs are now reachable upstream
+    followTags = true
+
+[stash]
+     ## Show patch during git stash show
+     showPatch = true
+
+[log]
+    date = relative
+    decorate = full
+
+[tag]
+    ## Sort tags as version numbers whenever applicable, so 1.10.2 is AFTER 1.2.0
+    sort = version:refname
+
+[grep]
+    ## Consider most regexes to be ERE
+    extendedRegexp = true
+    lineNumber = true
+
+###########################################################################
+###                               URL
+###########################################################################
+[url "git@github.com:"]
+    insteadOf = "gh:"
+    pushInsteadOf = "github:"
+    pushInsteadOf = "https://github.com/"
+    pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+    insteadOf = "gh:"
+
+[url "git@gist.github.com:"]
+    insteadOf = "gst:"
+    pushInsteadOf = "gist:"
+    pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+    pushInsteadOf = "gist:"
+
+[url "git@bitbucket.org:"]
+    insteadOf = "bb:"
+    pushInsteadOf = "bitbucket:"
+    pushInsteadOf = "https://bitbucket.org/"
+    pushInsteadOf = "git://bitbucket.org/"
+
+##### AND THEN I CAN DO ###################################################
+## $ git clone gh:locktree/test
+## $ git clone gist:locktree/test
+## $ git clone bb:locktree/test
+###########################################################################
+
+###########################################################################
+###                               ALIAS
+###########################################################################
+[alias]
+    #######################################################################
+    ######################## COMMIT #######################################
+    #######################################################################
+    c     = commit
+    cam   = commit --amend
+    camm  = commit --amend --no-edit
+
+    #######################################################################
+    ######################## CHECKOUT #####################################
+    #######################################################################
+    co  = checkout
+    cob = checkout -b
+    cm  = checkout master
+
+    #######################################################################
+    ######################## STATUS #######################################
+    #######################################################################
+    s = status --short --branch
+
+    #######################################################################
+    ######################## STASH ########################################
+    #######################################################################
+    stash-unapply  = !git stash show -p | git apply --reverse
+
+    #######################################################################
+    ######################## PUSH #########################################
+    #######################################################################
+    pom = push origin master
+
+    ## Push the current branch to the remote "origin", and set it to track the upstream branch
+    publish   = "!git push -u origin $(git rev-parse --abbrev-ref HEAD)"
+
+    ## Delete the remote version of the current branch
+    unpublish = "!git push -u origin :$(git rev-parse --abbrev-ref HEAD)"
+
+    ## See which commits are on the remote that aren't on your local branch
+    incoming = "! git fetch && git log --oneline --no-merges ..origin/$(git rev-parse --abbrev-ref HEAD)"
+
+    ## And the other way around: what is local and not on the remote
+    unpushed =                     ! git log --oneline --no-merges origin/$(git rev-parse --abbrev-ref HEAD)..
+
+    ## Run git update-from <remote> <branch-name>
+    update-from = "!f() { git fetch $1 --prune; git merge --ff-only $1/$2 || git rebase --preserve-merges $1/$2; }; f"
+
+    #######################################################################
+    ######################## DIFF #########################################
+    #######################################################################
+    d    = diff
+    ds   = diff --staged
+
+    dt   = difftool
+    dts  = difftool --staged
+
+    dr    = diff --word-diff-regex=.
+    drs   = diff --word-diff-regex=. --staged
+
+    d1 = diff HEAD~
+    d2 = diff HEAD~~
+    d3 = diff HEAD~~~
+    d4 = diff HEAD~~~~
+
+    ## `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { git difftool --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
+    ## Compare commits in one branch against another
+    ## E.g.: git diff-branch master develop
+    diff-branch = "!f() { git log --oneline $1..$2;  }; f"
+
+    #######################################################################
+    ######################## BRANCHES #####################################
+    #######################################################################
+    branch-name   = rev-parse --abbrev-ref HEAD
+    branch-rebase =  "!git rebase -i $(git merge-base master HEAD)"
+    branch-reset  =  "!git reset $(git merge-base master HEAD)"
+    branch-files  =  "!git diff --name-only $(git merge-base HEAD ${1:-master})"
+    branch-diff   =  "!git diff $(git merge-base master HEAD)"
+    branch-log    =  "!git log --graph --date=relative master..$(git rev-parse --abbrev-ref HEAD)"
+
+    ## Create new branch based off origin/master and checkout into the given name
+    branch-new = !"f() { git checkout -b \"$@\" remotes/origin/master; }; f"
+
+    ## Where is the current branch branched from
+    branch-from = !git show --summary $(git merge-base master $(git rev-parse --abbrev-ref HEAD))
+
+    ## lbs = List local branches sorted
+    lbs   = for-each-ref --sort=-committerdate refs/heads/   --format='%(color:cyan)%(authordate:format:%m/%d/%Y %I:%M %p) %(color:red bold)%(objectname:short) %(color:blue)%(refname:short)%(color:reset) (%(color:green)%(committername)%(color:reset)) %(contents:subject)'
+
+    ## rbs = List remote branches sorted
+    rbs   = for-each-ref --sort=-committerdate refs/remotes/ --format='%(color:cyan)%(authordate:format:%m/%d/%Y %I:%M %p) %(color:red bold)%(objectname:short) %(color:blue)%(refname:short)%(color:reset) (%(color:green)%(committername)%(color:reset)) %(contents:subject)'
+
+    ## Remove branches that have already been merged with master
+    branch-delete = "!f() { git checkout --quiet master && git branch --merged | grep --invert-match '\\*' | xargs -n 1 git branch --delete; git checkout --quiet @{-1}; }; f"
+
+    #######################################################################
+    ######################## STANDUP ######################################
+    #######################################################################
+    ## What happened today
+    today          = !"git log --since='12am' --all --committer=$(git config --get user.name)"
+
+    ## What happened yesterday
+    yesterday      = !"git log --since='2 day ago' --all --until='1 day ago' --committer=$(git config --get user.name)"
+
+    ## For standup @ work
+    standup = !"git log --branches --graph --committer=$(git config --get user.name) --since='$(if [[ "Mon" == "$(date +%a)" ]]; then echo "last friday"; else echo "yesterday"; fi)' "
+
+    ## Show the log for my own user email
+    log-me = !git log --author $(git config user.email)
+
+    #######################################################################
+    ######################## MERGE ########################################
+    #######################################################################
+    ## Test if Auto merge is possible. Execute from master
+    merge-test = "!git merge --no-commit --no-ff \"$1\"; git merge --abort; echo \"Merge aborted\""
+
+    edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+    add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+
+    #######################################################################
+    ######################## STATISTICS ###################################
+    #######################################################################
+    ## Show the number of log entries by a specific date format. HELPER FUNCTION!
+    log-count-per-date-format = "!f() { d=\"$1\"; shift; git log $@ --format=oneline --format="%ad" --date=format:\"$d\" | awk '{a[$0]++}END{for(i in a){print i, a[i]}}' | sort; }; f"
+    ##----------------------------------------------------------------------------------------------------------------------
+    ## Show the number of log items by year, or month, or day, etc.
+    log-count-per-hour          = "!f() { git log-count-per-date-format \"%Y-%m-%d:%H\" $@ ; }; f"
+    log-count-per-day           = "!f() { git log-count-per-date-format \"%Y-%m-%d\" $@ ; }; f"
+    log-count-per-week          = "!f() { git log-count-per-date-format \"%Y#%V\" $@; }; f"
+    log-count-per-month         = "!f() { git log-count-per-date-format \"%Y-%m\" $@ ; }; f"
+    log-count-per-year          = "!f() { git log-count-per-date-format \"%Y\" $@ ; }; f"
+    log-count-per-hour-of-day   = "!f() { git log-count-per-date-format \"%H\" $@; }; f"
+    log-count-per-day-of-week   = "!f() { git log-count-per-date-format \"%u\" $@; }; f"
+    log-count-per-week-of-year  = "!f() { git log-count-per-date-format \"%V\" $@; }; f"
+    ##----------------------------------------------------------------------------------------------------------------------
+    ## Churn means "frequency of change" file. Count the number of commits
+    churn   = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort -nr
+
+    ## List contributors with number of commits
+    contri  = !git shortlog --summary --numbered --all | head -n${1:-10}
+
+    ## List all blobs by size in bytes
+    list-objects = !"git rev-list --all --objects |   \
+                         awk '{print $1}'|            \
+                         git cat-file --batch-check | \
+                         fgrep blob |                 \
+                         sort -k3nr |                 \
+                         less"
+
+    ## hash of empty tree
+    count = diff --stat "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+
+    #######################################################################
+    ######################## RESET ########################################
+    #######################################################################
+    nevermind = !git reset --hard HEAD && git clean -d -f
+
+    ## This commits everything in my working directory and then does a hard reset to remove that commit.
+    ## The nice thing is, the commit is still there, but it's just unreachable.
+    ## Unreachable commits are a bit inconvenient to restore, but at least they are still there.
+    ## You can run the git reflog command and find the SHA of the commit if you realize later that you made
+    ## a mistake with the reset. The commit message will be WIPE SAVEPOINT in this case.
+    wipe = !git add -A && git commit --no-verify -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+
+    #######################################################################
+    ######################## FIND #########################################
+    #######################################################################
+    ## Find branches containing commit
+    fb = "!f() { git branch -a --contains $1; }; f"
+
+    ## Find tags containing commit
+    ft = "!f() { git describe --always --contains $1; }; f"
+
+    ## Find commits by source code
+    fs = "!f() { git log --decorate -S$1; }; f"
+
+    ## Find commits by commit message
+    fm = "!f() { git log --decorate --grep=$1; }; f"
+
+    #######################################################################
+    ######################## TAG ##########################################
+    #######################################################################
+    ## Last tag in the current branch
+    lasttag = describe --tags --abbrev=0
+
+    ## Latest annotated tag in all branches
+    lasttagged = !git describe --tags $(git rev-list --tags --max-count=1)
+
+    ## List tags
+    taglist1 = !"git for-each-ref refs/tags/ --format '%(objecttype) %(committername) %(objectname:short) %(refname:short) %(contents:subject)' | \
+                      while read objecttype committername objectname refname content; do     \
+                          if [ $objecttype = tag ]; then                                     \
+                              echo "ANNOTATED" $committername \"-\" $objectname \"-\" $refname $content;       \
+                          else   \
+                              echo \"SIMPLE   \" $committername \"-\" $objectname \"-\" $refname $content;     \
+                          fi                                                                 \
+                      done                                                                   \
+                      "
+
+    ## List tags
+    taglist2 = !git log --tags --simplify-by-decoration
+
+    # what tag contains the sha: git whatrelease [hash]
+    whattag = name-rev --name-only
+
+    ## Remove the old tag with this name and tag the latest commit with it
+    retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
+
+    #######################################################################
+    ######################## FILES STUFF ##################################
+    #######################################################################
+    unmerged    = !git ls-files --unmerged | cut -f2 | uniq
+    untracked   = ls-files --other --exclude-standard
+    staged      = ls-files --cached
+    modified    = ls-files --modified
+    deleted     = ls-files --deleted
+    ignored     = ls-files -o -i --exclude-standard
+    ##---------------------------------------------------------------------
+    vum  = !${EDITOR:-vim} -p $(git unmerged)
+    vmo  = !${EDITOR:-vim} -p $(git modified)
+    vut  = !${EDITOR:-vim} -p $(git untracked)
+    vall = !${EDITOR:-vim} -p $(git status --porcelain | awk '{print $2}')
+    ##---------------------------------------------------------------------
+    ## Mark a file as "assume unchanged", which means that Git will treat
+    ## it as though there are no changes to it even if there are.
+    ## Useful for temporary changes to tracked files
+    assume      = update-index --assume-unchanged
+    unassume    = update-index --no-assume-unchanged
+    assumed     = !git ls-files -v | grep ^h | cut -c 3-
+    unassumeall = !git assumed | xargs git update-index --no-assume-unchanged
+    assumeall   = !git s -s | awk {'print $2'} | xargs git assume
+    #######################################################################
+    ######################## LOG ##########################################
+    #######################################################################
+    log1 = log --graph --topo-order --decorate --all --boundary
+
+    log2 = log --stat --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+    log3 = log --color --graph --date-order --pretty=format:'%C(red)%d%C(yellow)%B\
+                %n%C(ul)Hash:%C(reset) %C(magenta)%H\
+                %n%C(ul)Author:%C(reset) %C(bold blue)%an<%ae> %C(reset)%C(green)%ar%C(cyan)(%ad)\
+                %n%C(ul)Committer:%C(reset) %C(bold blue)%cn<%ce> %C(reset)%C(green)%cr%C(cyan)(%cd)\
+                %n' --stat --date=local --patch
+    #-----------------------------------------------------------------------------------------------------------------------
+    lol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(red)(%cr) %C(bold blue) [%an]'
+
+    #######################################################################
+    ######################## DIVERSE ######################################
+    #######################################################################
+    ## Given a string for an author, try to figure out full name and email
+    whois   = !sh -c 'git log -i -1 --author=\"$1\" --pretty=\"format:%an <%ae>\"' -
+
+    ## Save a repo as a tarball
+    export  = !git archive -o $(basename $(git rev-parse --show-toplevel)).$(date +%Y%m%d-%H%M%S).tar.gz -9 --prefix=latest HEAD
+
+    ## Tells you who the authors are: git who -- path/to/file
+    who = "!f() { \
+        git log --ignore-all-space --pretty=format:'%Cgreen%<(30)%aN%Creset %Cblue<%aE>%Creset' \"${@-HEAD}\" \
+        | nl | sort --key=2 | uniq -c -f 1 | sort --numeric-sort --key=2 \
+        | awk '{$2=\"\"; print $0}'; \
+    }; f"
+
+    lost = !"git fsck | awk '/dangling commit/ {print $3}' | git show --format='SHA1: %C(yellow)%h%Creset %f' --stdin | awk '/SHA1/ {sub(\"SHA1: \", \"\"); print}'"
+
+    ## Open the git repo location in your web browser
+    browse = "!f() { REPO_URL=$(git config remote.origin.url); ${BROWSER} ${REPO_URL%%.git}; }; f"
+
+    #######################################################################
+    ######################## MAINTENANCE ##################################
+    #######################################################################
+    prune-all = "!f() {  git stash clear ; git clean -df ; git reflog expire --expire-unreachable=now --rewrite --all ; git gc --prune=now ; git remote prune origin ; }; f"
+
+    ## 1. git reflog expire --expire-unreachable=now --rewrite --all  ## prunes older reflog entries
+    ## 3. git gc --prune=now          ## Cleanup unnecessary files and optimize the local repository (will call git prune)(and git repack -a -d -l)
+    ## 3. git stash clear             ## Cleanup the stashes
+    ## 4. git clean -df               ## Cleanup local files
+    ## 5. git remote prune origin     ## Deletes all stale tracking branches which have already been removed at origin but are still locally available in remotes/origin
+
+###########################################################################
+############################ LOCAL ########################################
+###########################################################################
+## Allow local customizations in the .gitconfig_local file
+## To prevent people from accidentally committing under your name
+## Where         ~/.gitconfig_local is at least:
+## [user]
+##     name     = [username]
+##     email    = [email]
+##     username = [username]
+[include]
+    path = ~/.gitconfig_local
+
+###########################################################################
+############################ E O F ########################################
+###########################################################################
