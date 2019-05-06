@@ -1,0 +1,95 @@
+#--------------------------------------------------------------------------
+# Author      : mitchell
+# Purpose     : Fundamentals
+# Last Update : Sun 28 Apr 2019 01:31:43 PM CEST
+#--------------------------------------------------------------------------
+  # CTRL-KEY MAPPINGS
+  "\C-A":  beginning-of-line
+  "\C-B":  backward-char
+  "\C-D":  delete-char
+  "\C-E":  end-of-line
+  "\C-F":  forward-char
+  "\C-G":  abort                  # No idea?
+  "\C-K":  kill-line              # From cursor to end of line
+  "\C-L":  clear-screen           # Clear screen, keep the prompt
+  "\C-P":  previous-history
+  "\C-N":  next-history
+  "\C-R":  reverse-search-history
+  "\C-S":  forward-search-history
+  "\C-T":  transpose-chars
+  "\C-U":  unix-line-discard      # Remove everything before cursor
+  "\C-W":  unix-word-rubout       # Remove word before cursor
+  "\C-Y":  yank  #Yank to the top of the kill ring into the buffer at point
+  "\C-X":  backward-kill-line     # Begin till point
+
+  # ALT-KEY MAPPINGS
+  "\eb":  backward-word
+  "\ed":  kill-word               # From cursor to end of word
+  "\ef":  forward-word
+  "\et":  transpose-words
+  "\eu":  upcase-word             # From cursor position till end of line
+  "\el":  downcase-word           # From cursor position till end of line
+
+###########################################################################
+###      SPECIAL KEY MAPPINGS
+###########################################################################
+  "\eOP":     "F1"                      # F1
+  "\eOQ":     "F2"                      # F2
+  "\eOR":     "F3"                      # F3
+  "\eOS":     "F4"                      # F4
+  "\e[15~":   "F5"                      # F5
+  "\e[17~":   "F6"                      # F6
+  "\e[18~":   "F7"                      # F7
+  "\e[19~":   "F8"                      # F8
+  "\e[20~":   "F9"                      # F9
+  "\e[21~":   "F10"                     # F10
+  "\e[23~":   "F11"                     # F11
+  "\e[24~":   "F12"                     # F12
+
+  "\e[H":     beginning-of-line         # Home
+  "\e[F":     end-of-line               # End
+
+  "\e[3~":    delete-char               # Delete
+  "\e[2~":    quoted-insert             # Insert
+
+  "\e[5~":    history-search-backward   # PageUp
+  "\e[6~":    history-search-forward    # PageDown
+
+  "\e[A":     history-search-backward   # Up-arrow
+  "\e[B":     history-search-forward    # Down-arrow
+
+  "\e[1;5C":  forward-word              # CTRL+Left
+  "\e[1;5D":  backward-word             # CTRL+Right
+
+  "\e[1;3C":  forward-word              # ALT+Left
+  "\e[1;3D":  backward-word             # ALT+Right
+###########################################################################
+CTRL
+=====================
+A    BEGINNING OF LINE
+B    BACKWARD CHAR
+D    DELETE CHAR
+E    END OF LINE
+F    FORWARD CHAR
+K    KILL LINE (FROM CURRENT TO END)
+L    CLEAR SCREEN
+P    PREVIOUS HISTORY
+N    NEXT HISTORY
+R    REVERSE-SEARCH-HISTORY
+S    FORWARD-SEARCH-HISTORY
+T    TRANSPOSE CHAR
+U    REMOVE BEGIN TILL CURRENT(SAME AS X)
+W    REMOVE CURRENT TILL BEGIN OF WORD
+X    REMOVE BEGIN TILL CURRENT(SAME AS U)
+
+ALT
+======================
+B    BACKWARD WORD
+D    KILL WORD
+F    FORWARD WORD
+T    TRANSPOSE WORD
+U    UPPERCASE (FROM CURRENT TILL END)
+L    LOWERCASE (FROM CURRENT TILL END)
+###########################################################################
+###                           EOF
+###########################################################################
