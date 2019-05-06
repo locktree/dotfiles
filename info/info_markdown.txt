@@ -1,0 +1,94 @@
+# =========================================================================
+# Author      : mitchell
+# Purpose     : Cheatsheet markdown
+# Last Update : Sun 28 Apr 2019 01:27:46 PM CEST
+# =========================================================================
+-Markdown files: Files with the .md or .markdown extension
+-Escape character: \
+-Dots indicate leading spaces
++-------------------+------------------------------------------------------
+| HEADING           | #      Heading 1 (The largest heading)
+|                   | ##     Heading 2
+|                   | ###    Heading 3
+|                   | ####   Heading 4
+|                   | #####  Heading 5
+|                   | ###### Heading 6 (The smallest heading)
++-------------------+------------------------------------------------------
+| BOLD              | ** ** or __ __         **bold text**
+| ITALIC            | * * or _ _             *italicized text*
+| STRIKETHROUGH     | ~~ ~~                  ~~This was mistaken text~~
++-------------------+------------------------------------------------------
+| BLOCKQUOTE        | >                      >  Blockquote TEXT
+| TEXT              | >>                     >> Nested blockquote
++-------------------+------------------------------------------------------
+| HORIZONTAL RULE   | *** or --- or ___
++-------------------+------------------------------------------------------
+| BULLETED LIST     | * Bulleted Item
+|                   | - Bulleted Item
+|                   | + Bulleted Item
++-------------------+------------------------------------------------------
+| NUMBERED LIST     | 1. Numbered Item
+|                   | 2. Numbered Item
+|                   | 3. Numbered Item
++-------------------+------------------------------------------------------
+| NESTED LIST       | 1. Numbered Item
+|                   |   * Bulleted Item
+|                   |   * Bulleted Item
+|                   | 2. Numbered Item
++-------------------+------------------------------------------------------
+| CHECKLISTS        | [ ] Unchecked Item
+| (TASK LISTS)      | [X] Checked Item
++-------------------+------------------------------------------------------
+| CODE BLOCKS       | This is an example of `inline code`
+|                   | ```This is a fenced code block.```
+|                   | This is also a fenced code block.
++-------------------+------------------------------------------------------
+| TABLE             |    | Col1         | Col2     | Col3          |
+|                   |    | :----------- | :------: | ------------: |
+|                   |    | Left-aligned | Centered | Right-aligned |
++-------------------+------------------------------------------------------
+| TEXT HIGHLIGHTING | ==Text to be highlighted==
++-------------------+------------------------------------------------------
+| SYNTAX HIGHLIGHT  | ```python
+|                   | print "hello world"
+|                   | ```
++-------------------+------------------------------------------------------
+| COLORED           | ```diff
+| (using diff)      | + This will be highlighted in green
+|                   | - This will be highlighted in red
+|                   | ```
++-------------------+------------------------------------------------------
+| LINK              | [Link Text](http://google.com)
+|                   | [Link Text with title](https://www.google.com "Homepage")
+|                   | [Reference-style link][Arbitrary case-insensitive reference text]
+|                   | [Relative reference to a repository file](../blob/master/LICENSE)
+|                   | [You can use numbers for reference-style link definitions][1]
++-------------------+------------------------------------------------------
+| TYPOGRAPHIC       | (c) (C) (r) (R) (tm) (TM) (p) (P) +-
++-------------------+------------------------------------------------------
+| FOOTNOTES         | Sentence with a footnote label [^1].
+|                   |     [^1]: Footnote content.
++-------------------+------------------------------------------------------
+| COMMENTS          | <!---
+|                   |   your comment goes here
+|                   |   and here
+|                   | -->
++-------------------+------------------------------------------------------
+| Manual Line break | End a line with two or more spaces
++-------------------+------------------------------------------------------
+| Images            | ![alttext](http://example.com/logo.png)
+|                   | ![alttext](figures/img.png)
++-------------------+------------------------------------------------------
+https://dillinger.io/
++--------------------------------------------------------------------------
+GOOD README:
+-Description               --> Important first impression
+-Installation instructions --> How to install
+-Where to get help         --> Link to the docs, mailing list, wiki, etc
+-Contribution guidelines   --> Tell me how others can help
+-Contributor list          --> List the humans behind the project
+-Credits                   --> Credits to other people or projects
+-Include tests, specs, features, examples, license
++--------------------------------------------------------------------------
+|                              EOF
++--------------------------------------------------------------------------
