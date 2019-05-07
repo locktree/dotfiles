@@ -3,7 +3,7 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Tue 07 May 2019 09:05:48 PM CEST
+ *  Last Update: Tue 07 May 2019 09:08:10 PM CEST
  =========================================================================
 -->
 
@@ -88,6 +88,16 @@ risk. This repo involve mainly:
         |-- markdown.css
     |-- LICENSE
     |-- README.md
+
+## Getting Started
+TODO: Deployment script
+
+## Making Local Customizations
+You can make local customizations for some programs by editing these files:
+
+* `vim` : `~/.vimrc_local`
+* `bash`: `~/.bash_local`
+* `git` : `~/.gitconfig_local`
 
 ## Authors
 
