@@ -1,0 +1,122 @@
+#--------------------------------------------------------------------------
+# Author      : mitchell
+# Purpose     : vimrc cheat sheet
+# Last Update : Sun 28 Apr 2019 01:35:11 PM CEST
+#--------------------------------------------------------------------------
+nnoremap   ;w     :w<CR>
+nnoremap   ;W     :w<CR>
+nnoremap   ;q     :q<CR>
+nnoremap   ;Q     :q<CR>
+nnoremap   ;WQ    :wq<CR>
+nnoremap   ;wq    :wq<CR>
+nnoremap   ;qall  :qall<CR>
+
+nnoremap   <C-e>  5<C-e>
+nnoremap   <C-y>  5<C-y>
+nnoremap   ;  :
+
+nnoremap   pp        Past and indent
+
+nnoremap   <C-l>     Window navigation right
+nnoremap   <C-h>     Window navigation left
+nnoremap   <C-k>     Window navigation up
+nnoremap   <C-j>     Window navigation down
+nnoremap   <RIGHT>   Window navigation right
+nnoremap   <LEFT>    Window navigation left
+nnoremap   <UP>      Window navigation up
+nnoremap   <DOWN>    Window navigation down
+
+nnoremap   <S-TAB>   Cycle through tabs with <tab>
+nnoremap   <CR>      Page Down
+
+inoremap   jj        <ESC>
+inoremap   jk        <ESC>
+
+          <C-DOWN>   Move current line/selected lines up and down
+          <C-UP>     Move current line/selected lines up and down
+###########################################################################
+<LEADER>*      Search and replace word under cursor
+<LEADER>**     Search and replace word under cursor(use current word as starting)
+
+<C-a>1         Around with #
+<C-a>2         Underline line with =
+<C-a>3         Comment
+<C-a>4         Uncomment
+
+<LEADER>di     Diff with last write (VIMDIFF)
+<LEADER>do     Diff with last write (textual)
+<LEADER>dd     Diff with last write (TKDIFF)
+<LEADER>dg     Diff with last write (GIT)
+
+<LEADER>gg     Intent all lines (preserves cursor position)
+
+<LEADER>hl     Highlight the last inserted text
+<LEADER>hh     Toggle search highlighting
+<LEADER>hu     Case insensitive, partial match inclusive
+<LEADER>hc     Find merge conflict
+
+<LEADER>if    Show function name
+<LEADER>ii    Show highlight group at the cursor
+
+<LEADER>ml    Add Modeline
+
+<LEADER>qd    Wrap a word in double quotes
+<LEADER>qs    Wrap a word in single quotes
+
+<LEADER>ss    Toggle spell
+<LEADER>sn    Next misspelled word
+<LEADER>sp    Previous mispelled word
+<LEADER>sa    Add word to dictionary
+<LEADER>s?    List alternative words
+
+<LEADER>tm    :tabmove
+<LEADER>tf    :tabfirst
+<LEADER>tn    :tabnew
+<LEADER>th    :tabprev
+<LEADER>tl    :tabnext
+<LEADER>tc    :tabclose
+<LEADER>to    :tabonly
+<LEADER>ts    Open file corresponding to the source/header actually opened
+
+# Splits and Tabs
+nnoremap  ,e  :e    <C-r>=expand("%:p:h")<CR>/
+nnoremap  ,s  :sp   <C-r>=expand("%:p:h")<CR>/
+nnoremap  ,v  :vsp  <C-r>=expand("%:p:h")<CR>/
+nnoremap  ,t  :tabe <C-r>=expand("%:p:h")<CR>/
+
+<LEADER>wv    Window Vertical
+<LEADER>wh    Window Horizontal
+<LEADER>wq    Close window
+###########################################################################
+todo      TODO
+bug       BUG
+###########################################################################
+# FUNCTION KEYS
+###########################################################################
+<F1>        TabEdit bashrc
+<F2>        TabEdit vim autogroups
+<F3>        TabEdit vim maps
+<F4>        TabEdit vim vimrc
+<F5>        TabEdit info
+<F6>        Testing (depending on filetype)
+<F7>        Compile (depending on filetype)
+<F8>        Execute (depending on filetype)
+<F10>       Max current Window
+<F11>       Change window width
+<S-F11>     Change window width
+<F12>       Change window height
+<S-F12>     Change window height
+
+TAB-TAB     Explorer
+FormatJSON  Format JSON
+
+ShowFuncName
+DiffOrig
+RemoveFancyCharacters
+AppendModeline
+
+'  `        Swap
+w{          Word in brackets
+###########################################################################
+#                                  EOF
+###########################################################################
