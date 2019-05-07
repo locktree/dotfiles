@@ -1,0 +1,685 @@
+"--------------------------------------------------------------------------
+" Author      : mitchell
+" Purpose     : My vim help file
+" Last Update : Sun 28 Apr 2019 01:34:53 PM CEST
+"--------------------------------------------------------------------------
+###########################################################################
+###                         MASTERING VIM
+###########################################################################
+-alternate file: last edited
+###########################################################################
+###  01 - OPEN / CLOSE FILES AND FILE COMMANDS
+###########################################################################
+- vi <filename>          Create new file if not exits
+- vi -R <filename>       Open existing file in Read-Only mode
+- :w <filename>          Write file
+- :q                     Close Editor
+- :q!                    Close WITHOUT saving and warning
+- :qa                    Close all files at once
+- :x or ZZ               Save and Exit. Equivalent with :wq
+- :e!                    Discard all changes since last save
+- :update                Write only if buffer is modified
+- :1,10 w <file>         Saves lines 1 to 10 in <file>
+- :1,10 w >> <file>      Appends lines 1 to 10 to <file>
+- :r <file>              Insert the content of <file>
+- :23r <file>            Insert the content of <file> under line 23
+- vim -p <file>          Opens a new tab. E.g. vim -p testje.c -p test.md
+- vim -S <session>       Opens a new session
+###########################################################################
+###  02 - POSITIONING
+###########################################################################
+- h          Cursor Left
+- j          Cursor Down
+- k          Cursor Up
+- l          Cursor Right
+---------------------------------------------------------------------------
+- w          Next word(punctuation considered words)
+- W          Next word(spaces separete words)
+- b          Previous word(punctuation considered words)
+- B          Previous word(NO punctuation)
+- e          End of word(punctuation considered words)
+- E          Jump to end of word(NO punctuation)
+---------------------------------------------------------------------------
+- ge         Moves backward to the end of the preceding word
+---------------------------------------------------------------------------
+- 0(zero)    Start of current line
+- $          End of current line
+- ^          First nonblank character
+- G          Cursor to last line of file. Bottom
+- gg         Start of file. Top
+- _          Moves to the first non-blank character of the line
+- g,/g;      Move forward/back in change list
+---------------------------------------------------------------------------
+- CTRL-y     Moves screen up   one line -> in vimrc to 3 lines
+- CTRL-e     Moves screen down one line -> in vimrc to 3 lines
+- CTRL-u     Moves screen up   1/2 page
+- CTRL-d     Moves screen down 1/2 page
+- CTRL-b     Moves screen up   one page. Page UP
+- CTRL-f     Moves screen down one page. Page DOWN
+---------------------------------------------------------------------------
+- zz         Move current line to the middle of the screen
+- zt         Move current line to the top of the screen
+- zb         Move current line to the bottom of the screen
+---------------------------------------------------------------------------
+- :m 22      Move current line to line 22
+- :m+        Move current line 1 line down
+- :m+N       For moving N lines down
+- :m-N       For moving N lines up
+###########################################################################
+###  03 - INSERTING TEXT / APPENDING TEXT
+###########################################################################
+- i         Insert BEFORE Cursor
+- I         Insert BEFORE Line
+- a         Append AFTER Cursor
+- A         Append AFTER Line
+- o         Create new line BELOW cursor
+- O         Create new line ABOVE cursor
+---------------------------------------------------------------------------
+- c         Change, but leaves you in insert mode
+- cw        Change a word. From current till end of word
+- cc        Deletes entire line, and goes into insert mode
+- cb        Change previous word. From current till begin
+- C or c$   Rewrites the whole line. From cursor to the end
+- ea        Append at the end of word
+---------------------------------------------------------------------------
+- =G        Reindents the current cursor till end of buffer
+- ==        Fix identation of current line
+- gg=G      Fix identation of entire file
+- < or >    Indent line
+###########################################################################
+###  04 - DELETING TEXT
+###########################################################################
+- x         Deletes the character UNDER the cursor
+- X         Deletes the character BEFORE the cursor
+- dw        Deletes from the current cursor location to the next word
+- D or d$   Deletes from cursor to the end of a line
+- d^        Deletes from current location to the beginning of the line
+- dd        Deletes the line of current cursor location
+- db        Deletes the previous word
+- de        Delete from cursor to end of current word
+- dt"       Delete everything until the "
+###########################################################################
+###  05 - CHANGE TEXT
+###########################################################################
+- r         Replace one character
+- R         Replace multiple chacaters beginning current location
+- s         Substitute: delete character and go to insert mode
+- S or cc   Substitute: delete current line and go to insert mode
+###########################################################################
+###  06 - COPY AND PAST (YANK=COPY)
+###########################################################################
+- yw        Copy next word to buffer. From cursor till end
+- yy        Copies current line to buffer
+- Y         Yanks a single line
+- p         Puts the copied buffer AFTER the cursor
+- P         Puts the yanked text BEFORE the cursor
+- y$ or Y   Yank to end of line
+- :1,3y     To copy line 1 till 3
+###########################################################################
+###  07 - SEARCH
+###########################################################################
+- /str          Search forwards (also CTRL-r)
+- ?str          Search backwards(also CTRL-s)
+- n             Next occurrence of the search
+- N             Previous occurrence of the search
+- *             Search for next instance of current word(under cursor)
+- #             Search for last instance of current word(under cursor)
+- \<            Matches beginning of a word
+- \>            Matches end of a word
+###########################################################################
+###  08 - OFFSETS AFTER SEARCH COMMAND
+###########################################################################
+-  [num]    [num] lines downwards, in column 1
+- +[num]    [num] lines downwards, in column 1
+- -[num]    [num] lines upwards, in column 1
+- e[+num]   [num] characters to the right of the END of the match
+- e[-num]   [num] characters to the left of the END of the match
+- s[+num]   [num] characters to the right of the START of the match
+- s[-num]   [num] characters to the left of the START of the match
+- b[+num]   [num] characters to the right of the start (begin) of the match
+- b[-num]   [num] characters to the left of the start (begin) of the match
+- ;{search command}   execute {search command} next
+---------------------------------------------------------------------------
+Examples:
+Pattern         Cursor position
+/test/+1        One line below "test", in column 1
+/test/e         On the last t of "test"
+/test/s+2       On the 's' of "test"
+/test/b-3       Three characters before "test"
+###########################################################################
+###  09 - OTHER
+###########################################################################
+- u          Undo
+- U          Undo all previous text modifications on the line
+- CTRL-R     Undoes the undo
+- .          Repeat last command
+- J          Join current line with next line with a space in between
+- ~          Changes a Character's case
+- xp         Character twiddling: with current and next position
+- guu        Lowercase line. Same as Vu
+- gUU        Uppercase line. Same as VU
+- vEU        Switch word to uppercase
+- vE~        Modify word case
+- ggguG      Set all text to lowercase. Lowercase entire file
+- U          Convert selected text to uppercase
+- u          Convert selected text to lowercase
+- ~          Invert case of selected text and go to next character
+- CTRL+a     Increment number under the cursor
+- CTRL+x     Decrement number under cursor
+###########################################################################
+###  10 - REGISTERS
+###########################################################################
+- "*         System clipboard
+- ".         Last inserted text. (Read-only)
+- ""         Unnamed register
+- "0         Last yank command
+- "1-"9      Delete register stack
+- "-         Last text you edited within a single line
+- "_         Black hole register (like /dev/null)
+- "%         Name of the current buffer's file. (Read-only)
+- "#         Name of the alternate buffer's file. (Read-only)
+- ":         Most recently executed : command. (Read-only)
+- "/         Most recent search pattern
+- "a-"z      Named registers: 26 registers for you to play with
+- "A-"Z      Append registers: append to it rather than overwrite it
+- "+         The clipboard contents
+-------------------------------------------------------------------------
+- CTRL-r <reg>   Paste reg (in insert mode)
+- :reg           Lists all current registers
+- :echo @<reg>   Access register reg as a variable
+-------------------------------------------------------------------------
+-yanking/deleting text into registers replaces the previous contents of that register
+-To APPEND to a register, capitalizing the name of the register as it's referenced:
+    "ayy    - replace the contents of register a with the current line
+    "Ayy    - Append the current line to register a
+-------------------------------------------------------------------------
+-Example:
+    -Syntax: "<reg><command>
+    -"ayy    Put content of line in reg a
+    -"ap     Paste the content of reg a
+###########################################################################
+###  11 - EXPLORE
+###########################################################################
+- :Ex(plore)      Netrw in current window
+- :Sex(plore)     Netrw in horizontal split. Depending on settings
+- :Vex(plore)     Netrw in vertical split
+- :Hex(plore)     Netrw in horizontal split
+- :Tex(plore)     Netrw in Tabbed explorer
+###########################################################################
+###  12 - SESSIONS
+###########################################################################
+- :mks(ession)  <sessionname>     Make session (will NOT save the file! )
+- :mks(ession)! <sessionname>     Update session (will NOT save the file! )
+- :so(urce)     <sessionname>     Load Session
+###########################################################################
+###  13  - MODES
+###########################################################################
+- i       Insert Mode
+- r       Replace Mode
+- a       Append mode
+- v       Visual Mode
+- V       Visual Line Mode
+- ^+v     Visual Block Mode
+- Esc     Command Mode
+- :       Execute Mode
+-         Character
+###########################################################################
+###  14 - AUTOCOMPLETION - IN INSERT MODE!
+###########################################################################
+-CTRL-P     Forward search Autocompletion
+-CTRL-N     Backward search Autocompletion
+--> multiple times to go through all completions
+-------------------------------------------------------------------
+-Vim autocompletion default search (you can custimize)
+   1. Current File
+   2. Files in Other windows
+   3. Other files in currently loaded buffers
+   4. Files in unloaded buffers
+   5. The current tags list
+   6. All fils #included by the current file
+-------------------------------------------------------------------
+-Completion in INSERT MODE: Press Ctrl+X, then
+    CTRL+d     Definitions or macros
+    CTRL+f     File Names
+    CTRL+i     Keywords in the current and included files
+    CTRL+k     Keywords in 'dictionary'
+    CTRL+l     Whole lines
+    CTRL+n     Keywords in the current file
+    CTRL+o     Omni completion
+    CTRL+s     Spelling suggestions
+    CTRL+t     Keywords in 'thesaurus', thesaurus-style
+    CTRL+u     User defined completion
+    CTRL+v     Vim command-line
+    CTRL+]     Tags (A tag is a C function definition)
+###########################################################################
+###  15 - TABS
+###########################################################################
+-tabfir(st)          Goto first tab
+-tablast             Goto last tab (not the LAST edited!!)
+-------------------------------------------------------------------
+-tabnew <path>       Create new tab
+-tabe(dit)           Create new tab
+-tabc(lose)          Close current tab (including all windows)
+-------------------------------------------------------------------
+-tabo(nly)           Close all other tab pages
+-------------------------------------------------------------------
+-tabp(rev)           Goto previous tab (:tabprevious or gT)
+-tabn(ext)           Goto next tab (:tabnext or gt)
+-------------------------------------------------------------------
+-tabm(ove)           Move current tab after tab page N
+                     -if no args --> to the last tab
+                     -:tabmove 0 --> to beginning
+-------------------------------------------------------------------
+-tabs                List the tab pages and the windows they contain
+-------------------------------------------------------------------
+-tabd(o)             Execute cmd in each tab page. E.g. :tabdo %s/foo/bar/g
+-------------------------------------------------------------------
+-tab ball            Puts all open files in tabs
+###########################################################################
+###  16 - TEXT OBJECTS - VERBS, NOUNCE, MODIFIERS
+###########################################################################
+-SYNTAX: <number><command><text object or motion>
+-A command using a motion, e.g.:
+ ----> cw, operates from current cursor position
+-A command using a text-object, e.g.:
+ ----> ciw operates on the whole object regardless of the cursor position
+---------------------------------------------------------------------------
+VERBS
+  v    Visual
+  c    Change
+  d    Delete
+  y    Yank/copy
+---------------------------------------------------------------------------
+MODIFIERS
+  i    Inside
+  a    Around
+  t    Till ... finds a character
+  f    Find ... like till except including the char
+  /    Search ... find a string/regex
+---------------------------------------------------------------------------
+TEXT OBJECTS
+  w    Word
+  s    Sentence
+  p    Paragraph
+  b    Block ()
+  B    Block {}
+  c    Character
+  t    Tag, works for html/xml
+###########################################################################
+###  17 - JUMPS
+###########################################################################
+- CTRL-o         Jump between jump locations
+- CTRL-i         Jump between jump locations
+- :ju(mps)       List of your movements
+###########################################################################
+###  18 - FOLDING
+###########################################################################
+- There are six types of folds
+     1. manual     Manually defines folds
+     2. indent     More indent mean a higher fold level
+     3. expr       Specify an expressionto define folds
+     4. syntax     Folds defined by syntax highlighting
+     5. diff       Folds by unchanged text
+     6. marker     Folds defined by markers in the text
+---------------------------------------------------------------------------
+- zi     Enable/disable folds
+- zo     Opens a fold at the cursor
+- zO     Opens all folds at the cursor
+- zm     Increases the foldlevel by one
+- zM     Closes all open folds
+- zr     Decreases the foldlevel by one
+- zR     Decreases the foldleven to zeo -- all folds will be open
+- zc     Close fold
+- zd     Delete the fold at the cursor
+- zE     Delete all folds
+- [z     Move to start of open fold
+- ]z     Move to end of open fold
+- zf#j   Creates a fold from the cursor down # lines
+- zf/str Creates a fold from the cursor to str
+- zj     Moves the cursor to the next fold
+- zk     Moves the cursor to the previous fold
+- zf     Create fold
+- zv     View cursor-line
+- zD     Delete all folds
+- za     Toggle fold (open or close)
+###########################################################################
+###  19 - SPLIT WINDOWS
+###########################################################################
+- CTRL-w s        Split Window Horizontally  --> :sp  --> :split
+- CTRL-w v        Split Window Vertically    --> :vsp --> :vsplit
+- CTRL-w n        New window(horizontally) + start editing a new file(:new)
+- :vne            New window(vertically)
+---------------------------------------------------------------------------
+- CTRL-w CTRL-w   Move between vim viewpoints
+- CTRL-w j        Move one viewpoint down
+- CTRL-w k        Move one viewpoint up
+- CTRL-w h        Move one viewpoint left
+- CTRL-w l        Move one viewpoint right
+---------------------------------------------------------------------------
+- CTRL-w _        Maximize current window in horizontal split
+- CTRL-w |        Maximize current window in vertical split
+- CTRL-w =        Resize viewpoints to be of equal size
+- CTRL-w -        Reduce active viewport by one line(height)
+- CTRL-w +        Increase active viewport by one line(height)
+- CTRL-w <        Decrease current window by 1 (width)
+- CTRL-w >        Increase current window by 1 (width)
+---------------------------------------------------------------------------
+- CTRL-w q        Close the active windows
+- CTRL-w r        Rotate windows to the right
+- CTRL-w R        Rotate windows to the left
+- CTRL-w c        Close current Window
+---------------------------------------------------------------------------
+- CTRL-w o        Make the current window the only one --> :on --> :only
+- CTRL-w p        To the previous window
+- CTRL-w x        Exchange current window with next one
+- CTRL-w K(cap)   Move the current window to be at the very top
+- CTRL-w J(CAP)   Move the current window to very bottom
+- CTRL-w H(CAP)   Move current window to far LEFT
+- CTRL-w L(CAP)   Move current window to far RIGHT
+- CTRL-w T(CAP)   Move current window to a new tab
+---------------------------------------------------------------------------
+- CTRL-w ^        Split the window and edit the alternate buffer
+---------------------------------------------------------------------------
+- (Ctrl-w gf)     Open the file in a NEW TAB!!
+###########################################################################
+###  20 - KEYS IN INSERT MODE
+###########################################################################
+- CTRL-A                  Insert previously inserted text
+- CTRL-@                  Insert previously inserted text and stop insert
+- CTRL-C                  Like <Esc>, but do not do an abbreviation
+- CTRL-V                  Avoid expansion (after the last char of the abbrev)
+- CTRL-X ...              Complete word before the cursor in various ways
+---------------------------------------------------------------------------
+- CTRL-E                  Insert the character from below the cursor
+- CTRL-Y                  Insert the character from above the cursor
+---------------------------------------------------------------------------
+- CTRL-N                  Insert next match of identifier before the cursor
+- CTRL-P                  Insert previous match of identifier before cursor
+---------------------------------------------------------------------------
+- <BS> or CTRL-H          Delete the character before the cursor
+- <Del>                   Delete the character under the cursor
+---------------------------------------------------------------------------
+- CTRL-U                  Delete all entered characters before the cursor
+- CTRL-W                  Delete word before the cursor
+---------------------------------------------------------------------------
+- CTRL-R <0-9a-z%:.-">    Insert contents of register <0-9a-z%:.-">
+---------------------------------------------------------------------------
+- CTRL-T                  Insert one shiftwidth of indent in front of current line
+- CTRL-D                  Delete one shiftwidth of indent in front of current line
+---------------------------------------------------------------------------
+- <NL> or <CR> or CTRL-M or CTRL-J     begin new line
+---------------------------------------------------------------------------
+- CTRL-K {char1} {char2}  Enter digraph
+- {char1} <BS> {char2}    Enter digraph if 'digraph' option set
+###########################################################################
+###  21 - MULTIPLE FILES
+###########################################################################
+- :buffers      Displays a list of buffers. With stateflags
+                    -  Inactive Buffer(not being edited, but keeps info
+                    h  Hidden Buffer(being edited but not appeat on screen)
+                    %  Current Buffer
+                    #  Alternate Buffer
+                    +  Modified Buffer
+                    a  Active Buffer, loaded and visible
+                    =  Buffer is readonly
+                    x  A buffer with read errors
+---------------------------------------------------------------------------
+- :e[edit] <file>     Edit a new file
+- :ls                 List current open files ---> :buffers
+- :bn[ext]            Buffer Next
+- :bp[prev]           Buffer Previous
+- :bf[irst]           Go to the first buffer
+- :bl[ast]            Go to the last buffer
+---------------------------------------------------------------------------
+- :b[uffer]{#}        Go to buffer #
+- :b[uffer] <str>     Go to Buffer with <str> in the name
+---------------------------------------------------------------------------
+- :badd <file>        Add file to buffer list
+- :bd[elete]          Remove file from buffer list
+---------------------------------------------------------------------------
+- :bufdo              Do something in all Buffers
+- :bufdo /str/        Search in all open files
+---------------------------------------------------------------------------
+- :brew               Buffer Rewind. Go back to the first buffer in the list
+---------------------------------------------------------------------------
+- :wn(ext)            Save file and move to next
+- :wp(rev)            Save file and move to prev
+---------------------------------------------------------------------------
+- :args               Print the ARGUMENT LIST
+- :n[ext]             To edit the next file in ARGUMENT LIST
+- :la[st]             To edit the last file in ARGUMENT LIST
+- :fir[st]            To edit the first file in ARGUMENT LIST
+- :rew                Start editing the first file in the ARGUMENT LIST
+---------------------------------------------------------------------------
+- :sb[all]            Split all Buffers(SUPER). Rearrange the screen to
+                      open one window for each buffer in the buffer list
+- :ball               Open all buffers into windows. Rearrange the screen
+                      to open one window for each buffer in the buffer list
+###########################################################################
+###  22 - COMMAND MODE
+###########################################################################
+- :cd <dir>       To change the current working directory
+- :pwd            Print Working Directory
+- :p or :print    Print specified lines
+- :s              Substitute
+- :history        List of all your commands
+- :retab          Replace tabs by tabstop characters
+- :set option?    Prints current value of 'option'
+- :help [word]    Help
+---------------------------------------------------------------------------
+- :!cmd           Execute unix command, then returns to vim
+- :r!cmd          reads in output of cmd
+- !!              Previous command
+
+- :argdo          Do on all files in :args
+- :windo          Do for all Windows
+- :tabdo          Do for all Tabs. E.g. :tabdo s/foo/bar/
+---------------------------------------------------------------------------
+- :lcd %:p:h    Change to directory of current window
+- Command  Action
+    %      Create a new file
+    d      Create a new directory
+    R      Rename the file/directory under the cursor
+    D      Delete the file/directory under the cursor
+---------------------------------------------------------------------------
+-Commands can be preceded by a line or range
+-EXAMPLES:
+    1,/trouble/print
+    4,8print
+---------------------------------------------------------------------------
+ {number}          Absolute line number
+ .                 Current line
+ $                 Last line
+ %                 ENTIRE file: equal to: 1,$
+ *                 Equal to '<,'> (visual area)
+ 't                position of mark t
+ /{pattern}[/]     The next line where {pattern} matches
+ ?{pattern}[?]     The previous line where {pattern} matches
+
+ +[num]            Add [num] to the preceding line number (default: 1)
+ -[num]            Subtract [num] from the preceding line number (default: 1)
+
+ .+m               Current line plus m lines
+ [addr1],[addr2]   Specifies a range
+---------------------------------------------------------------------------
+After "%", "#", "<cfile>", or "<afile>"
+  :p     Full path
+  :h     Head
+  :t     Tail
+  :r     Root
+  :e     Extension
+###########################################################################
+###  23 - MARKS
+###########################################################################
+- m<a-zA-Z>           Mark current position with mark <a-zA-Z>
+- `<a-z>              Go to mark <a-z> within current file (local mark)
+- `<A-Z>              Go to mark <A-Z> in any file(Global Mark)
+- `<0-9>              Go to the position where Vim was last exited
+- ``                  Go to the position before the last jump
+- `"                  Go to the position when last editing this file
+- '<a-zA-Z0-9[]'"<>>  Same as `, but on the first non-blank in the line
+---------------------------------------------------------------------------
+- :delmarks a      Mark a
+- :delmarks a-d    Delete marks a, b, c, d
+- :delmarks abxy   Delete marks a, b, x, y
+- :delmarks!       Delete all lowercase marks for the current buffer (a-z)
+- :marks           Print the active marks
+- :marks aB        List marks a, B
+---------------------------------------------------------------------------
+- ]'          Jump to next line with a lowercase mark
+- ['          Jump to previous line with a lowercase mark
+- ]`          Jump to next lowercase mark
+- [`          Jump to previous lowercase mark
+---------------------------------------------------------------------------
+- `.          Jump to to last modification character
+- '.          Jump to to last modification line
+- ''          Jump back (to line in current buffer where jumped from)
+- `[ or `]    Jump to beginning/end of previously changed or yanked text
+- `< or `>    Jump to beginning/end of last visual selection
+- d'a         Delete from current line to line of mark a
+- d`a         Delete from current cursor position to position of mark a
+- c'a         Change text from current line to line of mark a
+- y`a         Yank text to unnamed buffer from cursor to position of mark a
+
+-Commands like d'a operate "linewise" and include the start and end lines.
+-Commands like d`a operate "characterwise" and include the start but not the end character
+
+###########################################################################
+###  24 - SPELL
+###########################################################################
+]s       Move to next misspelled word after the cursor(forward)
+[s       Move to next misspelled word after the cursor(backward)
+---------------------------------------------------------------------------
+z=       For the word under/after the cursor suggest correctly spelled words.
+         Show spelling suggestions
+---------------------------------------------------------------------------
+zg       g=good. Add word under the cursor as a good word to the first name in 'spellfile'
+zG       G=good. Like "zg" but add the word to the internal word list
+---------------------------------------------------------------------------
+zw       w=wrong. Like "zg" but mark the word as a wrong (bad) word
+zW       W=Wrong. Like "zw" but add the word to the internal word list
+---------------------------------------------------------------------------
+zuG      Undo zG. Rremove the word from the internal word list
+zug      Undu zg. Remove the word from the entry in 'spellfile'
+zuW      Undo zW. Remove the word from the internal word list
+zuw      Undo zw. Remove the word from the entry in 'spellfile'
+---------------------------------------------------------------------------
+:spellr  Repeat last spell replacement for all words in window
+---------------------------------------------------------------------------
+" ss = toggle spell
+" sn = Next misspelled word
+" sp = Previous mispelled word
+" sa = Add word to dictionary
+" s? = List alternative words
+
+###########################################################################
+###  25 - BASIC VISUAL MODE - DONE
+###########################################################################
+-Visual Mode: to highlight a block of text and execute a command on it
+-You can see what text is going to be affected before you make a change
+-You can only highlight full lines
+-from character mode to block mode: switch by pressing CTRL+V
+---------------------------------------------------------------------------
+-:help v_d will display what the d command does in visual mode
+---------------------------------------------------------------------------
+- v          Start visual mode
+- SHIFT+V    Start linewise visual mode. Select row(s)
+- CTRL +V    Start visual block mode. Select blocks (columns)
+---------------------------------------------------------------------------
+- d         Delete
+- D         Delete entire highlighted lines
+- y         Yank
+- Y         A linewise version
+- c         Deletes the highlighted text and starts insert mode
+- C         Linewise version
+- J         Joins all the highlighted lines into one long line
+- gJ        Join lines without adding space
+- > and <   Indents the selected lines by one "shift width"
+- < and >   Have different meaning when using Visual Block mode
+- =         Indents the text
+- K         To look up the selected text using the "man" command
+- ~         Switch case
+- o         Move to other end of marked area
+- O         Move to other corner of block
+
+###########################################################################
+###  26 - MACROS - DONE
+###########################################################################
+- qx         Record to x
+- q          Stop recording
+- @x         Execute x
+- @@         Repeat last macro
+---------------------------------------------------------------------------
+-it's a way to record a set of actions that can be executed multiple times
+-To start recording, press q in normal mode followed by a letter (a to z).
+ That starts recording keystrokes to the specified register
+---------------------------------------------------------------------------
+- q <macroname>         1.  Start recording <macroname> = lowercase letter
+- do what you want      2.  Perform the repetetive editing
+- q                     3.  Stop recording
+- @ <macroname>         4.1 play recording <macroname> = lowercase letter from before
+- <nbr> @ <macroname>   4.2 play recording multiple times <nbr> = number of times
+---------------------------------------------------------------------------
+Example 1: remove odd lines
+  1. qa     # Start recording to register a
+  2. j      # One line down
+  3. dd     # Delete row
+  4. q      # Stop recording
+  5. 99@a   # Execute register macro again
+---------------------------------------------------------------------------
+Example 2: line numbers in a file
+  0. i and 1  # insert number 1
+  1. qa       # Start recording to register a
+  2. yy and p # copy and paste
+  3. CTRL-A   # to increment the number
+  4. q        # Stop recording
+  5. 98@a     # Repeat 99 lines
+
+###########################################################################
+###  27 - LOCATING ITEMS IN A PROGRAM
+###########################################################################
+- ),(                Next, Previous sentense
+- ]],[[              Next, Previous section
+- },{                Next, Previous paragraph
+- %                  Goto matching parenthesis
+- '.                 Jump back to the last edited line
+- g;                 Jump back to last edited position
+---------------------------------------------------------------------------
+- ]]                 Sections forward, at start of section
+- [[                 Sections backward, at start of section
+- ][                 Sections forward, at end of section
+- []                 Sections backward, at end of section
+- [(                 Times back to unclosed '('
+- [{                 Times back to unclosed '{'
+- ])                 Times forward to unclosed ')'
+- ]}                 Times forward to unclosed '}'
+- [#                 Times back to unclosed "#if" or "#else"
+- ]#                 Times forward to unclosed "#else" or "#endif"
+- [*                 Times back to start of comment "/*"
+- ]*                 Times forward to end of comment "*/"
+###########################################################################
+###  28 - VIM ANTI-PATTERN
+###########################################################################
+ 1. Moving one line at a time. E.g. use
+      { — Move to start of previous paragraph or code block.
+      } — Move to end of next paragraph or code block.
+      Ctrl+F — Move forward one screenful.
+      Ctrl+B — Move backward one screenful.
+ 2. Moving one character at a time. E.g. use
+      t<char> — Move forward until the next occurrence of the char
+      f<char> — Move forward over the next occurrence of the char
+      T<char> — Move backward until the previous occurrence of the char
+      F<char> — Move backward over the previous occurrence of the char
+    Or Moving wordwise with w, W, b, B, e, and E is better, too
+ 3. Searching for the word under the cursor:  just use * or #
+ 4. Deleting, then inserting: c2w
+ 5. Using the arrow keys
+ 6. Moving in insert mode. You should, in general, spend as little time in
+    insert mode as possible
+ 7. Moving to Escape: inoremap jj <Esc>
+ 8. Moving to the start or end of the line, then inserting: Just use I and A.
+ 9. Repeating substitutions: Just type & to repeat the last substitution on
+    the current line. You can repeat it on all lines by typing g&.
+###########################################################################
+###                E O F
+###########################################################################
