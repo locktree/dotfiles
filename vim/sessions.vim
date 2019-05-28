@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Vim sessions
-" Last Update : Sun 28 Apr 2019 12:24:22 PM CEST
+" Last Update : Tue 28 May 2019 09:39:56 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -45,6 +45,19 @@ function! LoadSession()
 endfunction
 
 "autocmd VimLeave * :call UpdateSession()
+
+" ---------------------------------------------------------------------------
+" Session Management
+" ---------------------------------------------------------------------------
+" Go to last file(s) if invoked without arguments.
+autocmd VimLeave * nested if (!isdirectory($HOME . "/.vim")) |
+    \ call mkdir($HOME . "/.vim") |
+    \ endif |
+    \ execute "mksession! " . $HOME . "/.vim/Session.vim"
+
+autocmd VimEnter * nested if argc() == 0 && filereadable($HOME . "/.vim/Session.vim") |
+    \ execute "source " . $HOME . "/.vim/Session.vim"
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                              EOF
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
