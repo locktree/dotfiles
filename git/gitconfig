@@ -1,7 +1,7 @@
 ###########################################################################
 ## Author      : mitchell
 ## Description : My gitconfig
-## Last Update : Wed 01 May 2019 07:27:31 AM CEST
+## Last Update : Tue 28 May 2019 09:32:20 PM CEST
 ###########################################################################
 
 ###########################################################################
@@ -324,6 +324,17 @@
     ## Remove branches that have already been merged with master
     branch-delete = "!f() { git checkout --quiet master && git branch --merged | grep --invert-match '\\*' | xargs -n 1 git branch --delete; git checkout --quiet @{-1}; }; f"
 
+    ## Provide a more detailed vie of the branching status for the repo
+    branch-status = "!f(){ \
+        echo 'Date | Date Delta | Ref | Name | Email | Ahead | Behind'; \
+        git for-each-ref --sort=-committerdate --format=\"%(refname:short)\" refs/remotes | while read remote; \
+        do \
+            CHANGES=$(git rev-list --left-right ${remote}...origin/master); \
+            LEFT_AHEAD=$(echo \"$CHANGES\" | grep -c '^<'); \
+            RIGHT_AHEAD=$(echo \"$CHANGES\" | grep -c '^>'); \
+            echo \"$(git log -n1 $remote --pretty=format:'%Cgreen%cI%Creset | %Cgreen%cr%Creset | %C(yellow)%d%Creset | %Cgreen%an%Creset | %C(bold cyan)%ae%Creset') | $LEFT_AHEAD | $RIGHT_AHEAD\"; \
+        done; \
+    }; f"
     #######################################################################
     ######################## STANDUP ######################################
     #######################################################################
