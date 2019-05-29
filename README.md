@@ -3,7 +3,7 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Tue 07 May 2019 09:10:19 PM CEST
+ *  Last Update: Wed 29 May 2019 08:37:23 PM CEST
  =========================================================================
 -->
 
@@ -98,6 +98,8 @@ You can make local customizations for some programs by editing these files:
 * `vim` : `~/.vimrc_local`
 * `bash`: `~/.bash_local`
 * `git` : `~/.gitconfig_local`
+
+The gitconfig_local in required (contains at least name and email)
 
 ## Contributing
  1. Fork it!
