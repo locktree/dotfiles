@@ -1,0 +1,87 @@
+###########################################################################
+# Author      : mitchell
+# Purpose     : Bashrc
+# Last Update : Sun 28 Apr 2019 01:32:00 PM CEST
+###########################################################################
+###########################################################################
+###                                  BASHRC
+###########################################################################
+ ------------------- ALIASES ------------------------------------
+  c  = clear
+  g  = grep
+  h  = history
+  md = mkdir
+  p  = pwd
+  v  = vim
+  tk = tkdiff
+  x  = xterm
+
+  cd = cdls
+  .. = cd ..
+  ...= cd ../..
+
+  l  = Common used
+  l. = List only dotfiles
+  ld = list only dirs
+  lt = List last 10 files
+
+  of   = Open last file
+  todo = ~/todo.txt
+
+  psa = ps -aux  | grep -v grep | egrep -i
+  psg = ps -ef   | grep -v grep | egrep -i
+  hg  = history  | egrep -i
+  lg  = ls -ltrA | egrep -i
+
+  path = Display PATH env var
+  google = open google
+ ------------------- FUNCTIONS ------------------------------------
+  ff           Find file under the current directory
+  ffs          Find file whose name starts with a given string
+  ffe          Find file whose name ends with a given string
+  ffa          Find file whose name contains a given string
+  fd           Find directory whose name is a given string
+  conf         For editing and reloading conf files
+  extract      Extract files
+  mk<type>     Creates an archive from given directory
+  bu           Back Up a file
+  mkdate       Make directory with current timestamp
+  mcd          Make a directory and cd into it
+  cdls         cd into directory and do an ls
+  trash        Move file to trash
+  bin2dec      bin2dec
+  dec2bin      dec2bin
+  top10        Top10 commands
+  busy         Looks like i'm busy
+  matrix       Looks like i'm busy
+  colortable   Show colortable
+  swap         Swap 2 files
+  rot13        rot13
+  cleanup      Remove all stupid temp files that I hate
+  remindme     Set a reminder
+  fixtabs      Remove tabs from a file
+  mans         man page search
+  viw          vim & which <file>
+  col          Extract a column from a tabular output
+  rd           Save current dir
+  rdd          Goto the last saved dir
+  stopwatch    stopwatch
+  file2pdf     File2pdf
+  hex_to_rgb
+  rgb_to_hex
+  gho         Open current branch in Github
+  cdr         cd to git root
+
+  desk      ~/Desktop
+  cheat     ~/CHEATS
+  dot       ~/DOTFILES
+  script    ~/SCRIPTS
+  snippet   ~/SNIPPETS
+  template  ~/TEMPLATES
+  down      top level repo
+
+  bashrchelp   Helpfile
+  my           My info
+###########################################################################
+###                                  EOF
+###########################################################################
