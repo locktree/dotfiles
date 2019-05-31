@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+###########################################################################
+#  Filename   : pre-push
+#  Author     : mitchell
+#  Description: Git pre-push hook
+#  Last Update: Fri 31 May 2019 01:31:39 PM CEST
+###########################################################################
+##
+## 1. Prohibit word check
+## 2. Prevents force-pushing to master
+##
+###########################################################################
+##      1. PROHIBIT WORD CHECK
+###########################################################################
+## If the following text is found anywhere in the source for HEAD,
+## prevent pushing
+###########################################################################
+prohibit_list="TODO"
+for word in ${prohibit_list}; do
+    flag_found="$(git grep --color -n "${word}" HEAD)"
+    if [ -n "${flag_found}" ];then
+        ## Display which commit the first occurence of the flag was found
+        commit=$(git log --pretty=format:'%Cred%h%Creset' -S "${word}" | tail -n1)
+        printf "Found ${flag_found}, first occurence was in ${commit}\n"
+        found_prohibit="TRUE"
+    fi
+done
+
+###########################################################################
+##     2. Prevents force-pushing to master
+###########################################################################
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+PUSH_COMMAND="$(ps -ocommand= -p ${PPID})"
+if [[ "${BRANCH}" == "master" && "${PUSH_COMMAND}" =~ master|force|delete|-f ]]; then
+    printf "Prevented force-push to ${BRANCH}. Use --no-verify to bypass this pre-push hook.\n"
+    disabled_cmd="TRUE"
+fi
+
+###########################################################################
+##     SUMMARY
+###########################################################################
+if [[ "${found_prohibit}" == "TRUE" || "${disabled_cmd}" == "TRUE" ]]; then
+    printf "====> Pre-push hook FAILED. Push canceled\n"
+    exit 1
+else
+    printf "====> Pre-push hook PASSED.\n"
+    exit 0
+fi
+
+###########################################################################
+##                                 EOF
+###########################################################################
