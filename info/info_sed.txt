@@ -1,0 +1,492 @@
+"--------------------------------------------------------------------------
+" Author      : mitchell
+" Purpose     : My sed help file
+" Last Update : Wed 22 Aug 2018 11:46:14 AM CEST
+"--------------------------------------------------------------------------
+###########################################################################
+#                                                                         #
+#                          UNIX STREAM EDITOR                             #
+#                           SED CHEAT SHEET                               #
+#                                                                         #
+###########################################################################
+-Text processing utility(line-oriented)
+-Default: sed 'AutoPrints' PatSpace at the end of the sed script
+-Sed looks for a match in the current PatSpace, not in the original line
+-HoldSpace is only modified if you specifically direct (with h,H or x)
+-At the start of each cycle, sed reads a line into PatSpace
+-Before the line is read into PatSpace, sed Autoprints PatSpace, unless
+ the -n command line option is used
+-The n and N commands read input into PatSpace at ANY point during a sed script,
+ and increment sed's internal line counter
+-Sed ignores leading tabs and spaces in all commands
+-Sedsed utility
+-a,i,c bypassing the PatSpace
+-a,i,r,q will not take a range, c can handle a range
+-Line count will not be reset by opening a new file
+-Sed has four spaces: inputstream, outputstream, Pattern Space, Hold Space
+-Unless special commands (like ‘D’) are used, the pattern space is deleted
+ between two cycles.
+-The hold space, on the other hand, keeps its data between cycles (see
+ commands ‘h’, ‘H’, ‘x’, ‘g’, ‘G’ to move data between both buffers).
+-You cannot edit the contents of the HoldSpace directly
+-Sed operates by performing the following cycle on each line of input:
+  1. sed reads one line from the input stream, removes any trailing newline,
+     and places it in the pattern space
+  2. Then commands are executed; each command can have an address associated
+     to it: addresses are a kind of condition code, and a command is only
+     executed if the condition is verified before the command is to be executed
+-sed [option]sed-cmd[inputfile]
+
++=========================================================================+
+|                                SED SYNTAX                               |
++==============================+=====================+====================+
+| MULTIPLE COMMANDS/SCRIPT     | WITHIN SHELL SCRIPT | INTERPRETED        |
++==============================+=====================+====================+
+| sed -e 's/a/A/g'   \         | #!/bin/sh           | #!/bin/sed -f      |
+|     -e 's/e/E/g'   \         | sed '               | s/a/A/g            |
+|     -e 's/i/I/g'   \         | s/a/A/g             | s/e/E/g            |
+|     -e 's/o/O/g'   \         | s/e/E/g             | s/i/I/g            |
+|     -e 's/u/U/g'  <old >new  | s/i/I/g             | s/o/O/g            |
+|                              | s/o/O/g             | s/u/U/g            |
+|                              | s/u/U/g' <old >new  |                    |
++------------------------------+---------------------+--------------------+
+| sed  s/old/new/  file        | Omitted Quotes                           |
++------------------------------+------------------------------------------+
+| sed "s/old/new/" file        | Double quotes                            |
+| sed "s/$2/2 bucks/"          | Sed tries to interpret "$2" as a variable|
++------------------------------+------------------------------------------+
+| sed 's/old/new/' old.txt     | Single quotes                            |
+| sed 's/$2/2 bucks/'          | protect '$2' from being interpreted      |
++------------------------------+------------------------------------------+
+| sed '/PATTERN/p'  file       | No Space                                 |
++------------------------------+------------------------------------------+
+| sed '/PATTERN/ p' file       | With Space                               |
++------------------------------+------------------------------------------+
+| sed -n '/abc/I p'            | With Space                               |
++------------------------------+------------------------------------------+
+| sed -n '/abc/Ip'             | No Space                                 |
++------------------------------+------------------------------------------+
+| sed -f sedscript <old >new   | Using Sed Script                         |
++------------------------------+------------------------------------------+
+| sed -n 's/'"$1"'/&/p'        | Passing Arguments, use double quotes     |
++------------------------------+------------------------------------------+
+| sed '/^g/s/g/s/g' <=> sed '/^g/ s_g_s_g' (adding space,using underscore)|
++-------------------------------------------------------------------------+
+|-single quotes :certain special characters are not interpreted by shell  |
+|               :prevent the shell from trying to interpret '$x'          |
+|               : avoid problems with blanks and special characters       |
+|-$x indicates the shell variable 'x'. If no quotes, or double quotes,    |
+| the shell will interpret $x as a shell variable!!                       |
++-------------------------------------------------------------------------+
+|-using sed within shell scripts                                          |
+|    $shebang.sed inputfile  <---> sed -f shebang.sed inputfile           |
++-------------------------------------------------------------------------+
+|-multilines:use forward slash                                            |
+|      /red/ a txt1\                                                      |
+|              txt2                                                       |
++-------------------------------------------------------------------------+
+|-sed '/red/ c \ txt' file   #space between \ and txt is printed!!        |
++-------------+-----------------------------------------------------------+
+| Syntax      | -The opening brace MUST be the last character on a line   |
+|             | -The closing brace MUST be on a line by itself            |
+|             | -Make sure there are no spaces followed the braces        |
+|             | -E.g.    -   sed '                                        |
+|             |                    /begin/, /end/ {                       |
+|             |                      s/old/new/                           |
+|             |                    }                                      |
+|             |                  '                                        |
++-------------+-----------------------------------------------------------+
+
++=========================================================================+
+|                         COMMAND LINE OPTIONS                            |
++=====+=====================+=============================================+
+|SHORT| LONG                | DESCRIPTION                                 |
++=====+=====================+=============================================+
+| -e  | --expression=script | Multiple commands. sed -e s/o/O/ -e s/u/U/  |
+| -f  | --file=scriptfile   | Add sed script.    sed -f script <old >new  |
+| -h  | --help              | Help                                        |
+| -i  | --in-place          | Edit files in-place                         |
+|     |                     | -sed -ibak 's/old/new/' input               |
+|     |                     |  replace old with new in input              |
+|     |                     |  backup of original file will be input.bak  |
+|     |                     | -for editing without backup file:           |
+|     |                     |  sed -i'' 's/foo/bar/g' filename            |
+|     |                     | -sed -i.bak 's/old/new/' input -> input.bak |
+| -l  | --line-length=N     | Specify the desired line-wrap length        |
+| -n  | --quiet , --silent  | Suppress pattern space printing(AutoPrint)  |
+|     | --posix             | Disable all GNU extensions                  |
+| -r  | --regexp-extended   | Use extended regular expressions (like +)   |
+| -s  | --separate          | Consider files seperate rather than single  |
+| -u  | --unbuffered        | Load min. data from input flush output more |
+| -V  | --version           | Version                                     |
+| -z  | --null-data         | Separate lines by NUL characters            |
++=====+=====================+=============================================+
+
++=========================================================================+
+|                           ADDRESS RANGES                                |
++==================+======================================================+
+| FORMAT           | DESCRIPTION                                          |
++==================+======================================================+
+| NOTHING          | Always                                               |
+| Number           | Only the specified linenumber                        |
+| $                | The last line                                        |
+| L,H              | Line Range L-H (if L>H, only L matches)              |
+| /RegEx/          | RegEx                                                |
+| /RegEx/ M        | See M flag                                           |
+| /RegEx/,/RegEx/  | Start till Stop (can be multiple times)              |
+| L,/RegEx/        | Linenr L till RegEx                                  |
+| /RegEx/,+N       | From RegEx plus next N lines                         |
+| /RegEx/,~N       | From RegEx and also lines that are multiple of N     |
+| L,+N             | From line L plus next N lines                        |
+|                  | -seq 20 | sed -n '2,+5p' --> 2-3-4-5-6-7             |
+| L,~N (werk niet) | From Linenr L and also lines that are multiples of N |
+| First~Step       | 'First' line + the 'First+Step'^n line               |
+|                  | -seq 20 | sed -n '2~5p'  --> 2-7-12-17               |
+| !                | Invert Address Match                                 |
+|                  | sed -n '2!p'(print all except #2                     |
+|                  | sed -n '/match/ !p' <myfile                          |
+|                  | seq 5 | sed -n '2!p' --> 1-3-4-5                     |
++==================+======================================================+
+|-The restriction or address immediately preceded the command             |
+|-full syntax: '[a1[, a2]][!]d' where '[a1[, a2]]' is the address         |
+|-there is no line #0, so 0d is an error                                  |
+|-1, /RegEx/   starts the range at line #1,                               |
+|              and starts looking for the end of the range with line 2    |
+|-0, /RegEx/   starts the range at line #1,                               |
+|              but starts looking for the end of the range with line 1    |
+|-/^Red/M (Multi-Line) makes ^ change meaning to also match the empty     |
+| string AFTER a newline. /^Red/ matches 'Red',  but not 'X\nRed'. In     |
+| contrast, /^Red/M matches both 'X\nRed' and 'Red'                       |
+|-/Red$/M (Multi-Line) makes $ change meaning to also match the empty     |
+| string BEFORE a newline. /Red$/ matches 'Red',  but not 'Red\nX'. In    |
+| contrast, /Red$/M matches both 'Red\nX' and 'Red'                       |
+|-1,2! means NOT 1 and 2                                                  |
+|-$! -> any line except last line                                         |
+|-Eg sed '1,$d'                                                           |
++=========================================================================+
+
++=========================================================================+
+|                           SED COMMANDS                                  |
++================+========================================================+
+| CMD            | DESCRIPTION                                            |
++================+========================================================+
+| #              | Comment                                                | -seq 5 | sed '# ignore this'
+| =              | Prints current line number, followed by newline!       | -seq 9 | sed -n '/4/ =' ---> 4
+| :<label>       | Label (destination for b,t or T). Max 7 chars          | -:k is the destination for 'b k' or 'bk'
+| a <txt>        | Append txt AFTER lines. Does NOT change PatSpace       | -seq 5 | sed 'a some text'
+| b <label>      | Branches to end of script or label (if specified)      |
+| c <txt>        | Changes the current line/range with txt                |
+| d              | Delete PatSpace Extirely. Terminate immediately        |  -seq 5 | sed '2d'
+| D              | Delete PatSpace line #1                                |
+| e              | Execute command in PatSpace                            | -seq 5 | sed '2e uname'
+| g              | HoldSpace > PatSpace (copy)                            | -seq 5 | sed g --> 5x empty line
+| G              | HoldSpace >> PatSpace (append)                         | -seq 5 | G --> 1- -2- -3- -4- -5-
+| h              | PatSpace > HoldSpace (copy)                            |
+| H              | PatSpace >> HoldSpace (append)                         | -seq 5 | sed 'h;G' --> 1-1-2-2-3-3-4-4-5-5
+| i <txt>        | Insert txt BEFORE lines                                | -seq 5 | sed '2 i new-line'
+| l(ell)         | Prints the current pattern space(for debugging)        | -seq 3 | sed '2l' --> 1-2$-3
+|                | -converts unprintable chars into printed characters    |
+| n              | Next. Reads the next input line into PatSpace          |
+| N              | Next.Appends next line to PatSpace,after newline joins |
++----------------+--------------------------------------------------------+
+| n/N            | -Read Line into PatSpace nN                            |
+|                |                         n    N                         |
+|                |  Overwrite PatSpace    yes   -                         |
+|                |  Append to PatSpace     -   Yes                        |
+|                |  Exit if Read Fails    yes  yes                        |
+|                |  Print Before Read     yes   -                         |
+|                |  Print Before exit      -   yes                        |
+|                | -Summary:                                              |
+|                |   1. Both commands read the next line                  |
+|                |   2. n overwrites, N appends                           |
+|                |   3. n prints PatSpace before reading the next line    |
+|                |   4. N does not print before reading                   |
++----------------+--------------------------------------------------------+
+| p              | Prints entire PatSpace                                 | -seq 5 | sed -n '2p'
+| P              | Prints PatSpace line #1 (up to the first newline)      | -seq 5 | sed -n '2P'
+| q              | Quit. PatSpace is printed (unless -n option is used)   | -seq 5 | sed '2q' --> 1-2
+| Q              | Quit immediately. PatSpace not printed!                | -seq 5 | sed '2Q' --> 1
++----------------+--------------------------------------------------------+
+| r <Rfile>      | -schedules ALL lines from Rfile                        |
+| (read)         | -'r Rfile' schedules printing Rfile contents, either   |
+|                |    1) just before N or n tries to get next input line  |
+|                |    2) at the end of sed script(after sed AutoPrints)   |
+|                | -if Rfile cannot be read, r does nothing, no error     |
+|                | -if Rfile is /dev/stdin, input is take from stdin      |
+|                | -the output is NOT suppressed by the -n option         |
+|                | -output cannot be edited by subsequent commands        |
+|                | -sed '$ r log.txt' employee.txt --> read log.txt on    |
+|                |   encountering the last line                           |
+|                | -read f2 after every line of f1: sed 'r file2' file1   |
++----------------+--------------------------------------------------------+
+| R <Rfile>      | -schedules NEXT line from Rfile                        |
+| (Read)         | -'R Rfile' schedules printing the next line from Rfile:|
+|                |   1) just before N or n tries to get next input line   |
+|                |   2) at the end of the sed script(after sed AutoPrints)|
+|                | -each R invocation reads the next line from Rfile      |
+|                | -if Rfile cannot be read, or is at the end of file, R  |
+|                |   does nothing, and no error occurs                    |
+|                | -if Rfile is /dev/stdin, input is taken from std       |
+|                | -the output is NOT suppressed by the -n option         |
+|                | -output cannot be edited by subsequent commands        |
++----------------+--------------------------------------------------------+
+| s /Reg/Reg/    | -Substitute (default only first occurrence)            | -echo een een een | sed s/een/EEN/2 --> een EEN een  AND seq 5 | sed 's:1:blaaa:'
+| t<label>       | -Branch if match to <label>                            |
++----------------+--------------------------------------------------------+
+| t              | -Test. Branches to the end of the sed script if s      |
+|                |   replaces since the current line was read, or since   |
+|                |   the last t/T branch was taken                        |
+|                | -"t label" will branch to the label if the last        |
+|                |   substitute command modified the pattern space        |
++----------------+--------------------------------------------------------+
+| w <Wfile>      | -writes ALL LINES to Wfile                             |
+| (write)        | -appends PatSpace to Wfile                             |
+|                | -Wfile is created (or truncated) at sed startup        |
+|                | -if Wfile cannot be written, sed exits with an error   |
+|                | -Wfile is kept open until sed exits                    |
+|                | -'w /dev/stdout' writes PatSpace to stdout             |
+|                | -'w /dev/stderr' writes PatSpace to stderr             |
+|                | -immediately writes lines from PatSpace to file        |
+|                | -only one space must follow the command. Anything else |
+|                |    will be considered part of the file name            |
+|                | -The 'w' has to be the last flag!                      |
+|                | -sed -n '1,4 w output.txt' employee.txt                |
+|                | -sed -n 's/^[0-9]*[2468] /&/w my_even_file' < file     |
++----------------+--------------------------------------------------------+
+| W <Wfile>      | -writes first line to Wfile                            |
+| (Write)        | -'W Wfile'  appends line #1 of PatSpace(up to the first|
+|                |    newline) to Wfile                                   |
+|                | -Wfile is created(or truncated) at sed startup         |
+|                | -if Wfile cannot be written, sed exits with an error   |
+|                | -Wfile is kept open until sed exits                    |
+|                | -'W /dev/stdout' writes line #1 to stdout              |
+|                | -'W /dev/stderr' writes line #2 to stderr              |
+|                | -immediately writes lines from PatSpace to file        |
+|                | -only one space must follow the command. Anything else |
+|                |    will be considered part of the file name            |
+|                | -The 'w' has to be the last flag!                      |
++----------------+--------------------------------------------------------+
+| x              | PatSpace <>  HoldSpace (swap)                          |
+| y /src/des/    | Transform the characters in PatSpace (like Unix tr)    | -sed 'y/()/[]/   translates (bla) to [bla]
+| z              | Zap. Clear PatSpace                                    | -seq 5 | sed '4z' --> 1-2-3- -5
++----------------+--------------------------------------------------------+
+| a,c,i          | -output is not turned off by -n command line option    |
+|                | -do not change the line count                          |
+|                | -cannot be edited by later commands!                   |
++================+========================================================+
+| n              | -Next. Reads the next input line into PatSpace         |
+|                | -prints PatSpace before trying to read the line,       |
+|                | -using the -n option (Skips current line)              |
+|                | -cat file.sed --> /5/ {:k n; p; /5/ bk}                |
+|                | -seq 2 | sed 'n;p' --> 1-2-2                           |
+-----------------+--------------------------------------------------------+
+| N              | -Next                                                  |
+|                | -Appends next inputline to PatSpace,after newline joins|
+|                | -sed = myfile | sed 'N;s/\n/\t/' > myout               |
+|                | -seq 2 | sed 'N;p' --> 1-2-1-2                         |
++----------------+--------------------------------------------------------+
+| n/N            | -the n command will print out the current pattern      |
+|                |  space, empty the current pattern space,  and read in  |
+|                |  the next line of input                                |
+|                | -the N command does NOT print out the current pattern  |
+|                |  space and does NOT empty the pattern space. It reads  |
+|                |  in the next line,  but appends a new line character   |
+|                |  along with the input line itself to the pattern space |
++----------------+--------------------------------------------------------+
+|-Working with multiple lines: N, D, P                                    |
+|-hH   Hold to HoldSpace from PatSpace                                    |
+|-gG   Get from HoldSpace to PatSpace                                     |
+|-GH   Append to destination (after \n)                                   |
+|-gh   Copy from(overwrite) destination                                   |
++=========================================================================+
+
++=========================================================================+
+|                        FLAGS / SED SUBSTITUTE                           |
++======+==================================================================+
+| g    | Global substitution                                              |
+|      | -sed 's/Windows/Linux/g' world.txt                               |
+| n    | Substitute the nth occurrence (default 1)                        |
+|      | -sed 's/locate/find/2'  locate.txt -> sub only 2nd occurrence    |
+|      | -sed 's/locate/find/2g' locate.txt -> sub from 2nd to end        |
+| p    | Print only the substituted line                                  |
+| w    | Write only the substituted line into a file                      |
+|      | -The w flag MUST come last                                       |
+|      | -Put ONE space between the w flag and the file name. NOT MORE!!  |
+|      |   if more, the spaces are used in the filename!!                 |
+|      | -sed -n 's/old/new/w a.txt' rgb                                  |
+|      | -sed -n 's/John/Johnny/w output.txt' employee.txt                |
+|      | -sed -n 's/^[0-9]*[2468] /&/w my_even_file' < file               |
+| i/I  | Ignore case while search for match                               |
+|      | -sed 's/john/Johnny/i' employee.txt                              |
+|      | -echo old | sed s/Old/xxx/i                                      |
+| e    | Executes PatSpace as command                                     |
+|      | -echo 2 | sed 's/./expr & + 4/e'                                 |
+| m    | Multi-Line Mode matching(^ also matches the empty string after   |
+|      |  a newline, and $ also matches the empty string before a newline)|
++======+==================================================================+
+|-Any flag for the s command may be combined with any other flag, with a  |
+| few special cases:                                                      |
+|   1. Do not use the same flag more than once                            |
+|   2. Combining n and g tells sed to change match occurrence n, n+1, n+2 |
++=========================================================================+
+
++=========================================================================+
+|                             METACHARACTERS                              |
++=========+===============================================================+
+| .       | Any single character                                          |
+| [list]  | A single character that is contained within the brackets      |
+|         | -Character Set. E.g. [0-9]                                    |
+|         | -To include '-' in character set, place left or right: [-0-9] |
+| [^list] | A single character that is not contained within the brackets  |
+| ^       | Start Of PatSpace                                             |
+| $       | End Of PatSpace                                               |
+| ()      | Defines a marked subexpression                                |
+|         |    Grouping and Saving (BackRef using \1, \2 etc)???          |
+| \n      | The nth marker                                                |
+| *       | 0 or more of previous  {0, }:  a*  ->  a{0, } -> 0 or more 'a'|
+| +       | 1 or more of previous  {1, }:  a+  ->  a{1, } -> 1 or more 'a'|
+| ?       | 0 or 1 of previous     {0,1}:  a?  ->  a{0,1} -> 0 or 1 'a'   |
+| {N  }   | Exact N of previous                                           |
+| {L, }   | Low, Highter previous(low to any higher number of preceding)  |
+| {L,H}   | Low, High of Previous(low to high of preceding)               |
+| |       | Set union operator (OR). (regex1\|regex2).sed "/red\|RED/xxx" |
+| R1R2    | Matches the concat of regex1 and regex2                       |
+| \       | Escape sequence                                               |
+| \w      | Word Character(Word=sequence of [a-zA-Z0-9_] characters)      |
+| \W      | Non-Word Character                                            |
+| \<      | Start of Word. echo cow | sed 's/\<cow\>/ox/' --> ox          |
+| \>      | End of Word                                                   |
+| \b      | Is Word Boundary (similar to '\<' and '\>')                   | echo cow | sed 's/\bcow/ox/' --> ox
+| \B      | Is NOT word Boundary (matches only if NOT a word boundary)    |
+| \`      | Matches only at the START of PatSpace                         |
+|         | -This is different from ^ in multi-line mode                  |
+| \'      | Matches only at the END of PatSpace                           |
+|         | -This is different from ^ in multi-line mode                  |
++=========+===============================================================+
+| -All Repetition MetaChars and Regular Expressions are Greedy            |
+| -Greedy means 'matches the maximum number of characters possible'       |
+| -A MetaCharacter is a special symbol that represents something else     |
+| -If ^ is NOT the first char in the RegEx, ^ is interpreted as a literal |
+| -if $ is not the last char in the RegEx, $ is interpreted as literal $  |
+| -if the RegEx is solely '^', it matches the start of PatSpace, whatever |
+|    the contents are                                                     |
+| -a word is a sequence of [a-zA-Z0-9_] characters                        |
+|                                                                         |
+| -echo cow  | sed s/cow/ox/       -> ox                                  |
+| -echo scow | sed s/cow/ox/       -> sox                                 |
+| -echo cow  | sed 's/\<cow\>/ox'  -> ox                                  |
+| -echo scow | sed 's/\<cow\>/ox/' -> scow                                |
+| -echo cow  | sed 's/\bcow/ox/'   -> ox                                  |
+| -echo scow | sed 's/\bcow/ox/'   -> scow                                |
+|                                                                         |
+| - \<, \>, \b and \B Word boundary MetaChars always use BackSlash, even  |
+|     if -r is used                                                       |
+|                                                                         |
+| -in basic regular expressions, {, }, (, and ) should be preceded by \   |
+|    ---> E.g. \(regex\) or \{1,2\}                                       |
+| -if the -r options is used: |, ()                                       |
++=========================================================================+
+
++=========================================================================+
+|                 SUBSTITUTION EXPRESSION (SUBEX)                         |
++====+====================================================================+
+| &  | Substitutes the entire matched portion of PatSpace(matching string)|
+|    | -seq 3 | sed 's/./Line &/'                                         |
+|    | -get the matched pattern                                           |
+| \N | BackRef(Play Saved Group) (up to 9 BackRefs)                       |
+|    | BackRef may also be part of a RegEx                                |
+|    | -echo xy|sed -r 's/(.)(.)/\2\1/' -> yx                             |
+|    | -echo xy|sed -r 's/(.)./a\1'     -> ax                             |
+| \l | Changes the next character to lowercase                            |
+|    | -echo aBc | sed 's/./\l&/g -> abc                                  |
+| \u | Changes the next character to uppercase                            |
+|    | echo abc | sed 's/./\u&/g -> ABC                                   |
+| \L | Changes the rest of SubEx to lowercase, until the next '\U' or '\E'|
+| \U | Changes the rest of SubEx to uppercase, until the next '\L' or '\E'|
++====+====================================================================+
+|-'\E' ends \L or \U                                                      |
+|-sed 's/.*/\L&/' <input >output                                          |
++=========================================================================+
+
++=========================================================================+
+|                         CHARACTER CLASSES                               |
++=============+=================================+=========================+
+| TYPE        | DESCRIPTION                     | CONTENTS                |
++=============+=================================+=========================+
+| [:alnum:]   | Letter or number                |  [a-zA-Z0-9]            |
+| [:alpha:]   | Alphabetic character            |  [a-zA-Z]               |
+| [:blank:]   | Space or tab                    |  [\t]                   |
+| [:cntrl:]   | Control character               |  [\x00-\x1F\x7F]        |
+| [:digit:]   | Numeric digit                   |  [0-9]                  |
+| [:graph:]   | Visible character               |  [\x21-\x7E]            |
+| [:lower:]   | Lowercase letter                |  [a-z]                  |
+| [:print:]   | Visible character or space      |  [\x20-\x7E]            |
+| [:punct:]   | Punctuation or a symbol         |  ! @ # $ ....           |
+| [:space:]   | White space character           |  [\t\r\n\v\f]           |
+| [:upper:]   | Uppercase letter                |  [A-Z]                  |
+| [:xdigit:]  | Hexadecimal digit               |  [A-Fa-f0-9]            |
++=============+=================================+=========================+
+|-Posix character classes may be combined: [[:digit:]ab] -> [0-9ab]       |
+|-sed 's/[[:digit:]]\+\.//g'                                              |
++=========================================================================+
+
++=========================================================================+
+|                     SPECIAL LITERAL CHARACTERS                          |
++========+====================+===========================================+
+| TYPE   | DESCRIPTION        | ACSII                                     |
++========+====================+===========================================+
+| \a     | Alert              | (ASCII  7)                                |
+| \n     | Newline            | (ASCII 10)                                |
+| \f     | Form Feed          | (ASCII 12)                                |
+| \r     | Carriage Return    | (ASCII 13)                                |
+| \t     | Horizontal Tab     | (ASCII  9)                                |
+| \v     | Vertical Tab       | (ASCII 11)                                |
+| \d010  | Decimal 010        | (ASCII 10)                                |
+| \o012  | Octal 012          | (ASCII 10)                                |
+| \x0A   | Hex 0A             | (ASCII 10)                                |
++========+====================+===========================================+
+
++=========================================================================+
+|                         COMMANDS DETAILS                                |
++=========+===========+=========================================+=========+
+|         |           |           MODIFICATIONS TO:             |         |
+|         |  ADDRESS  +=========================================+         |
+| COMMAND | OR RANGE  | INPUT   | OUTPUT  | PATTERN |   HOLD    |         |
+|         |           | STREAM  | STREAM  | SPACE   |   BUFFER  |         |
++=========+===========+=========+=========+=========+===========+         |
+|    =    |     -     |    -    |    +    |    -    |     -     |         |
+|    a    |     1     |    -    |    +    |    -    |     -     |         |
+|    b    |     2     |    -    |    -    |    -    |     -     |         |
+|    c    |     2     |    -    |    +    |    -    |     -     |         |
+|    d    |     2     |    +    |    -    |    +    |     -     |         |
+|    D    |     2     |    +    |    -    |    +    |     -     |         |
+|    g    |     2     |    -    |    -    |    +    |     -     |         |
+|    G    |     2     |    -    |    -    |    +    |     -     |         |
+|    h    |     2     |    -    |    -    |    -    |     +     |         |
+|    H    |     2     |    -    |    -    |    -    |     +     |         |
+|    i    |     1     |    -    |    +    |    -    |     -     |         |
+|    l    |     1     |    -    |    +    |    -    |     -     |         |
+|    n    |     2     |    +    |    *    |    -    |     -     |         |
+|    N    |     2     |    +    |    -    |    +    |     -     |         |
+|    p    |     2     |    -    |    +    |    -    |     -     |         |
+|    P    |     2     |    -    |    +    |    -    |     -     |         |
+|    q    |     1     |    -    |    -    |    -    |     -     |         |
+|    r    |     1     |    -    |    +    |    -    |     -     |         |
+|    s    |     2     |    -    |    -    |    +    |     -     |         |
+|    t    |     2     |    -    |    -    |    -    |     -     |         |
+|    w    |     2     |    -    |    +    |    -    |     -     |         |
+|    x    |     2     |    -    |    -    |    +    |     +     |         |
+|    y    |     2     |    -    |    -    |    +    |     -     |         |
++---------+-----------+---------+---------+---------+-----------+---------+
+| Modifications to:                                                       |
+|  1    Command takes single address or pattern                           |
+|  2    Command takes pair of addresses                                   |
+|  -    Command does not modify the buffer                                |
+|  +    Command modifies the buffer                                       |
+|  *    The ``n'' command may/may not generate output depending           |
+|       on the ``-n'' command option                                      |
++-------------------------------------------------------------------------+
+
+###########################################################################
+#                                EOF                                      #
+###########################################################################
