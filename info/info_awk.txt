@@ -1,0 +1,759 @@
+########################################################################################################################
+# Author      : mitchell
+# Purpose     : My awk help  file
+# Last Update : Thu 23 Aug 2018 09:52:39 AM CEST
+########################################################################################################################
+
+########################################################################################################################
+###   AWK
+########################################################################################################################
+01. AWK INTRODUCTION
+02. AWK SYNTAX
+03. AWK BUILD IN VARIABLES
+04. AWK OPERATORS
+05. AWK ASSOCIATIVE ARRAYS
+06. AWK CONTROL FLOW
+07. AWK BUILT-IN FUNCTIONS
+08. AWK OUTPUT REDIRECTION
+09. AWK LIMITS
+10. AWK USER DEFINED FUNCTIONS
+11. AWK PATTERNS
+12. AWK STYLE
+########################################################################################################################
+###   01. AWK INTRODUCTION
+########################################################################################################################
+-Comments: #
+-Not free-form format
+-Line-oriented language
+-nothing <--> print <--> print $0
+-To break a line into two lines at any other place, you had to use a /
+-Awk support extended regular expressions
+-A positional variable is a function triggered by the dollar sign
+-print $1  <---> X=1; print $X
+-The variable "$0" refers to the entire line
+-String based language
+-Unlike some languages, relational expressions in awk do NOT return a value!! They only evaluate to a true condition
+ or a false condition. That means that a awk program like this BEGIN {a=1; print (a==1)} doesn't print anything
+-Awk is weakly-typed
+-Awk: both integer + floating point math
+-Awk variables are "stringy" because all awk variables are stored internally as strings
+    x="1.01"    #simply & stringy
+    x=x+1
+    print x --> 2.01
+-Awk automatically takes care of the string-to-nr conversion steps
+-Bash math: ugly $() construct
+-If a variable doesn't contain a valid number, awk will treat that variable as a numerical zero when it
+ evaluates your mathematical expression
+-* in UNIX: any character
+ * in AWK : zero or more of PREVIOUS character or expression
+-When two strings appear next to each other in an awk program, awk concatenates them without adding an intermediate space
+-PRINTING:use x, not $x ofzo
+-Use only equality, inequality or regex matching if you are NOT certain if the data is a string or a number!!!
+-Awk is "stringy": adding strings "1" and "2" is functional no different than adding the numbers 1 and 2
+-In AWK, Inside the quotes, the dollar sign is not a special character. Outside, it corresponds to a field
+-The dollar sign means that we are refering to a field or column in the current line
+########################################################################################################################
+###   02. AWK SYNTAX
+########################################################################################################################
+Syntax:
+ 1.                awk [options] '[/pattern/] {action}' [input-file]
+ 2.                awk -f [command.awk] [input-file] with #!/bin/awk
+
+ AWK               Original awk
+ NAWK              Newer and improved awk
+ GAWK              GNU AWK
+ IGAWK             GAWK with include files
+
+ BEGIN             Before starting to process input file. So e.g init FS, print a heading, init global vars
+ END               After awk is finished processing the input files. E.g. final calculations or summaries
+ @include          Include source files
+ @load             Read external awk extensions (system shared libraries)
+
+ -F <fs>           --field-separator <fs>    Field Seperator
+ -f <file>         --file <file>             To add a file. E.g. awk -f myscript.awk myfile.in
+ -v var=val        --assign var=val          Initialize a variable
+ -C                --copyright               Print the GPL and exit (GAWK)
+ -d[file]          --dump-variables[=file]   Print sorted list global vars
+ -D[file]          --debug[=file]            Enable debugging
+ -e <program-text> --source <program-text>   Provide source code
+ -i <source-file>  --include <source-file>   Read an awk source library
+ -p[file]          --profile[=file]          Enable profiling
+ -P                --posix                   Operate in strict POSIX mode
+ -V                --version                 Print version info(GAWK)
+ -W gawk-opt                                 Implementation-specific options
+ --                                          End of command-line options
+########################################################################################################################
+###  03. VARIABLES
+########################################################################################################################
+-No need to declare
+-Uninitialize variables: numeric value 0 and string value ""
+-Weakly typed
+-String operators on variables will give a string result, and numeric operators will give a numeric result
+-Test uninitialized var: var == 0 --> this tests "true" if var hasn't been initialized
+-print an uninitialized var gives NOTHING
+-$2 = "NewText"   --> changes the second text field in the input line to "NewText"
+-Two types of variables: positional and user defined
+-vari="line one\nline two"
+ awk -v var="$vari" 'BEGIN {print var}'
+########################################################################################################################
+###  04. AWK BUILD IN VARIABLES      (A=AWK, B=NAWK, G=GAWK)
+########################################################################################################################
+ FS         A N G   Field Separator                     (default: space)
+ NF         A N G   Number of Fields                    (in current record)
+ NR         A N G   Number of input records             if more files:accumulated
+ RS         A N G   Record separator                    (default: newline)
+ FILENAME   A N G   Current filename                    If no file: "-". In BEGIN undefined
+ OFS        A N G   Output Field Separator              (default: space)
+ ORS        A N G   Output Record Separator             (default: newline)
+ ARGC         N G   Nr of arguments                     Nr of elements in ARGV
+ ARGV         N G   Array of CL-arguments               0 till (ARGC-1)
+ FNR          N G   Input Record Number                 The number of lines read, reset for each file
+ OFMT         N G   Ouput Format                        (default "%.6g"). How to print values
+ RLENGTH      N G   Length of string after match()      -1 is no match
+ RSTART       N G   Index of first char after match()   0 if no match
+ SUBSEP       N G   Subscript Seperator                 Default separator with multiple subscripts in array
+                                                        (default "\034"). A[ X "&" Y ] <--> A[X,Y]
+ CONVFMT        G   Conversion format                   (default: "%.6g"). Specify format when converting a nr to str
+ ENVIRON        G   Array of environment variables      E.g print ENVIRON["PATH"]. All exported env vars
+ ARGIND         G   Index of ARGV of current file
+ BINMODE        G   Binary Mode for all file I/O on non-POSIX systems
+ ERRNO          G   Error messages when errors occur using getline or close (I/O operations)
+ FIELDWIDTHS    G   A space separated list of field widths.
+ IGNORECASE     G   If non-zero GAWK becomes case insensitive
+ LINT           G   Turns --lint mode on/off
+ PROCINFO       G   An associative array containing info about the process
+ TEXTDOMAIN     G   Text domain (i.e. localization) of current AWK program
+ RT             G   Record terminator.Contains the input text that matches the text denoted by RS
+ $0                 The entire input record
+ $n                 Nth field in current record where fields are separated by FS
+
+-record is a line
+-field is a column
+-FILENAME in BEGIN: awk 'BEGIN {print ARGV[1]}' file
+########################################################################################################################
+###  04. AWK OPERATORS
+########################################################################################################################
+ = += -= *= /= %= ^=    Assignment
+ ?:                     Conditional expression. print (price > 500 ? "expensive" : "cheap")
+ ||  &&                 Logical OR, logical AND
+ ~  !~                  Regular expression match, negated match
+ < <=  >  >=  !=  ==    Relationals
+ (blank)                String concatenation. - "a" "bc" --> abc (no explicit concat operator!)
+ +  -                   Add, subtract
+ *  /  %                Multiply, divide, modulus
+ +  -  !                Unary plus, unary minus, logical negation
+ ^ or **                Exponentional
+ ++  --                 Increment, decrement
+ $num                   Field reference/num
+ in                     Array Membership
+########################################################################################################################
+### 05. AWK ASSOCIATIVE ARRAYS(array whose index is a string,1-dimensional)
+########################################################################################################################
+-Assign element         arrayname[index/string]=value
+-Refer element          variable=arrayname[index/string]
+-Delete element         delete arrayname[index/string]
+-Browse elements        for (var in arrayname) actions
+-Delete array           delete array-name
+
+-if (val in array)
+    print array[val]
+
+-for ( x in myarray ) {
+    print myarray[x]
+ }
+
+-ARRAY[1,2] = y;         # NOT ALLOWED
+ ARRAY[1 "," 2] = y;     # ALLOWED, space is concatenation
+
+-Awk arrays can only have 1 dimension
+-Arrays start at indice 1, rather than 0
+-arr[1]  <--> arr["1"]
+-Awk has only associated arrays
+-Internally, awk uses string indexes for its arrays all the time
+-Awk arrays are SPARSE: meaning you can have element 1 and 3, without having element 2
+-Awk uses string indixes, so it makes no distinction about numered elements
+-Elements in an associative array are not stores in any particular order
+-Multi-dimensional: array["ok","1"]="hello"
+                              equal to
+                       array["OK@1"]="hello"    --> @ is subsep builtin var
+
+-C-style array           Associve Array
+  -Fixed-Length         -Variable-Length
+  -Integer-index        -String-Index
+  -Index starts with 0  -Parse with no order
+  -Multi-dimensional    -single dimensional
+
+-message[1]="have a nice"
+ message[2]="day"
+ print message[1], message[2] --> the commas within the print statement add spaces between the array elements.
+                                  This can be changed by setting the built-in variable OFS
+########################################################################################################################
+#   06. AWK CONTROL FLOW
+########################################################################################################################
+ if ( expr ) statement [ else statement ]
+ if ( subscript in array) statement [ else statement ]
+ while ( expr ) statement
+ do statement while ( expr )
+ for ( expr ; conditional ; expr ) statement
+ for ( variable in array ) statement
+ { [ statement ] ...}
+ variable=expr
+
+ next        		Stop processing the current input record. Go to the next input record
+ nextfile   		Stop processing the current file. Go to next file
+ break      		Jumping out of the innermost loop(while, do-while and for)
+ continue           Forces the next iteration of the loop
+ exit [ expr ]		Stop processing the input files, execute END operations, if specified, and finish
+ return [ expr ]	To return a value
+
+ while (getline <"file" > 0)  # Safe
+ while (getline <"file")      # Dangerous, maybe infinite loop, because if file does not exist, getline returns -1, a
+                                nonzero value that represents true
+
+ 0 is false, the rest is true
+########################################################################################################################
+###  07. AWK BUILT-IN FUNCTIONS
+########################################################################################################################
+########################################################################################################################
+###  AWK NUMERIC FUNCTIONS
+########################################################################################################################
+ cos(expr)       A N G     Cosine of x, with x in radians
+ exp(expr)       A N G     Exponential of x (e ^ x)
+ int(expr)       A N G     Truncates to integer
+ log(expr)       A N G     Natural logarithm of x, if x > 0
+ sin(expr)       A N G     Sine of x, with x in radians
+ sqrt(expr)      A N G     Positive square root of x
+ atan2(y, x)       N G     Arctangent of y / x in radians
+ rand()            N G     Random number between 0 and 1
+ srand([expr])     N G     Sets the starting point, or seed, for generating random numbers to the value x
+########################################################################################################################
+###  AWK BIT MANIPULATION FUNCTIONS
+########################################################################################################################
+ and (v1,v2)               Bitwise AND
+ compl(val)                Bitwise Complement
+ lshift(val,count)         Shifted LEFT by count bits
+ or(v1,v2)                 Bitwise OR
+ rshift(val,count)         Shifted RIGHT by count bits
+ xor(v1,v2)                Bitwise XOR
+########################################################################################################################
+###  AWK STRING FUNCTIONS
+########################################################################################################################
+ --> a           Array
+ --> r           Regular expression
+ --> s and t     String expressions
+ --> n and p     Integers
+----------------------------------------------------------------------------------------------------
+ index(s,t)      A N G  Return first position of string t in s, or 0 if t is not present
+ length(s/a)     A N G  Returns the length of the string/array
+ split(s,a)      A N G  Split s into array a on FS; return number of fields
+ split(s,a,fs)   A N G  Split s into array a on field separator fs; return number of fields
+ substr(s,p)     A N G  Return suffix of s starting at position p. if length(mystring) is shorter than startpos+maxlen,
+                        your result will be truncated. Substring won't modify the original string
+ substr(s,p,n)   A N G  Return substring of s of length n starting at position p. if length(mystring) is shorter than
+                        startpos+maxlen, your result will be truncated. Substring won't modify the original string
+ sub(r,s)          N G  Substitute s for the leftmost longest substring of $0 matched by r; return nr of substitutions
+ sub(r,s,t)        N G  Substitute s for the leftmost longest substring of t matched by r; return nr of substitutions
+ gsub(r,s)         N G  Substitute s for r globally in $0; return number of substitutions made
+ gsub(r,s,t)       N G  Substitute s for r globally in string t; return number of substitutions made
+ match(s,r)        N G  Like index. Test whether s contains a substr matched by r; return index or 0; sets RSTART + RLENGTH
+ tolower(s)          G  Uppercase to lowercase. Returns a NEW string, don't modify the original
+ toupper(s)          G  Lowercase to uppercase. Returns a NEW string, don't modify the original
+ asort(s,[d])        G  Sorts the array and stores them in indexes 1 through n. Sort using VALUES
+ asorti(s,[d])       G  Sort using array INDICES
+ gensub(r,s,h [,t])  G  General substitution function
+ strtonum(s)         G  Returns numeric value of str
+----------------------------------------------------------------------------------------------------
+-sub() and gsub() have identical arguments: the only way thay differ is that sub() will replace the first regex
+ match (if any) and gsub will perform a global replace, swapping out all matches in the string
+-when calling length(), sub(), or gsub, you can drop the last argument and awk will apply the function call
+ to $0 (the entire current line)
+---------------------------------------
+RSTART contains the return value (the location of the first match) and RLENGTH specifies its span in
+characters (or -1 if no match was found). Using RSTART, RLENGTH, substr() and a small loop, you can easily iterate
+through every match in your string. E.g. print match(mystring, /you/), RSTART, RLENGTH) ---> 9 9 3
+
+-awk '{sub(/pattern/,"foobar")}1'  --> tries to replace "pattern" with "foobar" -->  sed 's/pattern/foobar/'.
+########################################################################################################################
+###  AWK MISC FUNCTIONS: ts=timestamp
+########################################################################################################################
+ getline               A N G   Read next line from the input file.                          Sets $0, NF, NR, FNR
+ getline variable        N G   Read next line from input file and stores it in var.         Sets var, NF, FNR (var, NR, FNR)
+ getline < file          N G   Read next line from another input file.                      Sets $0, NF
+ getline variable <file  N G   Read next line from another input file and store it in var.  Sets var
+ cmd | getline           N G   Execute UNIX OS command (cmd) and store output in $0.        Sets $0, NF
+ cmd | getline var       N G                                                                Sets var
+ system(command)         N G   Executes cmd and returns its exit status
+ close(command)          N G   Close open files and pipes
+ systime()                 G   Returns current time as nr of sec since epoch
+ strftime(string)          G
+ strftime([format [,ts]])  G   Returns a string. Similar to ANSI C version
+ mktime(dataspec)              Turns dataspec into a timestamp
+ close(filename/cmd)           Closes file/pipe. return 0 for a file-return, -1 if file was never opened or problem
+ fflush([filename])            Flush buffered output associated filename
+
+-echo | awk '{print strftime("%d-%m-%Y",mktime("2012 12 21 0 0 0"));}'          ----> 21-12-2012
+-echo | awk '{print strftime("%d-%m-%Y",mktime("2012 12 -1 0 0 0"));}'          ----> 29-11-2012
+-echo | awk '{print strftime("%d-%m-%Y %H-%M-%S",mktime("2012 12 3 -2 0 0"));}' ----> 02-12-2012 22-00-00
+
+-echo | gawk '{ print mktime("2017 02 03 13 46 0");}' ---> 1486125960
+-echo | awk  '{ print strftime("%y_%m_%d_%H_%M_%S")}' ---> 17_04_15_15_00_54
+-echo | awk  '{ print systime()} '                    ---> 1492261353
+########################################################################################################################
+###  STRFTIME FORMATS
+########################################################################################################################
+ %a     The locale's abbreviated weekday name
+ %A     The locale's full weekday name
+ %b     The locale's abbreviated month name
+ %B     The locale's full month name
+ %c     The locale's "appropriate" date and time representation
+ %d     The day of the month as a decimal number (01--31)
+ %H     The hour (24-hour clock) as a decimal number (00--23)
+ %I     The hour (12-hour clock) as a decimal number (01--12)
+ %j     The day of the year as a decimal number (001--366)
+ %m     The month as a decimal number (01--12)
+ %M     The minute as a decimal number (00--59)
+ %p     The locale's equivalent of the AM/PM
+ %S     The second as a decimal number (00--61).
+ %U     The week number of the year (Sunday is first day of week)
+ %w     The weekday as a decimal number (0--6). Sunday is day 0
+ %W     The week number of the year (Monday is first day of week)
+ %x     The locale's "appropriate" date representation
+ %X     The locale's "appropriate" time representation
+ %y     The year without century as a decimal number (00--99)
+ %Y     The year with century as a decimal number
+ %Z     The time zone name or abbreviation
+ %%     A literal %
+########################################################################################################################
+###  Optional GAWK strftime formats
+########################################################################################################################
+ %D     Equivalent to specifying %m/%d/%y
+ %e     The day of the month, padded with a blank if it is only one digit
+ %h     Equivalent to %b, above
+ %n     A newline character (ASCII LF)
+ %r     Equivalent to specifying %I:%M:%S %p
+ %R     Equivalent to specifying %H:%M
+ %T     Equivalent to specifying %H:%M:%S
+ %t     A TAB character
+ %k     The hour as a decimal number (0-23)
+ %l     The hour (12-hour clock) as a decimal number (1-12)
+ %C     The century, as a number between 00 and 99
+ %u     Is replaced by the weekday as a decimal number [Monday == 1]
+ %V     Is replaced by the week number of the year (using ISO 8601)
+ %v     The date in VMS format (e.g. 20-JUN-1991)
+########################################################################################################################
+### 08. AWK OUTPUT REDIRECTION
+########################################################################################################################
+-print                       Print current record
+-print $2 S3                 Will concat
+-print $2, $3                Will print two variables, with OFS in between
+-print "text" > file         Print data to file
+-print "text" >> file        Append data to file
+-print "text" | cmd          Print data down a pipeline to cmd
+-print "text" |& cmd         Print data down a pipeline to co-process cmd
+----------------------------------------------------------------------------
+-printf (format);
+-printf (format, arguments...);   Will print a formatted string to stdout
+-default output format of numbers is %.6g
+-printf has no automatical newline
+-OFS and ORS have no effect on printf
+-Print terminates the line with the ORS character, and divides each field with the OFS separator
+-----------------------------------------------------------------------------
+-sprintf(format, expression1,...)    This returns (without printing) the string that printf would have
+                                     printed out with the same arguments
+-sprintf(fmt,expr-list)	             Return expr-list formatted according to format string fmt
+-sprintf: returns a formatted string that can be assigned to a variable
+-----------------------------------------------------------------------------
+-printf "%s %s\n" , "don't", "panic"
+ printf "%2$s %1$s\n" , "Panic", "don't"
+ ---> N$ : positional specifier
+ --------------------------------------------------------------------------
+- { printf "%10s %6d\n", $1, $3 } ----> first field as a string of 10 chars (right justified), then a space, then the
+                                        third field  as a decimal nr in a 6 character field, and finally a newline
+########################################################################################################################
+###  ESCAPE SEQUENCES
+########################################################################################################################
+ \a             ASCII bell
+ \b             Backspace
+ \f             Formfeed
+ \n             Newline
+ \r             Carriage Return
+ \t             Horizontal Tab
+ \v             Vertical Tab
+ \dd            Character (1 to 3 octal digits, NAWK only)
+ \xdd           Character (hex, NAWK only)
+ \<AnyChar>     Literal char
+########################################################################################################################
+###  PRINTF FORMAT SPECIFIERS
+########################################################################################################################
+ %c             Single ASCII Character
+ %d and %i      Decimal integer
+ %e + %E        Floating Point number (engineering format)
+ %f             Floating Point number (fixed point format)
+ %F             Like %f, but infinite and NotANumber values are spelled using uppercase letters
+ %g             The shorter of e or f, with trailing zeros removed
+ %o             Octal
+ %s             String
+ %u             Unsiged decimal
+ %x and %X      Hexadecimal
+ %%             Literal %
+------------------------------------------------------------------------------------------------------------------------
+-Format specifier starts with % and end with a "format-control-letter"
+-Format-control-letter specifies what kind of value to print
+-printf "%c",65 --> prints A
+-printf "%4.3e\n",1950  --> prints 1.950e+03
+-printf "%4.3f",1950    --> prints 1950.000  (4 digits, 3 digits)
+
+-"%-5s" OR "%5-s"???
+########################################################################################################################
+### OPTIONAL PARAMETERS WITH %
+########################################################################################################################
+-default: right justified
+-%6.2f : with 6 digits (4 as int, 2 as decimal)
+-printf "%4-s", "foo" --> prints "foo " (total 4 characters)
+-printf("%20s%d\n", s, d);   ---> As long as the string is less than 20 characters, the number will start on the 21st column.
+
+-Format Specifiers
+  -     -Left justified expr in its field. printf("%-10s %-6d\n", $1, $2);   -->the minus sign -->
+        -  "%-5s" ---> print as 5 characters, left alligned
+
+  width -specifying the desired minimum width of a field
+        -Fields that begin with a leading 0 are padded with zeros
+        -Pads field to width as needed; leading 0 pads with zeroes
+        -Inserting any number between the % sign and the format-control character forces the field to expand to this width
+        -Default way to do this is to pad with spaces on the left
+        -E.g. print "%4s","foo"
+        -The value of width is a MINIMUM width!
+        -Preceding the width with minimus sign causes the output to be padded with spaces on the right,instead of onthe left
+        -Spaces are added to the left
+
+  prec -The number between the decimal and the format character. Max string width or digits to right or decimal point
+
+-Field Precision Value: The precision field, which is the number between the decimal and the format character
+
+-TYPES OF FORMATTING
+  -n    pad n spaces on the right hand side of a column
+   n    pad n spaces on the left hand side of a column
+  .m    add zeros on left side
+  -n,m  pad n spaces right hand side and add m zeros before that number
+   n,m  pad n spaces left hand side and add m zeros before that
+
+-space: used before the width modifier
+      : Means always supply a sign for numeric conversions, even if the data for format is positive
+      : The "+" overrides the space modifier
+- 0   : The leading zero acts as a flag indicating that output should be padded with zeros instead of spaces
+      : Only for numeric output values
+- '   : Single quote. Indicates that the integer part of a FP value, or the entire part of an integer decimal
+      : Value, should have a thousansd-seperator character in it
+
+-awk '{printf "format", arguments}' filename
+-%[-][width][prec]
+########################################################################################################################
+###  CHARACTER CLASSES DEFINED BY POSIX
+########################################################################################################################
+ [:alnum:]    Alphanumeric characters
+ [:alpha:]    Alphabetic characters
+ [:blank:]    Space and tab characters
+ [:cntrl:]    Control characters
+ [:digit:]    Numeric characters
+ [:graph:]    Characters that are printable and are also visible
+ [:lower:]    Lower-case alphabetic characters
+ [:print:]    Printable characters (chars that are not control characters)
+ [:punct:]    Punctuation characters (characters that are not letter, digits, control characters, or space characters)
+ [:space:]    Space characters (such as space, tab, and formfeed)
+ [:upper:]    Upper-case alphabetic characters
+ [:xdigit:]   Characters that are hexadecimal digits
+########################################################################################################################
+###  REGULAR EXPRESSIONS
+########################################################################################################################
+ \         Escape sequence \$ = matches the char $
+ ^         Matches beginning of string
+ $         Matches end of string
+ .         Matches any single character, including the newline character
+ [...]     Character list. E.g. [0-9], [A-Za-z0-9]
+ [^ ...]   Complemented character list. E.g. [^0-9] matches any character that is not a digit
+ |         This is the alternation operator
+ *         This symbol means that the preceding regular expression is to be repeated as many times as necessary to find a match
+ +         The preceding expression must be matched at least once ( 1 or more)
+ ?         The preceding exprcan be matched either once or not at all (0 or 1)
+ (r)       Matches r (grouping). ----> -grouping: () : ($i)++  --> add 1 to the value of the ith field
+ {n}       Interval: repeated n times
+ {n,}      Interval: repeated at least n times
+ {n,m}     Interval: the preceding regexp is repeated n to m times
+########################################################################################################################
+###  GAWK REGULAR EXPRESSIONS
+########################################################################################################################
+ \w   Matches any word-constituent character(any letter, digit,underscore)
+ \W   Matches any character that is not word-constituent
+ \<   Matches the empty string at the beginning of a word
+ \>   Matches the empty string at the end of a word
+ \y   Matches the empty string at either beginning or end of a word
+ \B   Matches the empty string within a word. In other words, `\B' matches
+      the empty string that occurs between two word-constituent characters
+ \`   Matches the empty string at the beginning of the buffer
+ \'   Matches the empty string at the end of the buffer
+
+ --posix          Only POSIX regexps are supported
+ --traditional    Traditional Unix awk regexps are matched
+ --re-interval    Allow interval expressions in regexps, even if `--traditional' has been provided
+########################################################################################################################
+### 09. AWK LIMITS
+########################################################################################################################
+ Number of fields per record         100
+ Characters per input record         3000
+ Characters per output record        3000
+ Characters per field                1024
+ Characters per printf string        3000
+ Characters in literal string        400
+ Characters in character class       400
+ Files open                          15
+ Pipes open                          1
+########################################################################################################################
+### 10. AWK USER DEFINED FUNCTIONS
+########################################################################################################################
+-func name(a, b, c) {statement}
+-function name(a, b, c) {statement}
+-functionName( expr, expr,... )
+########################################################################################################################
+### 11. AWK PATTERNS
+########################################################################################################################
+-zelfde als sed???
+-BEGIN {statements}          Executed once before input is read
+-END {statements}            Executed after all input lines has been read
+-expression {statements}     Executed at each input line where the expression is true(nonzero or nonnull)
+-/regex/                     Matches when the current input line contains a substring matched by regex
+-expr ~  /regex/             Matches if the string value of expression contains a substring matched by regex
+-expr !~ /regex/             Matches if the string value of expression does not contain a substring matched by regex
+-pat1,pat2{statements}       A range pattern matches from pat1 to pat2(incl). pat can also be a regex
+-selection by comparison     $2 >= 5
+-selection by computation    $2 + $5 > 50
+-selection by text content   $1 == "suzie"    or   /suzie/
+-combi of pattern            $2 >= 4 || $3 >= 20
+ (&&, ||, ! and parentheses) !($2 < 4 && $3 < 20)
+                             ($1 == "foo") && ($2=="bar") {print }
+---------------------------------------------------------------------------
+-NF==3     If record has 3 fields
+-NR%2==0   Even-numbered line
+-NF>4      Records containing more that 4 fields
+-$NF>4     If last field greater than 4 !!!!! see the $ sign up front!!
+
+-$1  ~ /x/               If first field contains a x; 0 otherwise
+-$1  ~ /^End$/           If first field is End
+-$1 !~ /^End$/           If first field is not End
+-!$1                     If $1 is zero or null; 0 otherwise
+-/^start/,/Summary/      If block from start to summary
+-NR==10                  matches line 10
+-NR==10, NR==20          matches line 10 through 20
+-$1 == "End"             If first field is End
+-$1 == 100               If first field has numeric value equal to 100
+-$1 == "End"             Matches only End
+ $1 ~ /End/              Matches also End1 e.g.
+-/f[eo]{2}t/             foot or feet
+ /[0-9]{3}/              minimum 3 digits --> /[0-9][0-9][0-9]+/
+ /^[0-9]{4,7}$/          4 t/m 7 digits
+---------------------------------------------------------------------------
+-/Asia/ is a shorthand for: $0 ~ /Asia/
+-/Asia/ || /Europe/   <--> /Asia|Europe/
+-lawrence_welk ~ /(one|two|three)/
+-/[0-9]+\.[0-9]*/ {print}   ---> regex: if contain a floating point number
+-((NR>=30) && ($1 == "France" )) || $1 = "Norway")
+-if ($1 == "green" ) ...
+- /^[+-]?[0-9]+$/     --> ^      : find str at beginning of line
+                          [+-]?  : specify possible + or - sign for number
+                          [0-9]+ : specify at least one digit
+                          $      : specify that the line ends with a number
+-------------------------------------------
+ /the/                 simple
+ /^the/                StartOf                     echo -e "This\nThat\nThere\nTheir\nthese" | awk '/^The/'
+ /the$/                EndOf                       echo -e "knife\nknow\nfun\nfin\nfan\nnine" | awk '/n$/'
+ /\$/                  Searches for $
+ /[Tt]he/              MatchCharSet                echo -e "Call\nTall\nBall" | awk '/[CT]all/'
+ /[^CT]all/            ExclusiveSet                echo -e "Call\nTall\nBall" | awk '/[^CT]all/'
+ /[a-z]/               Range of characters
+ /a-zA-Z0-9/           Matches any letter or nr
+ /(ger)|(ned)/         Logical OR. Alteration(or)  echo -e "Call\nTall\nBall\nSmall\nShall" | awk '/Call|Ball/'
+ /f.n/                 . : any single character
+ /Colou?r/             ZeroOrOne(?)                echo -e "Colour\nColor" | awk '/Colou?r/'
+ /cat*/                ZeroOrMore(*)               echo -e "ca\ncat\ncatt" | awk '/cat*/'
+ /2+/                  OneOrMore                   echo -e "111\n22\n123\n234\n456\n222"  | awk '/2+/'
+ /Apple (Juice|Cake)/  Grouping                    echo -e "Apple Juice\nApple Pie\nApple Tart\nApple Cake" | awk '/Apple (Juice|Cake)/'
+--------------------------------------------
+-if an action has no patterns, the action is performed for all input lines
+-a string-matching pattern tests whether a string contains a substring. So e.g. NOT /*ASIA*/ just /ASIA/ is enough!
+
+-$5 ~ /root/ {print $1}     <---> if ($5 ~ /root/) {print $1}  --> if fifth field contain "root"
+
+- ! /matchme/ {print $1 $3 $4}  <----> if ( $0 !~ /matchme/) { print $1 $3 $4 }
+       --> #output only these lines that doesn't contain a matchme
+
+###############################################################################################
+### 12. AWK STYLE
+###############################################################################################
+-Use CamelCase
+-A global variable always starts with an uppercase letter
+-A function or local variable always starts with a lower case letter
+-Local variables must be explicity declared, after the actual function arguments and seperated with 4 spaces or a line
+ of 4 characters (####)
+-A case label should line up with its switch statement
+-The case statement is indented
+-Do not place spaces around unary operators
+-Do place spaces around binary and ternary operators
+-Do place spaces between variable names and literals
+-Do not place spaces before comma and semicolon
+-Do place spaces between control statements and their parentheses
+-Do not place spaces between a function and its parentheses, or between a parentheses and its content
+-An else statement should go on the same line as a preceding close brace if one is present, else it should
+ line up with the if statement
+-An else if statement should be written as an if statement when the prior if concludes with a return statement
+-Always place the open brace on the line preceding the code block; place the close brace on its own line
+-Place braces before pipes
+-There cannot be any blanks between the function name and the left parenthesis of the argumentlist when the function is called
+-Passed by value
+-AWK does not evaluate variables within strings
+-If you wanted to break a long line into two lines at any other place, you had to use a backslash
+-Place a space between two variables and the strings are concatenated together
+-A user defined variable is one you create
+-A positional variable is not a special variable, but a function triggered by the dollar sign
+-Therefore: print $1; and X=1; print $X; do the same thing:  print the first field on the line
+-$2="";print; deletes the second field
+-man 3 printf
+---------------------------------------------------------------------------
+#!/bin/sh
+#NOTE - this script does not work!
+column=$1
+awk '{print $column}'
+---------------------------------------------------------------------------
+#!/bin/sh
+column=$1
+awk '{print $'$column'}'
+---------------------------------------------------------------------------
+E.g. -v start=${START}
+
+ -${variable:-defaultvalue}  ---> e.g.awk '{print $'${||1:-1}'}'
+ -#!/bin/sh
+  column = $1
+  awk '{print$'$column'}'
+---------------------------------------------------------------------------
+   #!/bin/sh
+ column=${1:-1}
+ awk '{print $'$column'}'
+
+-or, saving a line by combining these two steps
+ #!/bin/sh
+ awk '{print $'${1:-1}'}'
+
+-or, but difficult to understand
+ #!/bin/sh
+ awk '{print $c}' c=${1:-1}
+---------------------------------------------------------------------------
+NAWK and GAWK allow the getline function to be given an optional filename
+or string containing a filename.
+    getline a_line
+    print a_line;
+NAWK's getline can also read from a pipe. If you have a program that
+generates single line, you can use
+    "command" | getline;
+    print $0;
+###############################################################################################
+###                             EOF
+###############################################################################################
+
+- #awk on FreeNode IRC network
+
+-idiomatic AWK
+
+-awk 'NR==FNR { # some actions; next} # other condition {# other actions}' file1 file2
+--> So, the condition "NR==FNR" is only true while awk is reading the first file.
+
+-awk -F: '{print $1}'     <<< "1:2:3" --> 1
+-awk -v FS=: '{print $1}' <<< "1:2:3" --> 1
+-awk '{print $1}' FS=: <<< "1:2:3" ---> 1
+-awk 'BEGIN{FS=":"} {print $1}' <<< "1:2:3" ---> 1
+
+somecommand | head -n +1 | grep foo | sed 's/foo/bar/' | tr '[a-z]' '[A-Z]' | cut -d ' ' -f 2
+            IS EQUIVELENT TO
+somecommand | awk 'NR>1 && /foo/{sub(/foo/,"bar"); print toupper($2)}'
+
+##############################################################################################
+# prints lines from /beginpat/ to /endpat/, inclusive
+awk '/beginpat/,/endpat/'
+
+# prints lines from /beginpat/ to /endpat/, not inclusive
+awk '/beginpat/,/endpat/{if (!/beginpat/&&!/endpat/)print}'
+
+# prints lines from /beginpat/ to /endpat/, not including /beginpat/
+awk '/beginpat/,/endpat/{if (!/beginpat/)print}'
+
+# prints lines from /beginpat/ to /endpat/, not inclusive
+awk '/endpat/{p=0};p;/beginpat/{p=1}'
+
+# prints lines from /beginpat/ to /endpat/, excluding /endpat/
+awk '/endpat/{p=0} /beginpat/{p=1} p'
+
+# prints lines from /beginpat/ to /endpat/, excluding /beginpat/
+awk 'p; /endpat/{p=0} /beginpat/{p=1}'
+
+All these programs just set p to 1 when /beginpat/ is seen, and set p to 0 when /endpat/ is seen.
+The crucial difference between them is where the bare "p" (the condition that triggers the printing
+of lines) is located. Depending on its position (at the beginning, in the middle, or at the end), different
+parts of the desired range are printed. To print the complete range (inclusive), you can just use the
+regular /beginpat/,/endpat/ expression or use the flag technique, but reversing the order of the
+conditions and associated patterns:
+
+# prints lines from /beginpat/ to /endpat/, inclusive
+awk '/beginpat/{p=1};p;/endpat/{p=0}'
+
+###########################################################################################
+line1
+line2
+line3
+line4
+FOO1
+line5
+line6
+FOO2
+line7
+line8
+FOO3
+line9
+line10
+line11
+FOO4
+line12
+FOO5
+line13
+
+# first way, works with all versions of awk
+awk -v n=1 '/^FOO[0-9]*/{close("out"n);n++;next} {print > "out"n}' file
+
+---> out1: line1 t/m line4
+     out2: line5 t/m line6
+     etc etc
+###########################################################################################
+-https://github.com/e36freak/awk-libs
+###########################################################################################
+-echo "12:23:11" | awk '{split($0,a,":"); print a[3] a[2] a[1]}'
+-SLOTMAP="1 2 3 4 6"; echo | gawk -vslotmap="$SLOTMAP" '{ print slotmap; split(slotmap, a, " ");  print a[1] }'
+-echo 3 4 | awk '{ print $1 + $2 }' ----> 7
+-echo | awk '{print mktime("2012 12 21 0 0 0");}' ---> 1356028200
+
+-awk -F"," '{OFS=","; $1=strftime("%Y-%m-%d %H:%M:%S", $1); print $0}' file
+############################################################################################
+-PRINT A LINE THAT MATCHES A PATTERN
+1. awk '{if ($0 ~ /pattern/) print $0}'
+2. awk '$0 ~ /pattern/ {print $0}'
+3. awk '/pattern/ {print $0}'            ( note that /pattern/ is the same as $0 ~ /pattern/ )
+4. awk '/pattern/ {print}'               ( print $0 is a redundant statement, since print alone, by default, prints $0)
+5. awk '/pattern/'                       ( awk performs a default action that is (you guessed it) print (which we already know is
+                                           equivalent to print $0). )
+###########################################################################################
+awk 'NR % 6'            # prints all lines except those divisible by 6
+awk 'NR > 5'            # prints from line 6 onwards (like tail -n +6, or sed '1,5d')
+awk '$2 == "foo"'       # prints lines where the second field is "foo"
+awk 'NF >= 6'           # prints lines with 6 or more fields
+awk '/foo/ && /bar/'    # prints lines that match /foo/ and /bar/, in any order
+awk '/foo/ && !/bar/'   # prints lines that match /foo/ but not /bar/
+awk '/foo/ || /bar/'    # prints lines that match /foo/ or /bar/ (like grep -e 'foo' -e 'bar')
+awk '/foo/,/bar/'       # prints from line matching /foo/ to line matching /bar/, inclusive
+awk 'NF'                # prints only nonempty lines (or: removes empty lines, where NF==0)
+awk 'NF--'              # removes last field and prints the line
+awk '$0 = NR" "$0'      # prepends line numbers (assignments are valid in conditions)
