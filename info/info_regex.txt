@@ -1,0 +1,811 @@
+############################################################################################################################
+# Author      : mitchell
+# Purpose     : Regex cheat sheet
+# Last Update : Wed 22 Aug 2018 03:34:39 PM CEST
+############################################################################################################################
+
+############################################################################################################################
+###                                    INTRODUCTION
+############################################################################################################################
+-A pattern describing a certain amount of text
+-Case sensitive by default
+-The engines behind these flavors fall into two main groups:
+ -- regex-directed (or NFA, which stands for Nondeterministic Finite Automaton)
+ -- text-directed (or DFA, which stands for Deterministic Finite Automaton)
+-A regex-directed engine will always return the leftmost match
+-POSIX: the longest match be returned, regardless the implementation
+----------------------------------------------------------------------------------------------------------------------------
+-Round brackets   : grouping
+-Square brackets  : character class
+-Curly braces     : special repetition operator
+############################################################################################################################
+###                                   ANCHORS - BOUNDARIES - POSITION MATCHING
+############################################################################################################################
+-The anchors match at a position, rather than matching a character
+-This match is zero-length
+-POSIX does not support word boundaries at all
+-Like ^ or $, \b is a zero-width assertion
+-Assertions mark boundaries, but they don’t consume characters. That is, characters will not be returned in a result
+-They are also known as zero-width assertions
+-A zero-width assertion doesn’t match a character, but rather a location in a string
+-You can also match non-word boundaries. A non-word boundary matches locations that are not equivalent to a word
+ boundary, like a letter or a number within a word or string. To match a non-word boundary, give this a spin: \Be\B
+----------------------------------------------------------------------------------------------------------------------------
+ ^        Start of string/line      echo hoi | egrep '^hoi'
+ \A       Start of String
+ $        End of string/line        echo "hoi daar" | egrep 'daar$'
+ \Z       End of String
+ \b       Word Boundary             echo "hoi daar" | egrep '\bhoi'     echo word | egrep "\bword\b"
+ \B       Not Word Boundary         echo "hoi daar" | egrep '\Bi
+ \<       Start of Word             echo "hoi"      | egrep '\<hoi\>'
+ \>       End of Word               echo "hoi daar" | egrep 'oi\>
+############################################################################################################################
+###                                LITERAL CHARACTERS (SPECIAL CHARACTERS)
+############################################################################################################################
+LITERAL CHARACTERS
+ \        Escape character
+ \a       Alarm(beep)
+ \e       Escape
+ \xhh     Hex character hh
+ \xxx     Octal character xxx
+ [\b]     A literal backspace(special case)
+ \cx      Control Character C-x???
+ \N{name} Named Character
+----------------------------------------------------------------------------------------------------------------------------
+CHARACTER SHORTHANDS FOR WHITESPACE CHARACTERS
+ \f       Form feed
+ \h       Horizontal whitespace
+ \H       NOT horizontal whitespace
+ \n       Newline
+ \r       Carriage return
+ \t       Horizontal tab
+ \v       Vertical tab
+ \V       NOT vertical
+############################################################################################################################
+###                              CHARACTER CLASSES
+############################################################################################################################
+-Character class = Character set = bracketed expressions
+-Tells the regex engine to match ONLY ONE out of several characters
+-The order of the characters inside a character class does not matter
+-Caret after the opening square bracket will negate the character class
+-Special chars in character class: closing bracket, caret and hyphen
+-POSIX regular expressions treat the backslash as a iteral character inside character classes. This means you can’t use
+ backslashes to escape the closing bracket (]), the caret (^) and the hyphen (-)
+ --> This means you can’t use backslashes to escape the closing bracket (]), the caret (^) and the hyphen (-)
+-A major difference between POSIX bracket expressions and the character classes in other regex flavors is that POSIX
+ bracket expressions treat the backslash as a literal character
+-If you repeat a character class by using the ?, * or + operators, you will repeat the entire character class and not
+ just the character that it matched
+-The regex [0-9]+ can match 837 as well as 222
+-If you want to repeat the matched character, rather than the class, you will need to use backreferences
+-->([0-9])\1+ will match 222 but not 837
+
+-A union of two character sets:          [0-3[6-9]]     ## Match 0 through 3 or 6 through 9
+-A difference (in essence, subtraction): [a-z&&[^m-r]]  ## Matches all the letters from a to z, except m through r
+
+-To include a caret, place it anywhere except right after the opening bracket. [x^]  matches an x or a caret
+-You can put the closing bracket right after the opening bracket, or the negating caret
+-[]x]  matches a closing bracket or an x
+-[^]x] matches any character that is not a closing bracket or an x
+-The hyphen can be included right after the pening bracket, or right before the closing bracket, or right after the
+ negating caret
+-Both [-x] and [x-] match an x or a hyphen
+----------------------------------------------------------------------------------------------------------------------------
+ \c   Control Character
+ \d   Digit              [0-9]             [[:digit:]]
+ \D   NOT Digit          [^0-9]            [^[:digit:]   or [^\d]
+ \l                                        [[:lower:]]
+ \L                                        [^[:lower:]]
+ \s   WhiteSpace        [ \t\n\r\f\v]      [[:space:]]
+ \S   NOT WhiteSpace    [^ \t\n\r\f\v]     [^[:space:]] or  [^\s]
+ \u                                        [[:upper:]]
+ \U                                        [^[:upper:]]
+ \w   Word               [a-zA-Z0-9_]      [[:alnum:]_]
+ \W   NOT Word           [^a-zA-Z0-9_]     [^[:alnum:]_] or [^\w]
+ \x   Hex digit
+ \O   Octal Digit
+----------------------------------------------------------------------------------------------------------------------------
+CHAR CLASS   DESCRIPTION                           EXAMPLE       VALID MATCH   INVALID
+ [ ]         Class definition                      [axf]         a, x, f       b
+ [ - ]       Class definition range (inclusive)    [a-c]         a, b, c       d
+ [ \ ]       Escape inside class                   [a-f.]        a, b, .       g
+ [^ ]        Not in class                          [^abc]        d, e          a
+ [:class:]   POSIX class                           [:alpha:]     string        0101
+----------------------------------------------------------------------------------------------------------------------------
+-Round brackets cannot be used inside character classes, at least not as metacharacters
+ When you put a round bracket in a character class, it is treated as a literal character
+ So the regex [(a)b] matches a, b, (”and„)
+
+-EXAMPLES:
+   -gr[ae]y to match either gray or grey
+   -sep[ae]r[ae]te or li[cs]en[cs]e
+   -[A-Za-z_][A-Za-z_0-9]*
+   -0[xX][A-Fa-f0-9]+  --> C style HEX
+   -q[^u]  does not mean: “a q not followed by a u”. It means: “a q followed by a character that is not a u”
+   -[0-9]              Matches a single digit between 0 and 9
+   -[0-9a-fA-F]        Multiple ranges
+   -[0-9a-fxA-FX]      Range of chars(matches a hexadecimal digit or the letter X)
+   -[^0-9]             Equivalent to [^\d]
+   -[x-z0-9]
+   -[x-z[:digit:]]
+   -[^x-z[:digit:]]    Matches a single character that is not x, y, z or a digit
+############################################################################################################################
+###                                             POSIX CHARACTER CLASSES
+############################################################################################################################
+ [:alnum:]    Alphanumeric chars (letters/digits)  [a-zA-Z0-9]
+ [:alpha:]    Alphabetic characters (letters)      [a-zA-Z]
+ [:ascii:]    ASCII characters                     [0-127]
+ [:blank:]    Space and tab                        [ \t]
+ [:cntrl:]    Control characters                   [\x00-\x1F\x7F]
+ [:digit:]    Digits                               [0-9]
+ [:graph:]    Printed characters                   [\x21-\x7E]
+ [:lower:]    Lowercase letters                    [a-z]
+ [:print:]    Printed chars and spaces             [\x21-\x7E]
+ [:punct:]    punctuation character                ! ' # S % & ' ( ) * + , - . / : ; < = > ? @ [ / ] ^ _ { | } ~
+ [:space:]    Blank characters                     \s  -> [ \t\n\r\f\v]
+ [:upper:]    Uppercase letters                    [A-Z]
+ [:word:]     Digits,letters and underscore        \w
+ [:xdigit:]   Hexadecimal digits                   []0-9A-Fa-f]
+----------------------------------------------------------------------------------------------------------------------------
+-Multiple Character Classes: [[:alpha:][:digit:]]
+-Negated Character Class:    [[:^digit:]]+
+-POSIX character classes must be used in bracket expressions! [[:alnum:]]
+############################################################################################################################
+###                                               QUANTIFIERS
+############################################################################################################################
+-The question mark makes the preceding token in the regular expression optional
+-Make tokens optional by grouping them together using round brackets, and placing the question mark after closing bracket
+-THREE types: Greedy, Lazy and Possessive
+
+GREEDY ( DEFAULT )
+-If the first attempt to match the whole string goes awry, it backs up one char and tries again. (This is BACKTRACKING)
+-It keeps backing up one character at a time until it finds a match or runs out of characters to try
+-Matches as many times as possible
+-First try to repeat the token as many times as possible, and gradually give up matches as the engine backtracks to
+ find an overall match
+
+LAZY ( ? )
+-Also called ungreedy or reluctant
+-It starts at the beginning of the target, trying to find a match
+-It looks at the string one character at a time, trying to find what it is looking for
+-At last, it will attempt to match the wholestring
+-Useful when you want to match the bare minimum of characters, not the maximum possible
+-First repeat the token as few times as required, and gradually expand the match as the engine backtracks through the
+ regex to find an overall match.
+
+POSSESSIVE ( + )
+-Grabs the whole target and then tries to find a match, but it makes only one attempt
+-It doesn’t chew; it just swallows, then wonders what it just ate
+-A possessive match is like a greedy match, it grabs as much as it can get away with
+-It does not give up anything it finds
+-Faster, because they don’t do any backtracking, and they also fail in a hurry
+-A way to prevent the regex engine from trying all permutations
+-This is primarily useful for performance reasons. You can also use possessive quantifiers to eliminate certain matches
+-Like a greedy quantifier, a possessive quantifier will repeat the token as many times as possible
+ Unlike a greedy quantifier, it will not give up matches as the engine backtracks
+-All or nothing
+-Doesn’t have to remember any backtracking positions
+-The performance increase can be significant in situations where the regex fails
+-Allow your regex to fail faster
+-Since no backtracking is done, and matches that would require a greedy quantifier to backtrack will not be found with
+ a possessive quantifier
+-E.g. ".*" will match "abc" in "abc"x, but ".*+" will not match this string at all
+===> In both regular expressions, the first " will match the first " in the string. The repeated dot then matches the
+     remainder of the string abc"x. The second " then fails to match at the end of the string
+-Now, the paths of the two regular expressions diverge. The possessive dot-star wants it all. No backtracking
+ is done. Since the «"»  failed, there are no permutations left to try, and the overall match attempt fails. The
+ greedy dot-star, while initially grabbing everything, is willing to give back. It will backtrack one character at a
+ time. Backtracking to „abc"”, «"» fails to match “x”. Backtracking to „abc”, «"» matches „"”. An overall match „"abc"” was
+ found.
+
+-when using possessive quantifiers, you need to make sure that whatever you’re applying the possessive quantifier to
+ should not be able to match what should follow it
+ The problem in the above example is that the dot also matches the closing quote. This prevents us from using a possessive
+ quantifier. The negated char class in the previous section cannot match the closing quote, so we can make it possessive.
+----------------------------------------------------------------------------------------------------------------------------
+-GREEDY QUANTIFIERS
+ ?         0 or 1      Equivalent to {0,1}  (in effect making it optional)
+ +         1 or more   Equivalent to {1,}
+ *         0 or more   Equivalent to {0,}
+ {n}       Exactly n
+ {n,}      n or more
+ {n,m}     Between n and m
+
+-LAZY QUNTIFIERS
+ ??         Lazy zero or one (optional)
+ +?         Lazy one or more
+ *?         Lazy zero or more
+ {n}?       Lazy n
+ {n,}?      Lazy n or more
+ {m,n}?     Lazy m,n
+
+-POSSESSIVE QUANTIFIERS
+ ?+         Possessive zero or one (optional)
+ ++         Possessive one or more
+ *+         Possessive zero or more
+ {n}+       Possessive n
+ {n,}+      Possessive n or more
+ {m,n}+     Possessive m,n
+----------------------------------------------------------------------------------------------------------------------------
+-EXAMPLES
+   7{1}     --> will match the first occurrence of 7
+   7{1,}    --> If you wanted to match one or more occurrences of the number 7, all you have to do is add a comma
+   7{3,5}   --> This will match three, four, or five occurrences of 7
+   ........ --> Equivalent to .{8}
+   colou?r              matches colour and color
+   Nov(ember)?          matches Nov and November
+   \b[1-9][0-9]{3}\b    matches a number between 1000 and 9999
+   \b[1-9][0-9]{2,4}\b  matches a number between 100 and 99999. Notice the use of the word boundaries
+
+-There is a better option than making the plus lazy. We can use a greedy plus and a negated character class: <[^>]+>
+ The reason why this is better is because of the backtracking
+############################################################################################################################
+###                                               PATTERN MODIFIERS
+############################################################################################################################
+ g      Global match
+ i      Case-insensitive
+ m      Multiline mode. Multiple lines. Let ^and $ match next to embedded \n
+ s      Single-line mode. Treat String as single line. let . match \n
+ x      Free-spacing mode. Allow comments and whitespaces in pattern
+ e      Evaluate replacement. Evaluate right-hand side of s/// as an expr
+ U      Ungreedy mode
+----------------------------------------------------------------------------------------------------------------------------
+ A      Anchored, the pattern is forced to ^
+ D      Dollar end only, a dollar metacharacter matches only at the end
+ S      Extra analysis performed, useful for non-anchored patterns
+ U      Ungreedy, greedy patterns becomes lazy by default
+ X      Additional functionality of PCRE (PCRE extra)
+ J      Allow duplicate names for subpatterns
+ u      Unicode, pattern and subject strings are treated as UTF-8
+----------------------------------------------------------------------------------------------------------------------------
+-(?i) option --> makes your pattern case-insensitive. So e.g. (?i)the
+             --> echo the The THE | egrep (?i)the ==> DOESN'T WORK...???
+----------------------------------------------------------------------------------------------------------------------------
+-Modern regex flavors allow you to apply modifiers to only part of the regular expression
+-If you insert the modifier (?ism) in the middle of the regex, the modifier only applies to the part of the regex to
+ the right of  the modifier
+-You can turn off modes by preceding them with a minus sign
+-The regex «(?i)te(?-i)st» should match „test” and „TEst”, but not “teST” or “TEST”
+-Instead of using two modifiers, one to turn an option on, and one to turn it off, you use a modifier span
+############################################################################################################################
+###                                       REPLACEMENT(RPٍ=Replacement Pattern)
+############################################################################################################################
+ \     Turn of special meaning of character. Escape following character
+ \n    Restore the text matched by the nth pattern previously saved by\( and \). n is nr(1 to 9) with 1 starting on the left
+ &     Reuse the text matched by the search pattern as part of the RP
+ ~     Reuse the previous replacement pattern in the current RP
+ %     Reuse the previous replacement pattern in the current RP
+ \u    Convert first character of replacement pattern to uppercase. Case modifier
+ \U    Convert entire replacement pattern to uppercase. Case modifier
+ \l    Convert first character of replacement pattern to lowercase. Case modifier
+ \L    Convert entire replacement pattern to lowercase. Case modifier
+ \E    Change case - acts as an end delimiter to terminate runs of \L & \U. End literal sequence
+ \Q    Begin literal sequence
+############################################################################################################################
+###                               METACHARACTERS (MUST BE ESCAPED) - ( SPECIAL MEANING )
+############################################################################################################################
+- ^ [ { . $ * ( ) \ + | ? < >
+-Escape them with a backslash
+-Most flavors threat { as a literal char, unless it is part of a repetition operator like {1,3}
+############################################################################################################################
+###                            STRING REPLACEMENT (Backreferences) ( REMEMBER WHAT THEY MATCH )
+############################################################################################################################
+ $n    nth non-pa­ssive group (\1 -> first group, \2 -> second group)
+ $2    "­xyz­" in /^(abc­(xy­z))$/
+ $1    "­xyz­" in /^(?:a­bc)­(xyz)$/
+ $`    Before matched string (Pre-match)
+ $'    After matched string (Post-match)
+ $+    Last matched string
+ $&    Entire matched string
+ $_    Entire input string
+ $$    Literal "$"
+ --> Some regex implementations use \ instead of $
+############################################################################################################################
+###                                 GROUPING AND RANGES [RANGES ARE INCLUSIVE]
+############################################################################################################################
+-Most often, when you refer to subpatterns in regular expressions, you are referring to a group or groups within groups
+-A subpattern is a pattern within a pattern
+
+ALTERNATION ( | )
+-Multiple options: Example cat|dog
+-Lowest precedence of all regex operators
+-Match whole words only: we would need to use \b(cat|dog)\b
+-\b(Get|GetValue|Set|SetValue)\b   or   \b(Get(Value)?|Set(Value)?)\b
+ ===> Since all options have the same end, we can optimize this further to \b(Get|Set)(Value)?\b
+----------------------------------------------------------------------------------------------------------------------------
+ .        Any character except new line(\n) --> Equivalent to [^\n] (dot, period or a full stop)
+ (a|b)    Matches pattern a or b
+ (...)    Group Characters. Group for capturing to $1, $2.. (\1,\2...). Capturing group
+ (?...)   Passive (non-capturing) group
+ (?:...)  Passive (non-c­apt­uring) group
+ \x       Group/subpattern number "x" (Backreference matches the results of a previous capture group)
+----------------------------------------------------------------------------------------------------------------------------
+(foo)        Define a group (or subpattern) consisting of pattern foo
+             Matches within the group can be referenced in a replacement using a backreference
+
+(?<foo>bar)  Define a named group named "foo" consisting of pattern bar
+             Matches within the group can be referenced in a replacement using the backreference $foo
+
+(?:foo)      Define a passive group consisting of pattern foo
+             Passive groups cannot be referenced in a replacement using a backreference
+
+(?>foo+)bar  Define an atomic group consisting of pattern foo+
+             Once foo+ has been matched, the regex engine will not try to find other variable length matches of foo+ in
+               order to find a match followed by a match of bar
+             Atomic groups may be used for performance reasons
+
+(foo|bar)    Matches pattern foo or bar. Alternation. Acts like a boolean OR
+----------------------------------------------------------------------------------------------------------------------------
+LOGIC     LEGEND                        EXAMPLE                 SAMPLE MATCH
+|         Alternation / OR operand      22|33                   33
+( … )     Capturing group               A(nt|pple)              Apple (captures "pple")
+\1        Contents of Group 1           r(\w)g\1x               regex
+\2        Contents of Group 2           (\d\d)\+(\d\d)=\2\+\1   12+65=65+12
+(?: … )   Non-capturing group           A(?:nt|pple)            Apple
+----------------------------------------------------------------------------------------------------------------------------
+CAPTURING GROUPS AND BACKREFERENCES
+-Capturing a group to later reference with a backreference
+-Content of the group
+-When a pattern groups all or part of its content into a pair of parentheses, it captures that content and stores it
+ temporarily in memory
+-You can reuse that content if you wish by using a backreference, in the form:   \1   or    $1
+ where \1 or $1 reference the first captured group, \2 or $2 reference the second captured group, and so on
+-echo It is an ancyent Marinere | sed -En 's/(It is) (an ancyent Marinere)/\2 \1/p'
+==> an ancyent Marinere It is
+
+-By placing part of a regular expression inside round brackets or parentheses, you can group that part of the regular
+ expression together
+-This allows you to apply a regex operator, e.g. a repetition operator, to the entire group
+-Besides grouping part of a regular expression together, round brackets also create a backreference
+-A backreference stores the part of the string matched by the part of the regular expression inside the parentheses
+-Remembering part of the regex match in a backreference, slows down the regex engine because it has more work to do
+-the regex «Set(Value)?» matches „Set” or „SetValue”. In the first case, the first backreference will be empty, because
+ it did not match anything. In the second case, the first backreference will contain „Value”
+-If you do not use the backreference, you can optimize this regular expression into «Set(?:Value)?». The
+ question mark and the colon after the opening round bracket are the special syntax that you can use to tell the
+ regex engine that this pair of brackets should not create a backreference
+-Backreferences allow you to reuse part of the regex match
+-You can reuse it inside the regular expression (see below), or afterwards
+-you can use the backreference in the replacement text during a search-and-replace operation by typing \1 (backslash one)
+ into the replacement text
+-Certain tools make the entire regex match available as backreference zero
+-Using backreference zero is more efficient than putting an extra pair of round brackets around the entire regex,
+ because that would force the engine to continuously keep an extra copy of the entire regex match
+-Backreferences can not only be used after a match has been found, but also during the match
+-You can reuse the same backreference more than once. «([a-c])x\1x\1» will match „axaxa”, „bxbxb” and „cxcxc”.
+-Using an empty backreference in the regex is perfectly fine. It will simply be replaced with nothingness
+-A backreference cannot be used inside itself. «([abc]\1)» will not work
+-If a new match is found by capturing parentheses, the previously saved match is overwritten
+-There is a clear difference between «([abc]+)» and «([abc])+». Though both successfully match „cab”, the first regex
+ will put „cab” into the first
+ backreference, while the second regex will only store  „b”. That is because in the second regex, the plus caused the
+ pair of parentheses to repeat three times. The first time, „c” was stored. The second time „a” and the third time „b”.
+ Each time, the previous value was overwritten, so „b” remains.
+
+ This also means that «([abc]+)=\1» will match „cab=cab”, and that «([abc])+=\1» will not. The reason is that when the
+ engine arrives at «\1», it holds «b» which fails to match “c”
+-Backreferences also cannot be used inside a character class. The \1 in regex like «(a)[\1b]» will be interpreted as an
+ octal escape in most regex flavors. So this regex will match an „a” followed by either «\x01» or a «b».
+-Capturing groups, which are numbered from left to right, starting with one.
+-The numbers can then be used in backreferences to match the same text again in the regular expression, or to use part
+ of the regex match for further processing
+-PYTHON
+ By assigning a name to a capturing group, you can easily reference it by name. «(?P<name>group)» captures the match
+ of «group» into the backreference “name”. You can reference the contents of the group with the numbered
+ backreference «\1» or the named backreference «(?P=name)».
+-Python and PCRE treat named capturing groups just like unnamed capturing groups, and number both kinds from left to
+ right, starting with one.
+-Technically, the non-capturing group is a modifier span that does not change any modifiers. It is obvious that the
+ modifier span does not create a backreference.
+-To create a capturing group, enclose a \d in a pair of parentheses to place it in a group,and then follow it with
+ a \1 to backreference what was captured:   (\d)\d\1
+ ---> The \1 refers back to what was captured in the group enclosed by parentheses
+
+-Likewise, in regex replace operations, \1, \2, \3 (or $1, $2, $3, depending on the flavor) usually refer to capture
+ groups 1, 2 and 3. Not by coincidence, \0 ($0) usually refer to the overall match.
+----------------------------------------------------------------------------------------------------------------------------
+NAMED GROUPS
+-Named groups are captured groups with names
+-You can access those groups by name later, rather than by integer
+-Syntax: (?<name>...)    A named group
+----------------------------------------------------------------------------------------------------------------------------
+NON-CAPTURING GROUPS
+-There are also groups that are non-capturing groups—that is, they don’t store their content in memory
+-Sometimes this is an advantage, especially if you never intend to reference the group
+-Because it doesn’t store its content, it is possible it may yield better performance
+-Remember the first group discussed in this chapter? Here it is again:
+     (the|The|THE)
+ You don’t need to backreference anything, so you could write a non-capturing group this way:
+      (?:the|The|THE)
+----------------------------------------------------------------------------------------------------------------------------
+-to make the pattern case-insensitive
+     (?i)(?:the)
+ Or you could do it this way:
+      (?:(?i)the)
+ Or, better yet, the pièce de résistance:
+      (?i:the)
+ The option letter i can be inserted between the question mark and the colon.
+----------------------------------------------------------------------------------------------------------------------------
+ATOMIC GROUP
+-Another kind of non-capturing group is the atomic group
+-If you are using a regex engine that does backtracking, this group will turn backtracking off, not for the entire
+ regular expression but just for that part enclosed in the atomic group.
+-The syntax looks like this: (?>the)
+-One of the things that can really slow regex processing is backtracking
+-The reason why is, as it tries all the possibilities, it takes time and computing resources
+-Sometimes it can gobble up a lot of time. When it gets really bad, it’s called catastrophic backtracking
+-An atomic group is a group that, when the regex engine exits from it, automatically throws away all backtracking
+ positions remembered by any tokens inside the group
+-Atomic groups are non-capturing
+-The syntax ATOMIC GROUP: (?>group)
+-Lookaround groups are also atomic
+-possessive quantifiers, which are essentially a notational convenience for atomic grouping
+-An example will make the behavior of atomic groups
+   -the regex a(bc|b)c   (capturing group) matches abcc and abc
+   -The regex a(?>bc|b)c (atomic group) matches abcc but not abc
+-When applied to abc, both regexes will match «a» to „a”, «bc» to „bc”, and then «c» will fail to match at
+ the end of the string. Here there paths diverge. The regex with the capturing group has remembered a
+ backtracking position for the alternation. The group will give up its match, «b» then matches „b” and «c» matches „c”.
+ Match found!
+-The regex with the atomic group, however, exited from an atomic group after «bc» was matched. At that point, all
+ backtracking positions for  okens inside the group are discarded
+----------------------------------------------------------------------------------------------------------------------------
+USING ATOMIC GROUPING INSTEAD OF POSSESSIVE QUANTIFIERS
+-Technically, possessive quantifiers are a notational convenience to place an atomic group around a single quantifier
+-Basically, instead of X*+, write (>X*)
+-It is important to notice that both the quantified token X and the quantifier are inside the atomic group
+-Even if X is a group, you still need to put an extra atomic group around it to achieve the same effect
+-(?:a|b)*+ is equivalent to (?>(?:a|b)*) but not to (?>a|b)*
+----------------------------------------------------------------------------------------------------------------------------
+REGEX OPTIMIZATION USING ATOMIC GROUPING
+-Consider the regex «\b(integer|insert|in)\b» and the subject “integers”. Obviously, because of the word boundaries,
+ these don’t match. What’s not so obvious is that the regex engine will spend quite some effort figuring this out
+-«\b» matches at the start of the string, and «integer» matches „integer”. The regex engine makes note that there are
+ to more alternatives in the group, and continues with «\b». This fails to match between the “r” and “s”. So the engine
+ backtracks to try the second alternative inside the group. The second alternative matches „in”, but then fails to
+ match «s». So the engine backtracks once more to the third alternative. «in» matches „in”. «\b» fails between the “n”
+ and “t” this time. The regex engine has no more remembered backtracking positions, so it declares failure
+-This is quite a lot of work to figure out “integers” isn’t in our list of words. We can optimize this by telling the
+ regular expression engine that if it can’t match «\b» after it matched „integer”, then it shouldn’t bother
+ trying any of the other words. The word we’ve encountered in the subject string is a longer word, and it isn’t in our list.
+==> We  can  do  this  my  turning  the  capturing  group  into  an  atomic  group:  «\b(?>integer|insert|in)\b».
+-Now,  when  «integer»  matches,  the  engine  exits  from  an  atomic  group,  and  throws  away  the  backtracking
+ positions it stored for the alternation. When «\b» fails, the engine gives up immediately.
+-Don’t be too quick to make all your groups atomic.
+----------------------------------------------------------------------------------------------------------------------------
+
+############################################################################################################################
+###                       ASSERTIONS
+############################################################################################################################
+-lookahead + lookbehind = lookaround, also called zero-width assertions
+-They are zero-width just like the start and end of line, and start and end of word anchors
+-The difference is that lookarounds will actually match characters, but then give up the match and only return the
+ result: match or no match
+-That is why they are called assertions
+-Lookarounds are non-capturing groups that match patterns based on what they find either in front of or behind a pattern
+-Only one character changed: The (=) in the positive lookahead became an (!) in the negative lookahead
+-A positive lookbehind looks to the left, in the opposite direction as a lookahead
+-The positive lookbehind throws in a less-than sign (<), reminding you which direction lookbehind is
+-Negative lookbehinds: It is looking to see if a pattern does not show up behind in the left-to-right stream of text
+                     : Again, it adds a less-than sign (<), reminding you which direction lookbehind is
+-Negative lookahead is indispensable if you want to match something not followed by something else
+-I already explained why you cannot use a negated character class to match a “q” not  followed by a “u”
+-Negative lookahead provides the solution: q(?!u)
+-The negative lookahead construct is the pair of round brackets, with the opening bracket followed by a question mark and an
+ exclamation point. Inside the lookahead, we have the trivial regex u
+-Positive lookahead works just the same. q(?=u) matches a q that is followed by a u, without making the u part of the match
+-The positive lookahead construct is a pair of round brackets, with the opening bracket followed by a question mark and an
+ equals sign
+-You can use any regular expression inside the lookahead
+-Note that this is not the case with lookbehind!!!!!
+-Lookahead: If it contains capturing parentheses, the backreferences will be saved
+-The lookahead itself does not create a backreference
+-So it is not included in the count towards numbering the backreferences
+-If you want to store the match of the regex inside a backreference, you have to put capturing parentheses around the regex
+ inside the lookahead, like this: (?=(regex))
+-The other way around will not work, because the lookahead will already have discarded the regex match by the time the
+ backreference is to be saved
+----------------------------------------------------------------------------------------------------------------------------
+ ?=          Positive Lookahead assertion     foo(?=bar)   The foo will only match if followed by a match of pattern bar
+ ?!          Negative Lookahead assertion     foo(?!bar)   The foo will only match if not followed by a match of pattern bar
+ ?<=         Positive Lookbehind Assertion    (?<=foo)bar  The bar will only match if preceded by a match of pattern foo
+ ?!= or ?<!  Negative Lookbehind assertion    (?<!foo)bar  The bar will only match if not preceded by a match of pattern foo
+ ?>          Once-Only Subexpression
+ ?()         Codition[if then]
+ ?()|        Condition [if then else]
+ ?#          Comment
+----------------------------------------------------------------------------------------------------------------------------
+-Possitive assertions:  pattern match succeed
+-Negative assertions :  pattern match failed
+----------------------------------------------------------------------------------------------------------------------------
+ASSERTION   DESCRIPTION             EXAMPLE         VALID MATCH     INVALID
+(?=...)     Positive lookahead      question(?=s)   questions       question
+(?!...)     Negative lookahead      answer(?!s)     answer          answers
+(?<=...)    Positive lookbehind     (?<=appl)e      apple           application
+(?<!...)    Negative lookbehind     (?<!goo)d       mood            good
+----------------------------------------------------------------------------------------------------------------------------
+First, let’s see how the engine applies «q(?!u)» to the string “Iraq”. The first token in the regex is the literal q. As we
+already know, this will cause the engine to traverse the string until the „q” in the string is matched.
+The  position  in  the  string  is  now  the  void  behind  the  string.  The  next  token  is  the  lookahead.  The  engine
+takes note that it is inside a lookahead construct now, and begins matching the regex inside the lookahead. So
+the next token is «u». This does not match the void behind the string. The engine notes that the regex inside
+the  lookahead  failed.  Because  the  lookahead  is  negative,  this  means  that  the  lookahead  has  successfully
+matched at the current position. At this point, the entire regex has matched, and „q” is returned as the match.
+----------------------------------------------------------------------------------------------------------------------------
+Let’s try applying the same regex to “quit”. «q» matches „q”. The next token is the «u» inside the lookahead.
+The  next  character  is  the  “u”.  These  match.  The  engine  advances  to  the  next  character:  “i”.  However,  it  is
+done  with  the  regex  inside  the  lookahead.  The  engine  notes  success,  and  discards  the  regex  match.  This
+causes the engine to step back in the string to “u”. Because the lookahead is negative, the successful match in
+side it causes the lookahead to fail. Since there are no  other  permutations  of  this  regex,  the  engine
+  has  to  start  again  at  the  beginning.  Since  «q»  cannot  match  anywhere else, the engine reports failure
+----------------------------------------------------------------------------------------------------------------------------
+Let’s take one more look inside, to make sure you understand the implications of the lookahead. Let’s apply q(?=u)i
+to “quit”. I have made the lookahead positive, and put a token after it. Again, «q» matches „q” and «u» matches „u”. Again,
+the match from the lookahead must be discarded, so the engine steps back from “i” in the string to “u”. The lookahead was
+successful, so the engine continues with «i». But «i» cannot match “u”. So this match attempt fails. All remaining attempts
+ will fail as well, because there are no more q’s in the string.
+----------------------------------------------------------------------------------------------------------------------------
+-Lookbehind has the same effect, but works backwards.
+-It tells the regex engine to temporarily step backwards in the string, to check if the text inside the lookbehind can
+ be matched there.
+-«(?<!a)b» matches a “b” that is not preceded by an “a”, using negative lookbehind
+-It will not match “cab”, but will match the „b” (and only the „b”) in “bed” or “debt”
+-«(?<=a)b» (positive lookbehind) matches the „b” (and only the „b”) in „cab”, but does not match “bed” or “debt”
+
+-The construct for positive lookbehind is «(?<=text)»: a pair of round brackets, with the opening bracket followed by a
+ question mark, “less than” symbol and an equals sign.
+-Negative lookbehind is written as «(?<!text)», using an exclamation point instead of an equals sign
+----------------------------------------------------------------------------------------------------------------------------
+IMPORTANT NOTES ABOUT LOOKBEHIND
+-The good news is that you can use look behind anywhere in the regex, not only at the star
+-If you want to find a  word  not  ending  with  an  “s”,  you  could  use  «\b\w+(?<!s)\b».
+-the correct regex without using lookbehind is \b\w*[^s\W]\b (star instead of plus, and \W in the character class).
+ (has double negation)
+----------------------------------------------------------------------------------------------------------------------------
+LOOKAROUND IS ATOMIC
+-The fact that lookaround is zero-width automatically makes it atomic.
+-As soon as the lookaround condition is satisfied,  the  regex  engine  forgets  about  everything  inside  the  lookaround.
+-It will not backtrack inside the lookaround to try different permutations
+-Since the regex engine does not backtrack into the lookaround, it will not try different permutations of capturing groups.
+----------------------------------------------------------------------------------------------------------------------------
+For this reason, the regex «(?=(\d+))\w+\1» will never match “123x12”. First the lookaround captures „123” into «\1». «\w+»
+then matches the whole string and backtracks until it matches only „1”. Finally, «\w+» fails since «\1» cannot be matched at
+any position. Now, the regex engine has nothing to backtrack to, and the overall regex fails
+----------------------------------------------------------------------------------------------------------------------------
+-If you don’t use capturing groups inside lookaround, then all this doesn’t matter
+----------------------------------------------------------------------------------------------------------------------------
+18 TESTING THE SAME PART OF A STRING FOR MORE THAN ONE REQUIREMENT
+-Lookaround is  often  underused  by  people  new  to  regular  expressions,  because  lookaround  is  a  bit  confusing
+-The  confusing part is that the lookaround is zero-width.
+-So if you have a regex in which a lookahead is followed by another piece of regex, or a lookbehind is preceded by another
+ piece of regex, then the regex will traverse part of the string twice
+----------------------------------------------------------------------------------------------------------------------------
+-EXAMPLE
+==> we want to find a word that is six letters long and contains the three subsequent letters “cat”
+==> We just specify all the options and hump them together using alternation:
+         «cat\w{3}|\wcat\w{2}|\w{2}cat\w|\w{3}cat»
+==> But this method gets unwieldy if you want to find any word between 6 and 12 letters long containing either cat, dog or
+    mouse
+==> In this example, we basically have two requirements for a successful match. First, we want a word that is 6 letters long
+    Second, the word we found must contain the word “cat”
+==> Matching a 6-letter word is easy with \b\w{6}\b
+==> Matching a word containing “cat” is equally easy: \b\w*cat\w*\b
+==> Combining the two, we get: (?=\b\w{6}\b)\b\w*cat\w*\b
+==> The lookahead is zero-width. So when the regex inside the lookahead has found the 6-letter word, the current position in
+    the string is still at the beginning of the 6-letter word. At this position will the regex engine attempt the
+    remainder of the regex. Because we already know that a 6-letter word can be matched  at the current position,
+    we know that «\b» matches and that the first «\w*» will match 6 times. The engine will then backtrack, reducing the
+    number of chars matched by «\w*», until «cat» can be matched. If «cat» cannot be matched, the engine has no other choice
+    but to restart at the beginning of the regex, at the next character position in the string. This is at the second letter
+    in the 6-letter word we just found, where the lookahead will fail, causing the engine to advance char by char until the
+    next 6-letter word.
+==> If cat can be successfully matched, the second «\w*» will consume the remaining letters, if any, in the 6-letter
+    word. After that, the last «\b» in the regex is guaranteed to match where the second «\b» inside the
+    lookahead matched. Our double-requirement-regex has matched successfully.
+==> While the above regex works just fine, it is not the most optimal solution.
+==> I said the third and last «\b» are guaranteed to match
+==> Since it is zero-width, and therefore does not change the result returned by the regex engine,
+    we can remove them, leaving:        «(?=\b\w{6}\b)\w*cat\w*».
+==> Though the last «\w*» is also guaranteed to match, we cannot remove it because it adds characters to the regex match.
+==> Remember that the lookahead discards its match, so it does not contribute to the match returned by the regex engine
+==> If we omitted the «\w*», the resulting match would be the start of a 6-letter word containing “cat”, up to and
+    including “cat”,  instead of the entire word
+==> But we can optimize the first «\w*».
+==> As it stands, it will match 6 letters and then backtrack
+==> But we know that in a successful match, there can never be more than 3 letters before “cat”. So optimize this to \w{0,3}
+==> Note that making the asterisk lazy would not have optimized this sufficiently. The lazy asterisk
+    would find a successful match sooner, but if a 6-letter word does not contain “cat”, it would still cause the
+    regex engine to try matching “cat” at the last two letters, at the last single letter, and even at one character
+    beyond the 6-letter word.
+==> So we have «(?=\b\w{6}\b)\w{0,3}cat\w*».
+==> One last, minor, optimization involves the first «\b». Since it is zero-width itself, there’s no need to put it inside
+     the lookahead
+==> So the final regex is: «\b(?=\w{6}\b)\w{0,3}cat\w*»
+==> So, what would you use to find any word between 6 and 12 letters long containing either “cat”, “dog” or “mouse”?
+    Again we have two requirements, which we can easily combine using a lookahead: \b(?=\w{6,12}\b)\w{0,9}(cat|dog|mouse)\w*
+----------------------------------------------------------------------------------------------------------------------------
+CONTINUING AT THE END OF THE PREVIOUS MATCH
+-The  anchor  «\G»  matches  at  the  position  where  the  previous  match  ended.
+-During  the  first  match  attempt,  «\G» matches at the start of the string in the way «\A» does.
+-With some regex flavors or tools, \G matches at the start of the match attempt, rather than at the end of the previous
+ match result
+----------------------------------------------------------------------------------------------------------------------------
+
+############################################################################################################################
+###                                        IF THEN ELSE CONDITIONALS
+############################################################################################################################
+-A special construct (?ifthen|else) allows you to create conditional regular expressions
+-If the if part evaluates to true, then the regex engine will attempt to match the then part.
+ therwise, the else part is attempted instead
+-The opening bracket must be followed by a question mark, immediately followed by the if part, immediately followed by
+ the then part. This part can be followed by a vertical bar and the else part. You may omit the else part, and the
+ vertical bar with it.
+-For the if part, you can use the lookahead and lookbehind constructs
+-Using positive lookahead, the syntax becomes: (?(?=regex)then|else). Because the lookahead has its own parentheses, the
+ if and then parts are clearly separated.
+-Remember that the lookaround constructs do not consume any characters
+-If you use a lookahead as the if part, then the regex engine will attempt to match the then or else part (depending on
+ the outcome of the lookahead) at the same position where the if was attempted
+-Alternatively, you can check in the if part whether a capturing group has taken part in the match thus far.
+ Place the number of the capturing group inside round brackets, and use that as the if part.
+-Although the syntax for a conditional check on a backreference is the same as a number inside a capturing groups,
+ no capturing groups is created
+-The number and the brackets are part of the if-then-else syntax started with (?
+-For the then and else, you can use any regular expression
+-If you want to use alternation, you will have to group the then or else together using  parentheses, like
+ in «(?(?=condition)(then1|then2|then3)|(else1|else2|else3))». Otherwise, there is no need to use parentheses around
+ the then and else parts.
+-The regex «(a)?b(?(1)c|d)» matches „bd” and „abc”. It does not match “bc”, but does match „bd” in “abd”
+-Some flavors: They allow you to use the name of a capturing group instead of its number as the if
+ test, e.g.: «(?<test>a)?b(?(test)c|d)».
+-Python supports conditionals using a numbered or named capturing group
+-Python does not support conditionals using lookaround, even though Python does support lookaround outside conditionals
+-Instead of a conditional like «(?(?=regex)then|else)», you can alternate two opposite lookarounds:
+     «(?=regex)then|(?!regex)else)».
+----------------------------------------------------------------------------------------------------------------------------
+(?(condition)...)       if-then pattern
+(?(condition)...|...)   if-then-else pattern
+############################################################################################################################
+###                                       TIPS AND TRICKS
+############################################################################################################################
+-Whenever Possible, Anchor
+-When You Know what You Want, Say It. When You Know what You Don't Want, Say It Too!
+-Contrast is Beautiful-Use It. When you can, use consecutive tokens that are mutually exclusive in order to create contrast
+-The way the best regex avoids this is by doing two things:
+  -Including a quantifier, as in, a character that quantifies how much should be consumed by a star. I replaced all but
+   the last * with *?
+  -Specifying what characters to match (or not to match) instead of just a dot. I replaced all but the last . with a
+   negated character class.
+-Ranges are INCLUSIVE
+############################################################################################################################
+###                                           COMMENTS
+############################################################################################################################
+-Syntax: «(?#comment)» where “comment” can be whatever you want, as long as it does not contain a closing round bracket
+-The regex engine  gnores everything after the «(?#» until the first closing round bracket
+-E.g. I could clarify the regex to match a valid date by writing it as
+    «(?#year)(19|20)\d\d[- /.](?#month)(0[1-9]|1[012])[-  /.](?#day)(0[1-9]|[12][0-9]|3[01])»
+-To make your regular expression even more readable, you can turn on free-spacing  mode
+-All flavors that support comments also support free-spacing mode
+############################################################################################################################
+###                                FREE SPACING REGULAR EXPRESSIONS
+############################################################################################################################
+FREE-SPACING REGULAR EXPRESSIONS
+-Free-spacing mode. You can turn on this mode with the (?x) mode modifier
+-In free-spacing mode, whitespace between regular expression tokens is ignored
+-Note that only whitespace between tokens is ignored
+-E.g. «a b c» is the same as «abc» in free-spacing mode, but «\ d» and «\d» are not the same
+-Likewise, grouping modifiers cannot be broken up. «(?>atomic)» is the same as «(?> ato mic )» and as «( ?>ato mic)».
+ They all match the same atomic group. They’re not the same as (? >atomic).
+-The ?> grouping modifier is a single element in the regex syntax, and must stay together. This is true for all such
+ constructs, including lookaround, named groups, etc.
+-A character class is also treated as a single token. «[abc]»  is  not  the  same  as  «[ a b c ]»
+-The former matches one of three letters, while the latter matches those three letters or a space
+-In other words: free-spacing mode has no effect inside character classes. Spaces and line breaks inside character classes
+ will be included in the character class
+-This means that in free-spacing mode, you can use «\ » or «[ ]» to match a single space.
+-Another feature of free-spacing mode is that the # character starts a comment
+-The comment runs until the end of the line
+-Everything from the # until the next line break character is ignored
+############################################################################################################################
+###                                    GLOSSARY
+############################################################################################################################
+-ALTERNATION  : Separating a list of regular expressions with a vertical bar (|) character, indicating OR
+-ATOMIC GROUP : A grouping that turns off backtracking when a regular expression inside (?>...) fails to match
+-BACKREFERENCE: Refers to a previous regex captured with parentheses using a reference in the form of \1, \2, and so forth
+-BACKTRACKING : Stepping back, character by character, through an attempted match to find a successful match. Used with a
+                greedy match, but not a lazy or possessive match. Backtracking slows down the regex engine.
+-BRACKETED EXPRESSION: A regular expression given in square brackets
+-CHARACTER ESCAPE    : A character preceded by a backward slash
+-ENGINE              : Piece of software that can process regular expressions
+-ERE                 : Extended Regular Expressions
+-PCRE                : Perl Compatible Regular Expressions
+-BRE                 : Basic Regular Expressions
+-GREEDY MATCH  : A greedy match consumes as much of a target string as possible, and then backtracks through the string to
+                 attempt to find a match
+-GROUPS        : Groups combine regular expression atoms within a pair of parentheses, ( ).
+-LAZY MATCH    : A lazy match consumes a subject string one character at a time, attempting to find a match.
+                 It does not backtrack.
+-LOOKAHEAD  : A regular expression that matches only if another specified regular expression follows the first
+              A positive lookahead uses the syntax regex(?=regex)
+              A negative lookahead means that the regular expression is not followed by a regular expression that follows
+                the first. Uses the syntax regex(?!regex).
+-LOOKBEHIND: A regular expression that matches only if another specified regular expression precedes the first.
+             A positive lookbehind uses the syntax regex(?<=regex).
+             A negative lookbehind means that the regular expression is not followed by a regular expression that precedes
+               the first. Uses the syntax regex(?<!regex).
+-MODIFIER           : A character placed after a match or substitution pattern that modifies the matching process.
+-NON-CAPTURING GROUP: A group within parentheses that is not captured (that is, stored in memory for future use).
+                      The syntax for a non-capturing group is (?:pattern)
+
+-QUANTIFIER          : Defines the number of times a regular expression may occur in an attempted match.
+
+-ZERO-WIDTH ASSERTIONS: Boundaries that do not consume any characters in a match. ^ and $, which match thebeginning and end
+                        of a line, respectively, are examples.
+
+############################################################################################################################
+###        EOF
+############################################################################################################################
+-(?i)\b[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}\b
+   (?i)               # Turn on case-insensitive mode
+
+ ----> http://www.rexegg.com/regex-disambiguation.html#confusingcouples ---> MOEILIJK!!!!
+
+-Find IP: \<209\.204\.146\.22\>
+-Quantifier: bo{1,2}t --> bot and boot
+           : only applies to the item that precedes it
+           : a{5} -> match at least 5a's
+-+:a+ and a{1,} are effectively equivalent
+-c(a|o)ke --> cake or coke
+-grouping: (hoi){2,3} --> hoi hoi and hoi hoi hoi
+-backreference: ([a-zA-Z]+ \1\>
+              : limited to nine (\1 ... \9) in most regex implementations
+-examples: positive integers   ^\d+$
+           negative integers   ^-\d+$
+           integers            ^-?\d+$
+
+-email: «\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b»
+# Anything inside brackets e.g. [Hello]
+/(?:\[)(.*)(?:\])/igm
+
+DOUBLE WORDS: When  editing  text,  doubled  words  such  as  “the the” easily creep in. Using the regex «\b(\w+)\s+\1\b»
+              in your text editor, you can easily find them
+
+-EXAMPLE: EXTRACT EMAIL HEADERS
+ The  regex  «^((From|To)|Subject):  ((?(2)\w+@\w+\.[a-z]+|.+))»  extracts  the  From,  To,  and
+ Subject  headers  from  an  email  message.  The  name  of  the  header  is  captured  into  the  first  backreference.  If
+ the header is the From or To header, it is captured into the second backreference as well.
+-The second part of the pattern is the if-then-else conditional «(?(2)\w+@\w+\.[a-z]+|.+))». The if part checks if the
+ second capturing group took part in the match thus far. It will have if the header is the From or To header. In that case,
+ we the then part of the conditional «\w+@\w+\.[a-z]+» tries to match an email address.
+----------------------------------------------------------------------------------------------------------------------------
+
+LAZY QUANTIFIERS
+-5??
+ Now it doesn’t appear to match anything. The reason why is that the pattern is being
+ lazy, that is, it’s not even forced to match that first 5. By nature, the lazy
+ match matches as few characters as it can get away with. It’s a slacker.
+ --> Try this zero or more times: 5*?
+ and it won’t match anything either, because you gave it the option to match a minimum
+ of zero times, and that’s what it does.
+ --> Try it again matching one or more times, à la lazy: 5+?
+ And there you go. Lazy just got off the couch and matched one 5
+-Things get a bit more interesting as you apply m,n matching. Try this:
+    5{2,5}?
+ Only two 5s are matched, not all five of them, as a greedy match would.
+
+-Remember that this tutorial only talks about regex-directed engines. Text-directed engines do not backtrack
+
+https://www.princeton.edu/~mlovett/reference/Regular-Expressions.pdf
+http://dobromirivanov.net/wp-content/uploads/2013/06/Oreilly.Introducing.Regular.Expressions.Jul.2012.pdf
+
+-«\d\d.\d\d.\d\d»    -MATCHES 02/12/03, BUT ALSO 02512703
+                     -«\d\d[- /.]\d\d[- /.]\d\d» IS BETTER.
+                     --> This regex allows a dash, space, dot and forward slash  as date separators.
+
+############################################################################################################################
+###    IF NEEDED....
+############################################################################################################################
+https://ryanstutorials.net/regular-expressions-tutorial/regular-expressions-advanced.php
+http://alanstorm.com/regular-expression-cheat-sheet/
+https://www.regular-expressions.info/brackets.html
+https://stackoverflow.com/questions/2973436/regex-lookahead-lookbehind-and-atomic-groups
