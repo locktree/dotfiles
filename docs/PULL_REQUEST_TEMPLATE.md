@@ -36,4 +36,7 @@
 - [ ] I have performed a self-review of my own code
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
+- [ ] Ensure that you run linting
+- [ ] I have merged in the latest changes from `master`
+- [ ] Resolved any conflicts that may have happened from that merge
 
