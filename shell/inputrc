@@ -1,7 +1,7 @@
 # =========================================================================
 # Author      : mitchell
 # Purpose     : My inputrc
-# Last Update : Sun 28 Apr 2019 12:56:30 PM CEST
+# Last Update : Sun 30 Jun 2019 08:12:20 PM CEST
 # =========================================================================
 ##
 ## type C-v and press any <key> or a combination of <key>s to see its code
@@ -81,7 +81,7 @@ set match-hidden-files on
 set page-completions off
 
 ## Don't print horizontally
-set print-completion-horizontally off
+#set print-completion-horizontally off
 
 ## Words which have more than one possible completion cause the matches to
 ## be listed immediately instead of ringing the bell.
