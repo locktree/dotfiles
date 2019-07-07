@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Sun 07 Jul 2019 03:09:35 PM CEST
+" Last Update : Sun 07 Jul 2019 04:03:33 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -37,6 +37,7 @@ augroup END
 " FUNCTION 6 - TESTING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;<CR>
+autocmd FileType yaml      nnoremap <buffer> <F6>  :w<CR>:!clear;yamllint %;<CR>
 autocmd FileType sh,ksh    nnoremap <buffer> <F6>  :w<CR>:!clear;shellcheck %;./%<CR>
 autocmd FileType python    nnoremap <buffer> <F6>  :w<CR>:!clear;
                                                     \echo "===========================FLAKE8=========================";
