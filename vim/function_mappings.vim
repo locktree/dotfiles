@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Sun 07 Jul 2019 02:18:05 PM CEST
+" Last Update : Sun 07 Jul 2019 03:09:35 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -36,14 +36,13 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 6 - TESTING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;./%<CR>
 autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;<CR>
 autocmd FileType sh,ksh    nnoremap <buffer> <F6>  :w<CR>:!clear;shellcheck %;./%<CR>
 autocmd FileType python    nnoremap <buffer> <F6>  :w<CR>:!clear;
                                                     \echo "===========================FLAKE8=========================";
                                                     \flake8 %;
                                                     \echo "===========================PYLINT=========================";
-                                                    \pylint --rcfile=~/dotfiles/python/pylintrc %<CR>
+                                                    \pylint-3 --rcfile=~/dotfiles/python/pylintrc %<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 7 - COMPILE
