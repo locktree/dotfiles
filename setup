@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+
+###########################################################################
+##                                HELP
+###########################################################################
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    cat <<HELP
+    Usage: $(basename "$0")
+    See the README for documentation.
+    https://github.com/locktree/tools
+    Copyright (c) 2019 Mitchell Slotboom
+    Licensed under the MIT license.
+HELP
+    exit 1
+fi
+
+###########################################################################
+##                     RUN AS ROOT TO INSTALL
+###########################################################################
+if [[ ${EUID} -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 2
+fi
+
+###########################################################################
+##                        INSTALL SYSTEM
+###########################################################################
+echo "************************************"
+echo "Setup tools and installing dotfiles."
+echo "************************************"
+
+#######################################
+##                     START
+#######################################
+sudo dnf update -y
+sudo dnf upgrade -y
+
+#######################################
+##                     TOOLS
+#######################################
+sudo dnf install -y vim
+sudo dnf install -y git
+sudo dnf install -y yamllint
+sudo dnf install -y php-jsonlint.noarch
+sudo dnf install -y ShellCheck.x86_64
+sudo dnf install -y python3-pylint.noarch
+sudo dnf install -y python3-pytest.noarch
+sudo dnf install -y python3-flake8.noarch
+sudo dnf install -y pandoc
+sudo dnf install -y putty
+sudo dnf install -y tkdiff
+sudo dnf install -y python3-pip.noarch
+sudo dnf install -y perl-pip.noarch
+
+sudo dnf install -y gnome-tweak-tool
+sudo dnf install -y chrome-gnome-shell
+sudo dnf install -y gimp
+sudo dnf install -y youtube-dl
+sudo dnf install -y thunderbird
+sudo dnf install -y libreoffice
+sudo dnf install -y pidgin           ## Pidgin is a chat client that supports multiple social accounts
+
+#######################################
+## save battery
+#######################################
+sudo dnf install tlp tlp-rdw
+sudo systemctl enable tlp
+
+#######################################
+## Spotify
+#######################################
+echo "Installing Spotify"
+dnf config-manager --add-repo=http://negativo17.org/repos/fedora-spotify.repo
+dnf install -y spotify-client
+
+#######################################
+## Skype
+#######################################
+wget -O skypeforlinux.rpm https://go.skype.com/skypeforlinux-64.rpm
+dnf install -y skypeforlinux.rpm
+rm -f skypeforlinux.rpm
+
+#######################################
+## VLC
+#######################################
+sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf install vlc
+
+###########################################################################
+##                        DOWNLOAD DOTFILES
+###########################################################################
+mkdir -p ~/dotfiles && git clone https://github.com/locktree/dotfiles ~/dotfiles
+cd ~/dotfiles
+git remote rm origin && git remote add origin git@github.com:locktree/dotfiles
+
+###########################################################################
+##                        SYMLINK DOTFILES
+###########################################################################
+echo "Creating symlink for dotfiles..."
+ln -sf   ~/dotfiles/vim/vimrc            ~/.vimrc
+ln -sf   ~/dotfiles/git/gitmessage       ~/.gitmessage
+ln -sf   ~/dotfiles/git/gitconfig        ~/.gitconfig
+ln -sf   ~/dotfiles/git/gitignore        ~/.gitignore
+ln -sf   ~/dotfiles/tkdiffrc             ~/.tkdiffrc
+ln -sf   ~/dotfiles/git/gitattributes    ~/.gitattributes
+ln -sf   ~/dotfiles/shell/dircolors      ~/.dircolors
+ln -sf   ~/dotfiles/shell/bash_logout    ~/.bash_logout
+ln -sf   ~/dotfiles/shell/bash_profile   ~/.bash_profile
+ln -sf   ~/dotfiles/shell/Xresources     ~/.Xresources
+ln -sf   ~/dotfiles/shell/inputrc        ~/.inputrc
+ln -sf   ~/dotfiles/shell/profile        ~/.profile
+ln -sf   ~/dotfiles/shell/xinputrc       ~/.xinputrc
+ln -sf   ~/dotfiles/shell/bashrc         ~/.bashrc
+
+###########################################################################
+##                             REBOOT
+###########################################################################
+echo "Finished!"
+read -p "Press enter to restart your system or press Q to exit this script"
+sudo reboot
+
+###########################################################################
+##                              E O F
+###########################################################################
+
