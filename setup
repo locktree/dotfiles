@@ -60,6 +60,8 @@ sudo dnf install -y thunderbird
 sudo dnf install -y libreoffice
 sudo dnf install -y pidgin           ## Pidgin is a chat client that supports multiple social accounts
 
+sudo pip install markdown
+
 #######################################
 ## save battery
 #######################################
