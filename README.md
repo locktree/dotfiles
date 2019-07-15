@@ -3,16 +3,14 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Mon 15 Jul 2019 08:24:27 PM CEST
+ *  Last Update: Mon 15 Jul 2019 08:28:22 PM CEST
  =========================================================================
 -->
 
 # Development environment and dotfiles
-This repo will contain all kind of files for my personal development
-environment. I'm a big fan of dotfiles. Dotfiles allow you to customize
-your nerdery. Customize my configuration, settings, look and behavior of my
-most important toolset. It's fun! Take anything you want, but at your own
-risk. This repo involve mainly:
+This repo will contain all kind of files for my personal development environment.
+I'm a big fan of dotfiles. Dotfiles are the customization files that are used to personalize your Linux or other Unix-based system. Customize my configuration, settings, look and behavior of my most important toolset.
+It's fun! Take anything you want, but at your own risk. This repo involve mainly:
 
 * VIM as editor
 * Git as SCM
