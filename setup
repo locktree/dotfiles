@@ -62,6 +62,8 @@ sudo dnf install -y pidgin           ## Pidgin is a chat client that supports mu
 
 sudo pip install markdown
 
+## Add Vim pathogen
+mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 #######################################
 ## save battery
 #######################################
