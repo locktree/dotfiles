@@ -3,7 +3,7 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Wed 29 May 2019 08:37:23 PM CEST
+ *  Last Update: Mon 15 Jul 2019 08:22:06 PM CEST
  =========================================================================
 -->
 
@@ -90,7 +90,7 @@ risk. This repo involve mainly:
     |-- README.md
 
 ## Getting Started
-TODO: Deployment script
+Execute the setup script for the installation and configuration of the environment and dotfiles. This setup script is created for Fedora.
 
 ## Making Local Customizations
 You can make local customizations for some programs by editing these files:
