@@ -1,7 +1,7 @@
 ###########################################################################
 ## Author      : mitchell
 ## Description : My gitconfig
-## Last Update : Tue 28 May 2019 09:32:20 PM CEST
+## Last Update : Mon 15 Jul 2019 08:58:22 PM CEST
 ###########################################################################
 
 ###########################################################################
@@ -113,7 +113,7 @@
     mergeoptions = --ff-only
 
 [diff]
-    tool = vimdiff
+    tool = tkdiff
 
     ## Use mnemonic prefixes (index/work tree/commit/object) instead of a/b
     mnemonicprefix = true
