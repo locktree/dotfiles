@@ -3,7 +3,7 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Tue 16 Jul 2019 08:36:57 PM CEST
+ *  Last Update: Tue 16 Jul 2019 08:44:16 PM CEST
  =========================================================================
 -->
 
@@ -16,6 +16,7 @@ It's fun! Take anything you want, but at your own risk. This repo involve mainly
 * SCM: Git
 * Shell: Bash
 * Linters: shellcheck, pylint, flake8, jsonlint, yamllint, markdownlint, htmllint, csslint
+* Diff: tkdiff
 
 ## Description
 * Dotfiles : Vim, Git, Bash, Python, other like tkdiff
