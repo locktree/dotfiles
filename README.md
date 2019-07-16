@@ -3,7 +3,7 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Mon 15 Jul 2019 08:28:22 PM CEST
+ *  Last Update: Tue 16 Jul 2019 08:28:27 PM CEST
  =========================================================================
 -->
 
@@ -20,6 +20,11 @@ It's fun! Take anything you want, but at your own risk. This repo involve mainly
 * Dotfiles : Vim, Git, Bash, Python, other like tkdiff
 * Scripts  : Multiple scripts
 * Templates: Templates for multiple languages
+
+## Prompt
+A terminal session with my prompt looks something like this
+
+20:25:12 [~/dotfiles/info] @ [?] @ 0|0 == 2|0 @ (master|0h0m)
 
 ## The top-level directory layout
     dotfiles
