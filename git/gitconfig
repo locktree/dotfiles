@@ -55,7 +55,6 @@
     excludesfile = ~/.gitignore
     attributesfile = ~/.gitattributes
     hooksPath = ~/dotfiles/git/hooks/
-    pager = less -FRX
 
     ## Always use Unix line-endings in checked out files
     autocrlf = false
@@ -63,6 +62,12 @@
 
     ## Treat specific whitespaces as error:
     whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+    # Disabled, now using vim (see pager below)
+    # pager = less -FRX
+
+[pager]
+    diff = "vim -c '%sm/\\e.\\{-}m//ge' -c 'set ft=diff' -c 'normal gg' -"
 
 [credential]
     helper = cache
