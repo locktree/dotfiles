@@ -42,6 +42,7 @@ sudo dnf install -y vim
 sudo dnf install -y git
 sudo dnf install -y yamllint
 sudo dnf install -y php-jsonlint.noarch
+sudo dnf install -y perl-HTML-Lint.noarch
 sudo dnf install -y ShellCheck.x86_64
 sudo dnf install -y python3-pylint.noarch
 sudo dnf install -y python3-pytest.noarch
