@@ -498,6 +498,11 @@
     #-----------------------------------------------------------------------------------------------------------------------
     lol = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(red)(%cr) %C(bold blue) [%an]'
 
+	ll = log --color --graph --date-order --pretty=format:'%C(red)%d%C(yellow)%B\
+%n%C(ul)Hash:%C(reset) %C(magenta)%H\
+%n%C(ul)Author:%C(reset) %C(bold blue)%an<%ae> %C(reset)%C(green)%ar%C(cyan)(%ad)\
+%n%C(ul)Committer:%C(reset) %C(bold blue)%cn<%ce> %C(reset)%C(green)%cr%C(cyan)(%cd)\
+%n'  --stat --date=local
     #######################################################################
     ######################## DIVERSE ######################################
     #######################################################################
