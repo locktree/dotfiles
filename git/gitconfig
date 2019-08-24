@@ -1,7 +1,7 @@
 ###########################################################################
 ## Author      : mitchell
 ## Description : My gitconfig
-## Last Update : Mon 15 Jul 2019 08:59:34 PM CEST
+## Last Update : Sat 24 Aug 2019 08:06:58 PM CEST
 ###########################################################################
 
 ###########################################################################
@@ -82,9 +82,6 @@
     pretty1 = format:"%C(60)Commit%C(162): %C(137)%H%C(auto)%d\
 %n%C(60)Author%C(162):%C(26) %aN %C(reset)%C(162 bold) %C(reset)%C(66 italic)%aE%C(reset)%C(162 bold) \
 %n%C(60)Date  %C(162):%C(132) %ad%C(8) (%C(reset)%C(60)%ar%C(8))%n%n%C(244)%w(0,4,4)%C(244 italic)%s%n%n%C(auto)%b%C(reset)"
-
-
-
 
 [advice]
     ## Disable "how to stage/unstage/add" hints given by git status
@@ -466,6 +463,7 @@
     modified    = ls-files --modified
     deleted     = ls-files --deleted
     ignored     = ls-files -o -i --exclude-standard
+    conflicts   = diff --name-only --diff-filter=U
     ##---------------------------------------------------------------------
     vum  = !${EDITOR:-vim} -p $(git unmerged)
     vmo  = !${EDITOR:-vim} -p $(git modified)
