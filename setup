@@ -103,20 +103,21 @@ git remote rm origin && git remote add origin git@github.com:locktree/dotfiles
 ##                        SYMLINK DOTFILES
 ###########################################################################
 echo "Creating symlink for dotfiles..."
-ln -sf   ~/dotfiles/vim/vimrc            ~/.vimrc
-ln -sf   ~/dotfiles/git/gitmessage       ~/.gitmessage
-ln -sf   ~/dotfiles/git/gitconfig        ~/.gitconfig
-ln -sf   ~/dotfiles/git/gitignore        ~/.gitignore
-ln -sf   ~/dotfiles/tkdiffrc             ~/.tkdiffrc
-ln -sf   ~/dotfiles/git/gitattributes    ~/.gitattributes
-ln -sf   ~/dotfiles/shell/dircolors      ~/.dircolors
-ln -sf   ~/dotfiles/shell/bash_logout    ~/.bash_logout
-ln -sf   ~/dotfiles/shell/bash_profile   ~/.bash_profile
-ln -sf   ~/dotfiles/shell/Xresources     ~/.Xresources
-ln -sf   ~/dotfiles/shell/inputrc        ~/.inputrc
-ln -sf   ~/dotfiles/shell/profile        ~/.profile
-ln -sf   ~/dotfiles/shell/xinputrc       ~/.xinputrc
-ln -sf   ~/dotfiles/shell/bashrc         ~/.bashrc
+
+ln -sf   ${PWD}/vim/vimrc            ~/.vimrc
+ln -sf   ${PWD}/git/gitmessage       ~/.gitmessage
+ln -sf   ${PWD}/git/gitconfig        ~/.gitconfig
+ln -sf   ${PWD}/git/gitignore        ~/.gitignore
+ln -sf   ${PWD}/git/gitattributes    ~/.gitattributes
+ln -sf   ${PWD}/tkdiffrc             ~/.tkdiffrc
+ln -sf   ${PWD}/shell/dircolors      ~/.dircolors
+ln -sf   ${PWD}/shell/bash_logout    ~/.bash_logout
+ln -sf   ${PWD}/shell/bash_profile   ~/.bash_profile
+ln -sf   ${PWD}/shell/Xresources     ~/.Xresources
+ln -sf   ${PWD}/shell/inputrc        ~/.inputrc
+ln -sf   ${PWD}/shell/profile        ~/.profile
+ln -sf   ${PWD}/shell/xinputrc       ~/.xinputrc
+ln -sf   ${PWD}/shell/bashrc         ~/.bashrc
 
 ###########################################################################
 ##                             REBOOT
