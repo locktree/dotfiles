@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Vim Autogroups
-" Last Update : Sun 28 Apr 2019 12:26:28 PM CEST
+" Last Update : Tue 16 Jul 2019 09:21:37 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -39,15 +39,16 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 augroup templates
     autocmd!
-    autocmd BufNewFile *.awk  0r ~/dotfiles/vim/templates/template.awk
-    autocmd BufNewFile *.bash 0r ~/dotfiles/vim/templates/template.bash
-    autocmd BufNewFile *.c    0r ~/dotfiles/vim/templates/template.c
-    autocmd BufNewFile *.cpp  0r ~/dotfiles/vim/templates/template.cpp
-    autocmd BufNewFile *.md   0r ~/dotfiles/vim/templates/template.md
-    autocmd BufNewFile *.py   0r ~/dotfiles/vim/templates/template.py
-    autocmd BufNewFile *.sed  0r ~/dotfiles/vim/templates/template.sed
-    autocmd BufNewFile *.sh   0r ~/dotfiles/vim/templates/template.sh
-    autocmd BufNewFile *.xml  0r ~/dotfiles/vim/templates/template.xml
+    autocmd BufNewFile *.awk   0r ~/dotfiles/vim/templates/template.awk
+    autocmd BufNewFile *.bash  0r ~/dotfiles/vim/templates/template.bash
+    autocmd BufNewFile *.c     0r ~/dotfiles/vim/templates/template.c
+    autocmd BufNewFile *.cpp   0r ~/dotfiles/vim/templates/template.cpp
+    autocmd BufNewFile *.md    0r ~/dotfiles/vim/templates/template.md
+    autocmd BufNewFile *.py    0r ~/dotfiles/vim/templates/template.py
+    autocmd BufNewFile *.sed   0r ~/dotfiles/vim/templates/template.sed
+    autocmd BufNewFile *.sh    0r ~/dotfiles/vim/templates/template.sh
+    autocmd BufNewFile *.xml   0r ~/dotfiles/vim/templates/template.xml
+    autocmd BufNewFile *.html  0r ~/dotfiles/vim/templates/template.html
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
