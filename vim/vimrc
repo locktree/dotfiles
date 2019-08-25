@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Configuration file for Vim (Vi IMproved)
-" Last Update : Wed 01 May 2019 06:58:33 AM CEST
+" Last Update : Sun 25 Aug 2019 02:11:56 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "        _
 " __   _(_)_ __ ___  _ __ ___
@@ -17,7 +17,7 @@ if !isdirectory(expand("~/.vim/bundle"))
     call system("git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim")
 endif
 
-if v:version < 700
+if v:version < 800
     echohl WarningMsg | echo 'Needs Vim version >= 7'| echohl None
     finish
 endif
