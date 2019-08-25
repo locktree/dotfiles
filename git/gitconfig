@@ -1,7 +1,7 @@
 ###########################################################################
 ## Author      : mitchell
 ## Description : My gitconfig
-## Last Update : Sat 24 Aug 2019 08:06:58 PM CEST
+## Last Update : Sun 25 Aug 2019 02:18:29 PM CEST
 ###########################################################################
 
 ###########################################################################
@@ -369,6 +369,10 @@
 
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
     add-unmerged  = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+
+    continue  = rebase --continue
+    skip      = rebase --skip
+    abort     = rebase --abort
 
     #######################################################################
     ######################## STATISTICS ###################################
