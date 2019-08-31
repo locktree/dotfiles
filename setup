@@ -53,6 +53,7 @@ sudo dnf install -y tkdiff
 sudo dnf install -y python3-pip.noarch
 sudo dnf install -y perl-pip.noarch
 
+sudo dnf install -y mutt
 sudo dnf install -y gnome-tweak-tool
 sudo dnf install -y chrome-gnome-shell
 sudo dnf install -y gimp
