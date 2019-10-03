@@ -40,6 +40,7 @@ sudo dnf upgrade -y
 #######################################
 sudo dnf install -y vim
 sudo dnf install -y git
+sudo dnf install -y golang
 sudo dnf install -y yamllint
 sudo dnf install -y php-jsonlint.noarch
 sudo dnf install -y perl-HTML-Lint.noarch
