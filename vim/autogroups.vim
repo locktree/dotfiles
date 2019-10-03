@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Vim Autogroups
-" Last Update : Tue 16 Jul 2019 09:21:37 PM CEST
+" Last Update : Thu 03 Oct 2019 08:23:16 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -49,6 +49,7 @@ augroup templates
     autocmd BufNewFile *.sh    0r ~/dotfiles/vim/templates/template.sh
     autocmd BufNewFile *.xml   0r ~/dotfiles/vim/templates/template.xml
     autocmd BufNewFile *.html  0r ~/dotfiles/vim/templates/template.html
+    autocmd BufNewFile *.go    0r ~/dotfiles/vim/templates/template.go
 augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

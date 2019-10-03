@@ -3,7 +3,7 @@
  *  Filename   : README.md
  *  Author     : mitchell
  *  Description: README for dotfiles project
- *  Last Update: Tue 16 Jul 2019 08:44:16 PM CEST
+ *  Last Update: Thu 03 Oct 2019 08:22:10 PM CEST
  =========================================================================
 -->
 
@@ -53,6 +53,7 @@ A terminal session with my prompt looks something like this
             |--template.cpp
             |--template.sed
             |--template.sh
+            |--template.go
     |-- git
         |-- gitattributes
         |-- gitignore
