@@ -1,7 +1,7 @@
 ###########################################################################
 ## Author      : mitchell
 ## Description : My gitconfig
-## Last Update : Sun 25 Aug 2019 02:18:29 PM CEST
+## Last Update : Sun 03 Nov 2019 12:57:43 PM CET
 ###########################################################################
 
 ###########################################################################
@@ -66,8 +66,8 @@
     # Disabled, now using vim (see pager below)
     # pager = less -FRX
 
-[pager]
-    diff = "vim -c '%sm/\\e.\\{-}m//ge' -c 'set ft=diff' -c 'normal gg' -"
+#[pager]
+#    diff = "vim -c '%sm/\\e.\\{-}m//ge' -c 'set ft=diff' -c 'normal gg' -"
 
 [credential]
     helper = cache
@@ -98,8 +98,17 @@
 [status]
     ## Show all files,  not only the directory
     showUntrackedFiles = all
-    ## Show absolute project paths of files
-    relativePaths = false
+    ## shows paths relative to the current directory
+    relativePaths = true
+    ## display the number of entries currently stashed away
+    showStash = true
+
+    ## show branch and tracking info
+     branch = true
+
+    ## display detailed ahead/behind counts for the branch relative to its
+    ## upstream branch
+    aheadBehind = true
 
 [commit]
     ## Gives diffs in commit message
@@ -251,7 +260,7 @@
     ######################## CHECKOUT #####################################
     #######################################################################
     co  = checkout
-    cob = checkout -b
+    cb = checkout -b
     cm  = checkout master
 
     #######################################################################
@@ -263,7 +272,7 @@
     ######################## STASH ########################################
     #######################################################################
     stash-unapply  = !git stash show -p | git apply --reverse
-
+    snapshot = !git stash save --include-untracked "snapshot: $(date)" && git stash apply "stash@{0}"
     #######################################################################
     ######################## PUSH #########################################
     #######################################################################
@@ -313,6 +322,8 @@
     #######################################################################
     ######################## BRANCHES #####################################
     #######################################################################
+    branches = for-each-ref --sort=-committerdate --format=\"%(color:bold black)%(authordate:relative)\t%(color:white)%(authorname)\t%(color:cyan bold)%(HEAD) %(color:green nobold)%(refname:short) %(color:white)-> %(upstream:short)\" refs/heads refs/remotes
+
     branch-name   = rev-parse --abbrev-ref HEAD
     branch-rebase =  "!git rebase -i $(git merge-base master HEAD)"
     branch-reset  =  "!git reset $(git merge-base master HEAD)"
@@ -490,6 +501,11 @@
     #######################################################################
     ######################## LOG ##########################################
     #######################################################################
+    hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(red)(%cr) %C(bold blue) [%an]'
+    l =    log --decorate --graph --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+    ld =   log --decorate --graph --abbrev-commit --date=short    --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'
+
+    #-----------------------------------------------------------------------------------------------------------------------
     log1 = log --graph --topo-order --decorate --all --boundary
 
     log2 = log --stat --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
