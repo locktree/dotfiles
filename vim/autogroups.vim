@@ -243,11 +243,6 @@ augroup filetype_general
         \ endif |
         \ call GetFileInfo()
 
-    autocmd FocusLost   * :set number
-    autocmd FocusGained * :set relativenumber
-    autocmd InsertEnter * :set number
-    autocmd InsertLeave * :set relativenumber
-
     " This will change directory on startup to the current file's directory
     autocmd VimEnter * lcd %:p:h
 
