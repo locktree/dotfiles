@@ -225,7 +225,19 @@ TEXT='5. Diff check'
 print_ok
 
 ###########################################################################
-###  6. LANGUAGES SPECIFIC TEST STUFF
+###  6. Add linebreak if needed
+###########################################################################
+files=$(git diff-index --name-status --cached HEAD | grep -v ^D | cut -c3-)
+for file in ${files}; do
+    ## Add linebreak to end of file if it doesn't have one
+    if [ "$(tail -c 1 "${file}")" != "" ]; then
+        echo >> "${file}"
+    fi
+    git add "${file}"
+done
+
+###########################################################################
+###  7. LANGUAGES SPECIFIC TEST STUFF
 ###########################################################################
 
 printf "##################################################################\n"
