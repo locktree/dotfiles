@@ -105,6 +105,9 @@ endif
 " :highlight link xStatement Statement
 " :syntax match xComment /#.*$/          -----> defining matches
 " :syntax region xString start=/"/ end=/" ---> defining regions
+
+" https://codeyarns.com/2015/09/30/how-to-make-spellfile-in-vim/
+" mkspell! ~/dotfiles/vim/en.utf-8.add
 "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 "      ___    ____                                            __   _         _    ________  ___  "
 "     /   |  / / /  __  ______  __  __   ____  ___  ___  ____/ /  (_)____   | |  / /  _/  |/  /  "
