@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Vim settings
-" Last Update : Sun 28 Apr 2019 12:24:50 PM CEST
+" Last Update : Fri 15 Nov 2019 10:15:25 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -180,7 +180,16 @@ set matchtime=5          " 0.5 to blink matching brackets
 setlocal spell spelllang=en_us
 " Default no spell check. Configure the language and turn off spell checking
 set nospell
+set encoding=utf-8         " internal encoding
+set fileencodings=utf-8    " file encodings to try when opening file
 
+set spellfile=~/dotfiles/vim/en_us.utf-8.add
+set spell spelllang=en_us
+set spellcapcheck=                                " disable capitalized words check
+autocmd BufRead,BufNewFile *.txt setlocal spell
+autocmd FileType txt setlocal spell
+autocmd FileType text setlocal spell
+set complete+=kspell
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 06. SPACES, TABS, MOVING AROUND
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
