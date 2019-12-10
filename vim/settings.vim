@@ -99,21 +99,30 @@ let &titleold=getcwd()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  STATUSLINE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
+
 set laststatus=2              " Always show the status line
 
-set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%l,%v]
-"              | | | | |  |   |      |  |      |  |
-"              | | | | |  |   |      |  |      |  + current column
-"              | | | | |  |   |      |  |      +-- current line
-"              | | | | |  |   |      |  +-- current % into file
-"              | | | | |  |   |      +-- current syntax in square brackets
-"              | | | | |  |   +-- current fileformat
-"              | | | | |  +-- number of lines
-"              | | | | +-- preview flag in square brackets
-"              | | | +-- help flag in square brackets
-"              | | +-- readonly flag in square brackets
-"              | +-- modified flag in square brackets
-"              +-- full path to file in the buffer
+set statusline=[%{StatuslineGit()}]%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%l,%v]
+"                                   | | | | |  |   |      |  |      |  |
+"                                   | | | | |  |   |      |  |      |  + current column
+"                                   | | | | |  |   |      |  |      +-- current line
+"                                   | | | | |  |   |      |  +-- current % into file
+"                                   | | | | |  |   |      +-- current syntax in square brackets
+"                                   | | | | |  |   +-- current fileformat
+"                                   | | | | |  +-- number of lines
+"                                   | | | | +-- preview flag in square brackets
+"                                   | | | +-- help flag in square brackets
+"                                   | | +-- readonly flag in square brackets
+"                                   | +-- modified flag in square brackets
+"                                   +-- full path to file in the buffer
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  FILES AND BACKUPS
