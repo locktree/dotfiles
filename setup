@@ -50,6 +50,7 @@ sudo dnf install -y python3-pylint.noarch
 sudo dnf install -y python3-pytest.noarch
 sudo dnf install -y python3-flake8.noarch
 sudo dnf install -y golint.x86_64
+sudo dnf install -y csslint.noarch
 sudo dnf install -y pandoc
 sudo dnf install -y putty
 sudo dnf install -y tkdiff
