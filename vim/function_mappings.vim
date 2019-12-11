@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Sun 07 Jul 2019 04:03:33 PM CEST
+" Last Update : Wed 11 Dec 2019 09:30:25 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -45,6 +45,8 @@ autocmd FileType python    nnoremap <buffer> <F6>  :w<CR>:!clear;
                                                     \echo "===========================PYLINT=========================";
                                                     \pylint-3 --rcfile=~/dotfiles/python/pylintrc %<CR>
 
+autocmd FileType go      nnoremap <buffer> <F6>  :w<CR>:!clear;golint %;<CR>
+autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 7 - COMPILE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
