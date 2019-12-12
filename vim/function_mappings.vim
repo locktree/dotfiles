@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Wed 11 Dec 2019 09:30:25 PM CET
+" Last Update : Thu 12 Dec 2019 08:38:09 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -47,6 +47,7 @@ autocmd FileType python    nnoremap <buffer> <F6>  :w<CR>:!clear;
 
 autocmd FileType go      nnoremap <buffer> <F6>  :w<CR>:!clear;golint %;<CR>
 autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;<CR>
+autocmd FileType css      nnoremap <buffer> <F6>  :w<CR>:!clear;csslint %;<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 7 - COMPILE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
