@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Sat 21 Dec 2019 02:02:57 PM CET
+" Last Update : Sat 21 Dec 2019 02:05:30 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -57,12 +57,12 @@ autocmd FileType cpp     nnoremap <F7>  :w<CR>:!clear; g++ % -o %:r -Wall -Wextr
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 8 - EXECUTE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType c        nnoremap <buffer> <F8>  :w<CR>:!clear; ./%:r<CR>
-autocmd FileType cpp      nnoremap <buffer> <F8>  :w<CR>:!clear; ./%:r<CR>
-autocmd FileType python   nnoremap <buffer> <F8>  :w<CR>:!clear;python %<CR>
-autocmd FileType sh,ksh   nnoremap <buffer> <F8>  :w<CR>:!clear; ./%<CR>
+autocmd FileType c        nnoremap <buffer> <F8>  :w<CR>:! ./%:r<CR>
+autocmd FileType cpp      nnoremap <buffer> <F8>  :w<CR>:! ./%:r<CR>
+autocmd FileType python   nnoremap <buffer> <F8>  :w<CR>:! python %<CR>
+autocmd FileType sh,ksh   nnoremap <buffer> <F8>  :w<CR>:! ./%<CR>
 autocmd FileType markdown nnoremap <buffer> <F8>  :w<CR>:!~/dotfiles/scripts/md-prev "%:p"<CR>
-autocmd FileType go       nnoremap <buffer> <F8>  :w<CR>:!clear; go run %<CR>
+autocmd FileType go       nnoremap <buffer> <F8>  :w<CR>:! go run %<CR>
 
 "https://coderwall.com/p/ubekiw/preview-markdown-from-vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
