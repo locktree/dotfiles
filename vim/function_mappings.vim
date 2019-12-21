@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Thu 12 Dec 2019 08:38:09 PM CET
+" Last Update : Sat 21 Dec 2019 02:02:57 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -62,6 +62,7 @@ autocmd FileType cpp      nnoremap <buffer> <F8>  :w<CR>:!clear; ./%:r<CR>
 autocmd FileType python   nnoremap <buffer> <F8>  :w<CR>:!clear;python %<CR>
 autocmd FileType sh,ksh   nnoremap <buffer> <F8>  :w<CR>:!clear; ./%<CR>
 autocmd FileType markdown nnoremap <buffer> <F8>  :w<CR>:!~/dotfiles/scripts/md-prev "%:p"<CR>
+autocmd FileType go       nnoremap <buffer> <F8>  :w<CR>:!clear; go run %<CR>
 
 "https://coderwall.com/p/ubekiw/preview-markdown-from-vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
