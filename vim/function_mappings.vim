@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Function mappings
-" Last Update : Sat 21 Dec 2019 02:05:30 PM CET
+" Last Update : Sat 21 Dec 2019 02:23:28 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -36,23 +36,23 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 6 - TESTING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;<CR>
-autocmd FileType yaml      nnoremap <buffer> <F6>  :w<CR>:!clear;yamllint %;<CR>
-autocmd FileType sh,ksh    nnoremap <buffer> <F6>  :w<CR>:!clear;shellcheck %;./%<CR>
-autocmd FileType python    nnoremap <buffer> <F6>  :w<CR>:!clear;
+autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!jsonlint-php %;<CR>
+autocmd FileType yaml      nnoremap <buffer> <F6>  :w<CR>:!yamllint %;<CR>
+autocmd FileType sh,ksh    nnoremap <buffer> <F6>  :w<CR>:!shellcheck %;./%<CR>
+autocmd FileType python    nnoremap <buffer> <F6>  :w<CR>:!;
                                                     \echo "===========================FLAKE8=========================";
                                                     \flake8 %;
                                                     \echo "===========================PYLINT=========================";
                                                     \pylint-3 --rcfile=~/dotfiles/python/pylintrc %<CR>
 
-autocmd FileType go      nnoremap <buffer> <F6>  :w<CR>:!clear;golint %;<CR>
-autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!clear;jsonlint-php %;<CR>
-autocmd FileType css      nnoremap <buffer> <F6>  :w<CR>:!clear;csslint %;<CR>
+autocmd FileType go      nnoremap <buffer> <F6>  :w<CR>:!golint %;<CR>
+autocmd FileType json      nnoremap <buffer> <F6>  :w<CR>:!jsonlint-php %;<CR>
+autocmd FileType css      nnoremap <buffer> <F6>  :w<CR>:!csslint %;<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 7 - COMPILE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType c       nnoremap <F7>  :w<CR>:!clear; gcc % -o %:r -Wall -Wextra -Wpedantic -O3 -ansi<CR>
-autocmd FileType cpp     nnoremap <F7>  :w<CR>:!clear; g++ % -o %:r -Wall -Wextra -Wpedantic -O3 -std=c++11<CR>
+autocmd FileType c       nnoremap <F7>  :w<CR>:! gcc % -o %:r -Wall -Wextra -Wpedantic -O3 -ansi<CR>
+autocmd FileType cpp     nnoremap <F7>  :w<CR>:! g++ % -o %:r -Wall -Wextra -Wpedantic -O3 -std=c++11<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " FUNCTION 8 - EXECUTE
