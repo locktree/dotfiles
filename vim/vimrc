@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Configuration file for Vim (Vi IMproved)
-" Last Update : Sun 25 Aug 2019 02:11:56 PM CEST
+" Last Update : Sat 04 Jan 2020 02:11:27 PM CET
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "        _
 " __   _(_)_ __ ___  _ __ ___
@@ -35,6 +35,7 @@ source ${HOME}/dotfiles/vim/wordlist.vim
 source ${HOME}/dotfiles/vim/maps.vim
 source ${HOME}/dotfiles/vim/function_mappings.vim
 source ${HOME}/dotfiles/vim/autogroups.vim
+source ${HOME}/dotfiles/vim/auto_alias_mutt.vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                           VARIABLES
