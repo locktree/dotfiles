@@ -9,7 +9,7 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     Usage: $(basename "$0")
     See the README for documentation.
     https://github.com/locktree/tools
-    Copyright (c) 2019 Mitchell Slotboom
+    Copyright (c) 2020 Mitchell Slotboom
     Licensed under the MIT license.
 HELP
     exit 1
@@ -125,7 +125,7 @@ ln -sf   ${PWD}/shell/inputrc        ~/.inputrc
 ln -sf   ${PWD}/shell/profile        ~/.profile
 ln -sf   ${PWD}/shell/xinputrc       ~/.xinputrc
 ln -sf   ${PWD}/shell/bashrc         ~/.bashrc
-
+ln -sf   ${PWD}/mutt/muttrc          ~/.muttrc
 ###########################################################################
 ##                             REBOOT
 ###########################################################################
