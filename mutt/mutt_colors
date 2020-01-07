@@ -1,0 +1,113 @@
+###########################################################################
+###                              MUTT COLORS
+###########################################################################
+# object can be one of:
+#   * attachment
+#   * body              (match regexp in the body of messages)
+#   * bold              (hilighting bold patterns in the body of messages)
+#   * error             (error messages printed by Mutt)
+#   * header            (match regexp in the message header)
+#   * hdrdefault        (default color of the message header in the pager)
+#   * index             (match pattern in the message index)
+#   * indicator         (arrow or bar used to indicate the current item in a menu)
+#   * markers           (the '+' markers at the beginning of wrapped lines in the pager)
+#   * message           (informational messages)
+#   * normal            (normal (not quoted) text
+#   * quoted            (text matching $quote_regexp in the body of a message)
+#   * quoted1, quotedN  (higher levels of quoting)
+#   * search            (hilighting of words in the pager)
+#   * signature
+#   * status            (mode lines used to display info about the mailbox or message)
+#   * tilde             (the '~' used to pad blank lines in the pager)
+#   * tree              (thread tree drawn in the message index and attachment menu)
+#   * underline         (hilighting underlined patterns in the body of messages)
+###########################################################################
+
+# defaults ################################################################
+color   attachment  brightmagenta    default
+color   bold        black            default
+color   error       brightred        default
+color   hdrdefault  red              default
+color   indicator   brightyellow     red
+color   markers     brightcyan       default
+color   message     brightcyan       default
+color   normal      white            default
+color   quoted      brightblue       default
+color   search      default          green
+color   signature   red              default
+color   status      yellow           blue
+color   tilde       magenta          default
+color   tree        magenta          default
+color   underline   black            default
+
+# index ###################################################################
+color index         red              default      "~A"    # all messages
+color index         brightred        default      "~E"    # expired messages
+color index         blue             default      "~N"    # new messages
+color index         blue             default      "~O"    # old messages
+color index         brightmagenta    default      "~Q"    # messages that have been replied to
+color index         brightwhite      default      "~R"    # read messages
+color index         blue             default      "~U"    # unread messages
+color index         brightyellow     default      "~v"    # messages part of a collapsed thread
+color index         brightyellow     default      "~P"    # messages from me
+color index         red              default      "~F"    # flagged messages
+color index         black            red          "~D"    # deleted messages
+
+# message headers #########################################################
+color hdrdefault    brightgreen      default
+color header        brightyellow     default      "^(From)"
+color header        blue             default      "^(Date)"
+color header        yellow           default      "^(to)"
+color header        yellow           default      "^(cc)"
+color header        brightblue       default      "^(Subject)"
+
+# quote blocks ############################################################
+color quoted        magenta          default
+color quoted1       cyan             default
+color quoted2       green            default
+color quoted3       magenta          default
+color quoted4       cyan             default
+color quoted5       green            default
+color quoted6       magenta          default
+color quoted7       cyan             default
+
+# sidebar #################################################################
+color sidebar_highlight  black       green        # the selected mailbox
+color sidebar_divider    green       black        # the sidebar divider
+color sidebar_flagged    red         black
+color sidebar_new        green       black        # color of folders with new mail
+
+###########################################################################
+##                       Highlights inside the body of a message
+###########################################################################
+
+# Interesting words #######################################################
+color body       brightmagenta    black        "Artistic License"
+color body       brightmagenta    black        "BSD License"
+color body       brightmagenta    black        "GNU (Lesser )?General Public License"
+color body       brightmagenta    black        "L?GPL"
+color body       brightmagenta    black        "MIT/X Consortium License"
+color body       brightyellow     default      "warning"
+color body       brightred        default      "error"
+color body       white            default      "no error"
+color body       brightred        default      "fail(ure|ed)?"
+
+# Highlight the relevant elements in the diff #############################
+color body       green            default      "^diff \-.*"
+color body       green            default      "^index [a-f0-9].*"
+color body       green            default      "^\-\-\- .*"
+color body       green            default      "^[\+]{3} .*"
+color body       cyan             default      "^[\+][^\+]+.*"
+color body       blue             default      "^\-[^\-]+.*"
+color body       brightblue       default      "^@@ .*"
+
+# Others ##################################################################
+color body       brightblue       default      "(^|<| )mailto:[^ ]+@[^ ]( |>|$)"
+color body       magenta          default      "(ftp|http|https|file|telnet|news|finger)://[^ ]+"    # point out URLs
+color body       magenta          default      [-a-z_0-9.]+@[-a-z_0-9.]+                             # e-mail addresses
+
+## email from my boss in RED
+color index brightred default '~f myboss@hotmail.com'
+###########################################################################
+##                          E O F
+###########################################################################
