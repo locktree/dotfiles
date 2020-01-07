@@ -1,0 +1,45 @@
+###########################################################################
+###                              MUTTRC
+###########################################################################
+source ~/dotfiles/mutt/mutt_base            # define base configuration
+source ~/dotfiles/mutt/mutt_bindings        # define bindings
+source ~/dotfiles/mutt/mutt_macros          # define macros
+source ~/dotfiles/mutt/mutt_colors          # define colours
+source ~/dotfiles/mutt/mutt_mailboxes       # define mailboxes
+###########################################################################
+## ENCRYPTED PASSWORDS
+# Of course, nobody would want to keep their password in cleartext in the
+# configuration file. Let’s encrypt them with gpg.
+#
+# OPTIONAL: Create GPG key:
+# $ gpg --gen-key
+# ==> key type (RSA)
+# ==> keysize (2048 bits)
+# ==> expiration date (0: no expiration)
+#
+# $ mkdir ~/.mutt
+# $ vi ~/.mutt/password
+#
+# set imap_pass='secr3t'
+# set smtp_pass='secr3t'
+#
+# Now encrypt this file with gpg using your public key:
+#
+# gpg -r myemail@email.com -e ~/.mutt/password
+#
+# This will create ~/.mutt/password.gpg, which is a GPG-encrypted version of the original file.
+# Go ahead and remove ~/.mutt/password, leaving only the GPG-encrypted version.
+#
+# It will give you a auth.gpg file. Now to use it in mutt, add this to your ~/.mutt/muttrc:
+#
+# encrypted IMAP/SMTP passwords
+# source "gpg -d ~/.mutt/password.gpg |"
+#
+# ==> MORE INFO: http://xmodulo.com/mutt-email-client-encrypted-passwords.html
+###########################################################################
+#
+# http://www.mutt.org/doc/manual/#mail-check-stats
+#
+###########################################################################
+##                          E O F
+###########################################################################
