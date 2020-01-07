@@ -1,0 +1,91 @@
+###########################################################################
+###                              MUTT BASER
+###########################################################################
+source "gpg -d ~/.mutt/password.gpg |"
+source ~/.mutt/aliases                    ## also defined in Vim for automatic adding aliases!
+
+set ssl_force_tls=yes
+set from= $imap_user
+set realname='Mitchell'
+set folder = imaps://imap-mail.outlook.com:993
+set spoolfile = "+INBOX"
+set postponed="+[hotmail]/Drafts"
+
+set alias_file       = ~/.mutt/aliases
+set header_cache     = ~/.mutt/cache/headers
+set message_cachedir = ~/.mutt/cache/bodies
+set certificate_file = ~/.mutt/certificates
+set signature        = ~/.signature	              # signature file, is appended to all outgoing messages
+
+set smtp_url = "smtp://$imap_user@smtp-mail.outlook.com:587"
+set smtp_pass = $imap_pass
+set record="+Sent"                                     # ... and it gets saved in
+set move = no
+set timeout=60                                         # Check for mail every minute
+
+###########################################################################
+set delete                                             # don't ask, just do
+unset confirmappend                                    # don't ask, just do!
+set quit                                               # don't ask, just do!!
+set sleep_time = 0                                     # be fast
+set smart_wrap                                         # for line wrapping
+set pager_stop                                         # this turns off the default behavior of mutt where hitting space to scroll will automatically move to the next message when the end of the current message is reached
+set confirmappend = no                                 # no confirm question
+alternative_order text/plain text/enriched text/html   # always open in plain text
+auto_view text/html
+###########################################################################
+set sort=threads
+set sort_aux = 'reverse-last-date-received'            # Sort threads by date received.
+set sort_browser=reverse-date
+ignore *
+unignore From Date Subject To Cc                       # then, show only these
+hdr_order From Date: From: To: Cc:                     # and in this order
+###########################################################################
+set askcc                                     # ask for CC:
+set send_charset="utf-8"
+set edit_headers                              # edit mail header
+set folder_format="%t%N %-30.30f %8s"         # folder list look
+set menu_scroll                               # scroll list by one line
+set postponed=+drafts                         # postponed mails
+
+set visual=vim                                # editor called by  ~v
+
+set editor='vim + -c "set textwidth=72" -c "set wrap" -c "set spell spelllang=en"'
+
+###########################################################################
+## You can configure Mutt so that the index view is always visible when you read mails. For instance, to always show 8 mails in the index:
+set pager_index_lines=10
+
+###########################################################################
+#                          INDEX FORMAT
+###########################################################################
+## The index_format allows you to set what will shown for every mail in the index view:
+set index_format="%3C %Z %[!%y%m%d]  %-19.19n (%5c) %?X?(%1X)&   ? %?M?(%02M)&  ? %s%> %?y?[%Y]?"
+
+###########################################################################
+#                          STATUS CONFIGURATION
+###########################################################################
+set status_format = "---[ Folder: %f ]---[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]---%>-%?p?( %p postponed )?---"
+
+###########################################################################
+#                          SIDEBAR CONFIGURATION
+###########################################################################
+set sidebar_width=30
+set sidebar_visible=yes
+set sidebar_divider_char='|'         # which mailboxes to list in the sidebar
+set mail_check_stats                 # check for new mail and do some statistics
+
+# %B- Mailbox name
+# %?F? [%F]?- If flagged emails [%F], otherwise nothing
+# %*- Pad with spaces
+# %?N?%N/?- If new emails %N/, otherwise nothing
+# %S- Total number of emails
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+
+###########################################################################
+#
+###########################################################################
+set attribution="* %n <%a> [%{%Y-%m-%d %H:%M:%S %Z}]:\n"      # This is the string that will precede a message which has been included in a reply.
+############################################################################
+##                          E O F
+###########################################################################
