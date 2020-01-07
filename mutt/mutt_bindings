@@ -1,0 +1,30 @@
+###########################################################################
+###                              MUTT BINDINGS
+###########################################################################
+## some same vim-like keybindings
+bind index,pager k     previous-entry
+bind index,pager j     next-entry
+bind index,pager g     noop
+bind index,pager \Cu   half-up
+bind index,pager \Cd   half-down
+bind pager gg          top
+bind index gg          first-entry
+bind pager G           bottom
+bind index G           last-entry
+###########################################################################
+# ctrl-n, ctrl-p to select next, prev folder, ctrl-o to open selected folder
+bind index,pager \CP   sidebar-prev         # Ctrl-Shift-P - Previous Mailbox
+bind index,pager \CN   sidebar-next         # Ctrl-Shift-N - Next Mailbox
+bind index,pager \CO   sidebar-open         # Ctrl-Shift-O - Open Highlighted Mailbox
+###########################################################################
+bind index,pager @     compose-to-sender    # To start composing a new email to the sender of the current message
+bind index,pager R     group-reply          # Message to all
+###########################################################################
+bind pager       J     next-line
+bind pager       K     previous-line
+###########################################################################
+bind index       N     search-opposite
+bind pager       N     search-opposite
+###########################################################################
+##                          E O F
+###########################################################################
