@@ -1,0 +1,12 @@
+###########################################################################
+###                              MUTT MACROS
+###########################################################################
+# READ IMPORTANT MESSAGES FIRST
+macro index <F3> "l~N ~b \"([\^nN][\^oO].error|[Ff][Aa][Ii][Ll])\"<enter>"
+
+# b toggles sidebar visibility
+macro index b '<enter-command>toggle sidebar_visible<enter>
+macro pager b '<enter-command>toggle sidebar_visible<enter>
+###########################################################################
+##                          E O F
+###########################################################################
