@@ -1,0 +1,101 @@
+##################################################################################################
+TMUX       TMUX     TMUX     TMUX       TMUX     TMUX     TMUX       TMUX     TMUX     TMUX
+##################################################################################################
+-terminal multiplexer
+-Sessions are for an overall theme, such as work, or experimentation, or sysadmin
+-Windows are for projects within that theme
+-Panes are for views within your current project
+-detach is "running in background"
+-session --> window --> pane
+-windows is like tabs in browser
+-/etc/tmux.conf + ~/.tmux.conf
+[session_name]:[window].[pane]
+---------------------------------------------------------------------------
+Ctrl-b                prefix-key
+---------------------------------------------------------------------------
+tmux                             start tmux
+tmux ls                          list sessions. ls = list-sessions
+tmux new -s name                 start with new session name. New = new-session
+tmux new -s window -n shell      new session, Name of session is "window, -n to name the first window easily
+tmux attach                      attach. a/at/=attach
+tmux attach -t myname            attach to named
+tmux kill-session -t myname      kill Session
+tmux list-buffers                list buffers
+
+new-window
+join-pane
+
+show-buffer       show buffer content
+save-buffer       save buffer content
+list-buffer       list all buffer content
+choose-buffer     choose from all buffer what to insert! Great!
+----------------------------------------------------------------------------
+SESSIONS
+:new<CR>          new session
+<prefix> s        list sessions
+<prefix> $        name the current session
+<prefix> (        previous session
+<prefix> )        next session
+<prefix> L        last session
+<prefix> d        detach session
+-------------------------------------------------------------------------
+WINDOWS(TABS)
+<prefix> c        create new window (shortcut: new-window)
+<prefix> w        move to another windows. Display visual menu of the windows
+<prefix> n        next window
+<prefix> p        previous window
+<prefix> f        prompt to search for text in open windows. Find window by name
+<prefix> ,        (re)name current window
+<prefix> &        kill current window
+<prefix> d        detache window
+<prefix> 0 to 9   select windows 0 to 9. Starting from 0
+<prefix> l        previously selected window
+<prefix> i        display some information about the current window
+<prefix> .        prompt for an index to move the current window
+-------------------------------------------------------------------------
+PANES(SPLITS)
+<prefix> %        vertical split
+<prefix> "        horizontal split
+<prefix> o        Select the next pane in the current window. Cycle through panes
+<prefix> q        show pane numbers
+<prefix> x        kill current pane
+<prefix> +        break pane into window (e.g. to select text by mouse to copy)
+<prefix> -        restore pane from window
+<prefix> ⍽        space - toggle between layouts
+<prefix> {        move the current pane left
+<prefix> }        move the current pane right
+<prefix> z        toggle pane zoom
+<prefix> ;        move to the previously active pane
+<prefix> !        break the current pane out of the window. Create a new window from your pane
+<prefix> C-o      rotate the panes in the current window forwards
+<prefix> arrow    move around the panes
+-------------------------------------------------------------------------
+OTHER
+<prefix> d        detach the current client
+<prefix> t        big Clock
+<prefix> ?        list key-bindings
+<prefix> :        Command mode
+--------------------------------------------------------------------------
+prefix [          enters copy mode. Arrow keys to more around
+prefix ]          pastes current buffer contents
+prefix =          lists all paste buffers and pastes selected buffer contents
+
+-press ESC to get out of Copy Mode
+-also vim keys like w,b,f,F,Ctrl-b,ctrl-f, g, G , /, ?, n,N work
+--------------------------------------------------------------------------
+=========> copy text
+1. copy mode ( <prefix> [ )
+2. move the cursor to the right place
+3. press space
+4. move cursor
+5. press enter
+==========> paste text
+1. <prefix> ]
+--------------------------------------------------------------------------
+to move the first window into a pane in the second window, we press prefix : to enter Command mode, and then type this
+    join-pane -s 1
+this means "Take window 1 and join it to the current window", since we didn't specify a target
+    join-pane -s 1.0
+######################################################################################################################
+EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF
+######################################################################################################################
