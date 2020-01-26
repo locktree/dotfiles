@@ -1,0 +1,20 @@
+###########################################################################
+## MUTT     MUTT    MUTT     MUTT     MUTT     MUTT     MUTT     MUTT
+###########################################################################
+<return>   Display message
+<space>    Page down within message
+<tab>      Jump to next new message
+@          Show authors full email address ~ cool
+a          Add to addressbook ~ supacool
+d          Mark message for deletion
+f          Forward message
+m          New message
+q          Exit
+r          Reply to message
+w          Set status flag
+<c-g>      Cancel current operation
+/          Search forward
+<alt-/>    Search backwards
+###########################################################################
+## EOF       EOF.......EOF.......EOF.......EOF.......EOF.......EOF
+###########################################################################
