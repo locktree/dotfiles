@@ -126,6 +126,7 @@ ln -sf   ${PWD}/shell/profile        ~/.profile
 ln -sf   ${PWD}/shell/xinputrc       ~/.xinputrc
 ln -sf   ${PWD}/shell/bashrc         ~/.bashrc
 ln -sf   ${PWD}/mutt/muttrc          ~/.muttrc
+ln -sf   ${PWD}/mutt/signature       ~/.signature
 ln -sf   ${PWD}/tmux/tmux.conf       ~/.tmux.conf
 ###########################################################################
 ##                             REBOOT
