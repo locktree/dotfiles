@@ -1,0 +1,201 @@
+    #######################################################################
+    ######################## COMMIT #######################################
+    #######################################################################
+    c    = commit
+    cm   = commit --message
+    cam  = commit --amend --message
+    com  = commit --amend --no-edit
+    call = !git add -A && git commit -av         ## Commit all changes
+
+    ########################################################################
+    ######################## CHECKOUT ######################################
+    ########################################################################
+    co  = checkout                  ## Checkout a branch
+    cob = checkout -b               ## Checkout a new branch
+
+    #######################################################################
+    ######################## STATUS #######################################
+    #######################################################################
+    s = status --short --branch
+
+    #######################################################################
+    ######################## STASH ########################################
+    #######################################################################
+    stash-unapply  = !git stash show -p | git apply -R
+    stash-all      = stash save --all
+
+    #######################################################################
+    ######################## PUSH #########################################
+    #######################################################################
+    pom = push origin master
+    poh = push origin HEAD
+
+    #######################################################################
+    ######################## MERGE ########################################
+    #######################################################################
+    ## Given a merge commit,find the span of commits that exist(ed) on that
+    ## branch. Again, not so useful in itself, but used by other aliases.
+    ## ==> looks like i need to merge with --no-ff option!!!!!!!
+    merge-span = "!f() { echo $(git log -1 $2 --merges --pretty=format:%P | cut -d' ' -f1)$1$(git log -1 $2 --merges --pretty=format:%P | cut -d' ' -f2); }; f"
+
+    ## Find the commits that were introduced by a merge
+    merge-log = "!git log $(git merge-span .. $1)"
+
+    ## Show the changes that were introduced by a merge
+    merge-diff = "!git diff $(git merge-span ... $1)"
+
+    ## As above, but in your difftool
+    merge-difftool = "!git difftool $(git merge-span ... $1)"
+
+    ## Test if Auto merge is possible
+    merge-test = "!git merge --no-commit --no-ff \"$1\"; git merge --abort; echo \"Merge aborted\""
+
+    #######################################################################
+    ######################## DIFF #########################################
+    #######################################################################
+    d    = diff
+    dc   = diff --staged
+    ##---------------------------------------------------------------------
+    dt   = difftool
+    dtc  = difftool --staged
+    ##---------------------------------------------------------------------
+    dr    = diff --word-diff-regex=.                 ## Diff character-wise
+    drs   = diff --word-diff-regex=. --staged        ## Diff staged character-wise
+    ##---------------------------------------------------------------------
+    ## `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { git difftool --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+    ##---------------------------------------------------------------------
+    du1           = difftool @{upstream}
+    du2           = difftool origin
+    du3           = difftool origin/master...    ## Files different from master on current branch
+    review-log    = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset' @{upstream}..
+    diff-all      = !"for name in $(git diff --name-only $1); do git difftool $1 $name & done"
+    ##---------------------------------------------------------------------
+    ## creates a diff of current branch against supplied branch, usage: git export-branch [refbranch]
+    branch-name   = !git for-each-ref --format='%(refname:short)' $(git symbolic-ref HEAD)
+    export-branch = !git format-patch --stdout $1 > ~/branches/$(git branch-name).diff
+
+    #######################################################################
+    #######################  BRANCHES #####################################
+    #######################################################################
+    ## Remove branches that have already been merged with master
+    br     = !git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d
+
+    #######################################################################
+    #######################  REFERENCES ###################################
+    #######################################################################
+    refs   = for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:iso8601) %(color:red bold)%(objectname:short) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committername)%(color:reset)) %(contents:subject)'
+    lbs1   = !git refs refs/heads        ## lbs = local branches sorted
+    rbs1   = !git refs refs/remotes      ## rbs = remote branches sorted
+
+    #######################################################################
+    ########################## TAG ########################################
+    #######################################################################
+    lasttag = describe --tags --abbrev=0
+
+    ## Remove the old tag with this name and tag the latest commit with it
+    retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
+
+    #######################################################################
+    ################################## RESET ##############################
+    #######################################################################
+    nevermind = !git reset --hard HEAD && git clean -d -f
+
+    ## This commits everything in my working directory and then does a hard reset to remove that commit.
+    ## The nice thing is, the commit is still there, but it’s just unreachable.
+    ## Unreachable commits are a bit inconvenient to restore, but at least they are still there.
+    ## You can run the git reflog command and find the SHA of the commit if you realize later that you made
+    ## a mistake with the reset. The commit message will be “WIPE SAVEPOINT” in this case.
+    wipe = !git add -A && git commit --no-verify -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+
+    #######################################################################
+    ####################### LOGS ##########################################
+    #######################################################################
+    logfile  = log -u
+    logstats = log --stat --pretty=format:'%C(yellow)%h%C(reset) %C(green)[%cr]%C(reset) %C(bold cyan)[%cd]%C(reset) %C(blue)%cn%C(reset): %s'
+
+    logs     =  log         \
+                --oneline   \
+                -n 50       \
+                --graph     \
+                --decorate  \
+                --all       \
+                --pretty=format:'%C(yellow)%h%C(reset)  %C(green)[%ad]%C(reset) %C(cyan)[%cD]%C(reset)  %C(blue)[%an]%C(reset) -- %s  %C(green bold)%d%C(reset) '\
+                --abbrev-commit --date=relative
+                ## --stat     : deze kan er uit, geeft erg mooi overzicht
+                ## --numstat
+
+    #######################################################################
+    ###     OTHERS
+    #######################################################################
+    ##---------------------------------------------------------------------
+    ## Mark a file as "assume unchanged", which means that Git will treat
+    ## it as though there are no changes to it even if there are.
+    ## Useful for temporary changes to tracked files
+    assume      = update-index --assume-unchanged
+    unassume    = update-index --no-assume-unchanged
+    assumed     = !git ls-files -v | grep ^h | cut -c 3-
+    unassumeall = !git assumed | xargs git update-index --no-assume-unchanged
+    assumeall   = !git s -s | awk {'print $2'} | xargs git assume
+    ignored     = !git ls-files -o -i --exclude-standard
+    ##----------------------------------------------------------------------------------------------------------------------
+    today          = !git log --since='12am' --committer=\"$(git config user.name)\" --oneline
+    today-all      = !git log --since='12am'
+    today-diff     = difftool 'HEAD@{midnight}' 'HEAD'
+
+    yesterday      = !git log --since=\"2 day ago\" --until=midnight --author=\"$(git config user.name)\" --oneline
+    yesterday-diff = difftool 'HEAD@{yesterday}' 'HEAD@{midnight}'
+
+    week          = !git log --since=1.weeks --author=\"$(git config user.name)\" --oneline
+    last          = cat-file commit HEAD
+
+    ##----------------------------------------------------------------------------------------------------------------------
+    ## Find branches containing commit
+    fb = "!f() { git branch -a --contains $1; }; f"
+
+    ## Find tags containing commit
+    ft = "!f() { git describe --always --contains $1; }; f"
+
+    ## Find commits by source code
+    fs = "!f() { git log --pretty=format:'%C(yellow)%h %Cblue%ad %Creset%s%Cgreen [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+
+    ## Find commits by commit message
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h %Cblue%ad %Creset%s%Cgreen [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+    ##----------------------------------------------------------------------------------------------------------------------
+    unmerged    = !git ls-files --unmerged | cut -f2 | uniq
+    untracked   = ls-files --other --exclude-standard
+    staged      = ls-files --cached
+    modified    = ls-files --modified
+    deleted     = ls-files --deleted
+    gitignored  = ls-files -o -i --exclude-standard
+
+    vum  = !vim -p $(git unmerged)                                 ## VIM unmerged
+    vmo  = !vim -p $(git ls-files --modified)                      ## VIM modified
+    vut  = !vim -p $(git untracked)                                ## VIM untracked
+    vall = !vim -p $(git status --porcelain | awk '{print $2}')    ## VIM all files
+    ##----------------------------------------------------------------------------------------------------------------------
+    contri  = shortlog --summary --numbered                                                        ## List contributors with number of commits
+    contrii = shortlog --summary --numbered --no-merges                                            ## List contributors with number of commits
+    peeps   = !git log --pretty=format:"%Cblue%aN%Creset" --no-merges | sort | uniq -c | sort -rn  ## number of non-merge commits
+    mergers = !git log --pretty=format:"%Cred%aN%Creset"  --merges | sort | uniq -c | sort -rn     ## number of merge commits
+    whois   = !sh -c 'git log -i -1 --author=\"$1\" --pretty=\"format:%an <%ae>\"' -               ## given a string for an author, try to figure out full name and email
+    whatis  = show -s --pretty='tformat:%h (%s, %ad)' --date=short                                 ## Given any git object, try to show it briefly
+    this    = !git init && git add . && git commit -m \"Initial commit\"                           ## Start a new local repository and perform initial commit
+    export  = !git archive -o archieve.$(date +%Y%m%d-%H%M%S).tar.gz -9 --prefix=latest HEAD       ## Save a repo as a tarball
+    aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | sort             ## List of aliases
+
+    ours    = "!f() { git checkout --ours $@ && git add $@; }; f"
+    theirs  = "!f() { git checkout --theirs $@ && git add $@; }; f"
+    ##----------------------------------------------------------------------------------------------------------------------
+    # git-who tells you who the authors are. It is generally most useful when given a path:   git who -- path/to/file
+    who = "!f() { \
+        git log --ignore-all-space --pretty=format:'%Cgreen%<(30)%aN%Creset %Cblue<%aE>%Creset' \"${@-HEAD}\" \
+        | nl | sort --key=2 | uniq -c -f 1 | sort --numeric-sort --key=2 \
+        | awk '{$2=\"\"; print $0}'; \
+    }; f"
+
+    ##----------------------------------------------------------------------------------------------------------------------
+    master = !git checkout master && git pull origin
+    update = !sh -c 'git fetch origin && git rebase -p origin/${1-master}' -      ## update current branch
+    get    = !git pull --rebase && git submodule update --init --recursive
+    put    = !git commit -am "$1" && git push
