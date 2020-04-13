@@ -56,6 +56,7 @@ sudo dnf install -y putty
 sudo dnf install -y tkdiff
 sudo dnf install -y python3-pip.noarch
 sudo dnf install -y perl-pip.noarch
+sudo dnf install -y cppcheck.x86_64
 
 sudo dnf install -y mutt
 sudo dnf install -y gnome-tweak-tool
