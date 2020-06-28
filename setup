@@ -42,6 +42,7 @@ sudo dnf upgrade -y
 sudo dnf install -y vim
 sudo dnf install -y git
 sudo dnf install -y golang
+sudo dnf install -y ruby.x86_64
 sudo dnf install -y yamllint
 sudo dnf install -y php-jsonlint.noarch
 sudo dnf install -y perl-HTML-Lint.noarch
@@ -66,6 +67,7 @@ sudo dnf install -y youtube-dl
 sudo dnf install -y thunderbird
 sudo dnf install -y libreoffice
 sudo dnf install -y pidgin           ## Pidgin is a chat client that supports multiple social accounts
+sudo dnf install -y jq
 
 sudo pip install markdown
 
