@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Configuration file for Vim (Vi IMproved)
-" Last Update : Sat 04 Jan 2020 02:11:27 PM CET
+" Last Update : Mon 06 Jul 2020 09:08:21 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "        _
 " __   _(_)_ __ ___  _ __ ___
@@ -42,7 +42,7 @@ source ${HOME}/dotfiles/vim/auto_alias_mutt.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:AUTHORNAME = 'Mitchell'
 let OS=substitute(system('uname -s'),"\n","","")
-
+let g:ale_python_pylint_options = '--rcfile ~/.pylintrc'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                           LOCALS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
