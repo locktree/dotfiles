@@ -1,7 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Author      : mitchell
 " Purpose     : Vim settings
-" Last Update : Fri 15 Nov 2019 10:15:25 PM CET
+" Last Update : Mon 06 Jul 2020 09:05:27 PM CEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -111,6 +111,7 @@ endfunction
 set laststatus=2              " Always show the status line
 
 set statusline=[%{StatuslineGit()}]%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%l,%v]
+set statusline=[%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%l,%v]
 "                                   | | | | |  |   |      |  |      |  |
 "                                   | | | | |  |   |      |  |      |  + current column
 "                                   | | | | |  |   |      |  |      +-- current line
