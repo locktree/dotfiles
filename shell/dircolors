@@ -1,7 +1,7 @@
 # =========================================================================
 # Author      : mitchell
 # Purpose     : Configuration file for dircolors
-# Last Update : Sun 24 Nov 2019 01:07:28 PM CET
+# Last Update : Tue 07 Jul 2020 12:52:51 PM CEST
 # =========================================================================
 # Configuration file for dircolors, a utility to help you set the
 # LS_COLORS environment variable used by GNU ls with the --color option.
@@ -48,9 +48,12 @@ EXEC        01;32    ## This is for files with execute permission
 .c     01;32
 .cpp   01;32
 .csh   01;32
+.go    01;32
 .h     01;32
 .hpp   01;32
 .hs    01;32
+.html  01;32
+.json  01;32
 .ksh   01;32
 .md    01;32
 .py    01;32
@@ -58,8 +61,7 @@ EXEC        01;32    ## This is for files with execute permission
 .sh    01;32
 .txt   01;32
 .vim   01;32
-.html  01;32
-.go    01;32
+.yaml  01;32
 
 # ========================================
 # ARCHIVES OR COMPRESSED ( RED )
