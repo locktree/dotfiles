@@ -69,6 +69,23 @@ endif
 " vim-variable       v:     Global, predefined by Vim.
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                           HOW TO ADD A PLUGUIN WITH PATHOGEN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Copy pathogen.vim to ~/.vim/autoload/pathogen.vim     ===> curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+" cd ~/.vim/bundle
+" git clone https://github.com/plasticboy/vim-markdown.git
+" execute pathogen#infect() in vimrc ## Only once!!!!
+" And then add the configuration to the vimrc
+
+" =====> Install plugins as submodules
+" cd ~/.vim
+" mkdir ~/.vim/bundle
+" git submodule add http://github.com/tpope/vim-fugitive.git bundle/fugitive
+" git add .
+" git commit -m "Install Fugitive.vim bundle as a submodule."
+" ===> git submodule foreach git pull origin master
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                           INFO - EVENTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " There are three kinds of things which are defined in this file:
