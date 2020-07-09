@@ -97,5 +97,19 @@ to move the first window into a pane in the second window, we press prefix : to 
 this means "Take window 1 and join it to the current window", since we didn't specify a target
     join-pane -s 1.0
 ######################################################################################################################
+CURRENT CONFIG              CURRENT CONFIG              CURRENT CONFIG              CURRENT CONFIG
+######################################################################################################################
+<prefix> v           Split vertical
+<prefix> s           Split horizontal
+
+<CTRL> hjkl          To resize
+<ALT>  hjkl          Switch pane
+<SHIFT> left/right   Switch Window
+
+<prefix> r           Reload tmux.conf
+<prefix> <CTRL>e     Open and Reload tmux.cong
+<prefix> <CTRL>w     Rename session
+<prefix> TAB         Switch to last active pane
+######################################################################################################################
 EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF      EOF
 ######################################################################################################################
