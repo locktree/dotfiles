@@ -99,6 +99,7 @@ this means "Take window 1 and join it to the current window", since we didn't sp
 ######################################################################################################################
 CURRENT CONFIG              CURRENT CONFIG              CURRENT CONFIG              CURRENT CONFIG
 ######################################################################################################################
+prefix               CTRL-q
 <prefix> v           Split vertical
 <prefix> s           Split horizontal
 
